@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    tools:context=".MainActivity"
+    android:layout_gravity="center" >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        <Button
+            android:textSize="20dp"
+            style="?android:attr/buttonStyleSmall"
+            android:id="@+id/btn_activity_photo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:text="PHOTO" />
+        <Button
+            android:textSize="20dp"
+            style="?android:attr/buttonStyleSmall"
+            android:id="@+id/btn_activity_func1"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:text="기능1" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        <Button
+            android:id="@+id/btn_activity_gallery"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:textSize="20dp"
+            android:text="Gallery" />
+        <Button
+            android:textSize="20dp"
+            android:id="@+id/btn_activity_func2"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:text="기능2" />
+    </LinearLayout>
+</LinearLayout>
