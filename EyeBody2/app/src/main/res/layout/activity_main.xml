@@ -10,38 +10,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
+
         <Button
-            android:textSize="20dp"
-            style="?android:attr/buttonStyleSmall"
             android:id="@+id/btn_activity_photo"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:text="PHOTO" />
-        <Button
-            android:textSize="20dp"
             style="?android:attr/buttonStyleSmall"
-            android:id="@+id/btn_activity_func1"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:text="기능1" />
+            android:text="@string/category_camera"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/btn_activity_func1"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:text="@string/category_exercise"
+            android:textSize="20dp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
+
         <Button
             android:id="@+id/btn_activity_gallery"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:textSize="20dp"
-            android:text="Gallery" />
+            android:text="@string/category_gallery"
+            android:textSize="20dp" />
+
         <Button
-            android:textSize="20dp"
             android:id="@+id/btn_activity_func2"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:text="기능2" />
+            android:text="@string/category_setting"
+            android:textSize="20dp" />
     </LinearLayout>
 </LinearLayout>
