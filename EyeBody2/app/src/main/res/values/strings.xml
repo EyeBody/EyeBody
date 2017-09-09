@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">EyeBody</string>
+    <string name="category_camera">카메라</string>
+    <string name="category_gallery">갤러리</string>
+    <string name="category_exercise">운동</string>
+    <string name="category_setting">설정</string>
 </resources>
