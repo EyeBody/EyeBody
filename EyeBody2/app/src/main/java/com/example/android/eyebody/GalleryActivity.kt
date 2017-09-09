@@ -15,4 +15,6 @@ class GalleryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
     }
+
+    //gallery test
 }

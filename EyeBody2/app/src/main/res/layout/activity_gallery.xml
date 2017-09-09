@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.eyebody.GalleryActivity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Gallery Test"
+        tools:layout_editor_absoluteX="138dp"
+        tools:layout_editor_absoluteY="119dp" />
 </android.support.constraint.ConstraintLayout>
