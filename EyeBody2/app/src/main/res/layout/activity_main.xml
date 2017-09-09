@@ -31,7 +31,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
-
         <Button
             android:id="@+id/btn_activity_gallery"
             style="?android:attr/buttonStyleSmall"
@@ -39,7 +38,6 @@
             android:layout_height="150dp"
             android:text="@string/category_gallery"
             android:textSize="20dp" />
-
         <Button
             android:id="@+id/btn_activity_func2"
             style="?android:attr/buttonStyleSmall"
