@@ -24,6 +24,6 @@
         <activity android:name=".SettingActivity"
                   android:label="@string/category_setting" />
     </application>
-    <uses-sdk android:minSdkVersion="18"/>
+    <uses-sdk android:minSdkVersion="15"/>
     <uses-permission android:name="android:permission.CAMERA"></uses-permission>
 </manifest>

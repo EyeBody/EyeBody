@@ -17,10 +17,11 @@ class MainActivity : AppCompatActivity() {
             menuInflater.inflate(R.menu.menu_sel, menu)
             return true
         }
+
         fun onOptionsItemSelected(item: MenuItem): Boolean {
             val id = item.itemId
             if (id == R.id.settingButton) {
-                val settingPage=Intent(this,SettingActivity::class.java)
+                val settingPage = Intent(this, SettingActivity::class.java)
                 startActivity(settingPage)
             }
             return super.onOptionsItemSelected(item)
