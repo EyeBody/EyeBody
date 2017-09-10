@@ -6,11 +6,44 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.eyebody.GalleryActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="Gallery Test2"
-        tools:layout_editor_absoluteX="138dp"
-        tools:layout_editor_absoluteY="119dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/et_sample"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:text="Sample Text" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_encrypt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="encrypt"/>
+
+            <Button
+                android:id="@+id/btn_decrypt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="decrypt"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="400px"
+            android:layout_height="600px" />
+
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
