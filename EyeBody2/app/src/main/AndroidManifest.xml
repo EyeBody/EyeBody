@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.eyebody">
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,6 +23,10 @@
         <activity android:name=".SettingActivity"
                   android:label="@string/category_setting" />
     </application>
-    <uses-sdk android:minSdkVersion="15"/>
+    <uses-sdk android:minSdkVersion="4"/>
     <uses-permission android:name="android:permission.CAMERA"></uses-permission>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
 </manifest>
