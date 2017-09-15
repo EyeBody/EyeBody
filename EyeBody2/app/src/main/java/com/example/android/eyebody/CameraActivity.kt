@@ -49,6 +49,5 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         camera?.release()
         camera = null
         previewing = false
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
