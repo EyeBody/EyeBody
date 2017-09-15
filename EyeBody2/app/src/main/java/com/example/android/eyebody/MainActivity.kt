@@ -33,8 +33,7 @@ class MainActivity : AppCompatActivity() {
         MODE_PRIVATE : 다른 앱이 접근 불가(파일 권한 없이 불가를 뜻하는 것 같음) (mode_world_readable : 다른 앱이 공유 데이터에 접근 가능)
          */
         val shared : SharedPreferences = getSharedPreferences("isUserTypeInitSetting", Context.MODE_PRIVATE)
-        TODO("공유데이터로 initActivity를 실행하게? 아니면 이닛에서 공유데이터를 판별할지 해야함")
-
+        // TODO("공유데이터로 initActivity를 실행하게? 아니면 이닛에서 공유데이터를 판별할지 해야함")
         /* Listener (이벤트 리스너)
         클릭하면 반응
          */
