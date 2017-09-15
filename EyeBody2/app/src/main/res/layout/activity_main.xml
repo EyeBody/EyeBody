@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
     android:orientation="horizontal"
-    tools:context=".MainActivity"
-    android:layout_gravity="center" >
+    tools:context=".MainActivity">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_activity_photo"
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:text="@string/category_camera"
-            android:textSize="20dp" />
+            android:src="@drawable/imagebutton_camera"
+            android:contentDescription="Take a Picture" />
 
         <Button
             android:id="@+id/btn_activity_func1"
@@ -27,17 +29,29 @@
             android:text="@string/category_exercise"
             android:textSize="20dp" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:orientation="vertical" >
         <Button
+=======
+        android:orientation="vertical">
+
+        <ImageButton
+>>>>>>> origin/develop
             android:id="@+id/btn_activity_gallery"
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="150dp"
             android:layout_height="150dp"
+<<<<<<< HEAD
             android:text="@string/category_gallery"
             android:textSize="20dp" />
+=======
+            android:src="@drawable/imagebutton_gallery"
+            android:contentDescription="Go to Gallery" />
+
+>>>>>>> origin/develop
         <Button
             android:id="@+id/btn_activity_func2"
             style="?android:attr/buttonStyleSmall"

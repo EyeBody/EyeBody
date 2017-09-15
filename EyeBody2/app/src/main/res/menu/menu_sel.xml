@@ -1,8 +1,29 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
     <item
-        android:id="@+id/settingButton"
-        android:orderInCategory="1"
-        android:title="설정"
-        app:showAsAction="always" />
+        android:id="@+id/Actionbar_Backup"
+        android:title="백업하기"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/Actionbar_PWmodify"
+        android:title="비밀번호 변경"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/Actionbar_PWfind"
+        android:title="비밀번호 찾기"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/Actionbar_reDesire"
+        android:title="목표 재설정"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/Actionbar_AlarmSetting"
+        android:title="알람설정"
+        tools:ignore="HardcodedText" />
+
 </menu>
