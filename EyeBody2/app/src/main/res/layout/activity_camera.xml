@@ -6,6 +6,7 @@
     android:orientation="horizontal"
     android:layout_height="match_parent"
     tools:context="com.example.android.eyebody.CameraActivity">
+<<<<<<< HEAD
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,3 +30,6 @@
             android:layout_marginBottom="50dp"/>
     </RelativeLayout>
 </RelativeLayout>
+=======
+</android.support.constraint.ConstraintLayout>
+>>>>>>> master

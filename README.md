@@ -6,4 +6,4 @@ Eye + InBody
 
 문서화([링크](https://github.com/EyeBody/EyeBody/wiki/))
 
-프로젝트관리([링크](https://github.com/EyeBody/EyeBody/projects))
+프로젝트관리([링크](https://github.com/EyeBody/EyeBody/projects/1))
