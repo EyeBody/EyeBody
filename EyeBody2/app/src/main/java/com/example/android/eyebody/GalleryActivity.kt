@@ -24,19 +24,36 @@ class GalleryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
 
+        //외부저장소(SD카드)가 마운트되었는지 확인
+        //디렉토리 생성
+        //파일 생성
+        //파일 쓰기
+
+        /*
         var state: String = Environment.getExternalStorageState()
         if(Environment.MEDIA_MOUNTED.equals(state)){
-            textView.text = "외부 저장소 사용가능"
             var filedir: String = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/gallery_body"
             textView.text = filedir
 
-            var file: File = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "gallery_body")
+            var file: File? = File(filedir, "eyebody.txt")
             Toast.makeText(this, "디렉토리가 만들어짐", Toast.LENGTH_SHORT).show()
-            if (!file.mkdirs()) {
+            if (!file!!.mkdirs()) {
                 //Log.e(LOG_TAG, "Directory not created")
                 Toast.makeText(this, "디렉토리가 만들어지지 않음", Toast.LENGTH_SHORT).show()
             }
-        }
+
+            //파일 쓰기
+            file = File(filedir, "eyebody.txt")
+            try{
+                var fos: FileOutputStream = FileOutputStream(file)
+                fos.write("eyebododody".toByteArray())
+                fos.flush()
+                fos.close()
+            } catch (e: Exception){
+                e.printStackTrace()
+                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
+            }
+        }*/
     }
 
     fun getImageFromAssets(){
