@@ -9,13 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".CameraActivity"
                   android:label="@string/category_camera" />
 
@@ -26,7 +20,17 @@
                   android:label="@string/category_exercise" />
 
         <activity android:name=".SettingActivity"
-                  android:label="@string/category_setting" />
+                  android:label="@string/category_setting" >
+        </activity>
+
+        <activity android:name=".InitActivity"
+            android:label="시작">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
     </application>
 
 </manifest>
