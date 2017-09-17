@@ -12,43 +12,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/editText"
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            android:text="Sample Text" />
+            android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_encrypt"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/galleryLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                android:text="encrypt"/>
 
-            <Button
-                android:id="@+id/btn_decrypt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="decrypt"/>
+            </LinearLayout>
 
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="400px"
-            android:layout_height="600px" />
+        </ScrollView>
 
     </LinearLayout>
 
