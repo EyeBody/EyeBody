@@ -24,36 +24,61 @@ class GalleryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
 
-        //외부저장소(SD카드)가 마운트되었는지 확인
-        //디렉토리 생성
-        //파일 생성
-        //파일 쓰기
+        //1차목표: txt파일 외부저장소에 읽고 쓰기
+        //2차목표: 이미지 파일 외부저장소에 저장하고 불러오기
 
-        /*
+        //외부저장소(SD카드)가 마운트되었는지 확인
         var state: String = Environment.getExternalStorageState()
         if(Environment.MEDIA_MOUNTED.equals(state)){
-            var filedir: String = getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + "/gallery_body"
-            textView.text = filedir
+            //디렉토리 생성
+            var filedir: String = getExternalFilesDir(null).toString() + "/gallery_body"  //Android/data/com.example.android.eyebody/files/gallery_body
+            var file: File = File(filedir)
+            if(!file.exists()){
+                if(!file.mkdirs()){
+                    //디렉토리가 만들어지지 않음
+                }
+            }
 
-            var file: File? = File(filedir, "eyebody.txt")
-            Toast.makeText(this, "디렉토리가 만들어짐", Toast.LENGTH_SHORT).show()
-            if (!file!!.mkdirs()) {
-                //Log.e(LOG_TAG, "Directory not created")
-                Toast.makeText(this, "디렉토리가 만들어지지 않음", Toast.LENGTH_SHORT).show()
+            //파일 생성
+            file = File(filedir, "eyebody.txt")
+            if(!file.createNewFile()){
+                //파일이 만들어지지 않음
             }
 
             //파일 쓰기
-            file = File(filedir, "eyebody.txt")
             try{
+                var str: String = editText.text.toString()
+                var content: ByteArray = str.toByteArray()
                 var fos: FileOutputStream = FileOutputStream(file)
-                fos.write("eyebododody".toByteArray())
+
+                fos.write(content)
                 fos.flush()
                 fos.close()
-            } catch (e: Exception){
+            } catch(e: Exception){
                 e.printStackTrace()
-                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
             }
-        }*/
+
+            //파일 읽기
+            try {
+                var fis: FileInputStream = FileInputStream(file)
+                var buffer: BufferedReader = BufferedReader(InputStreamReader(fis))
+                //var cnt: Int = file.length().toInt()
+                var line: String?
+
+                // buffer: ByteArray = ByteArray(cnt)
+               do{
+                   line = buffer.readLine()
+                   if(line == null) break
+                   textView.text = textView.text.toString() + line
+               } while(true)
+
+
+            } catch(e: Exception){
+                e.printStackTrace()
+            }
+        } else{
+            //외부저장소가 마운트되지 않아서 파일을 읽고 쓸 수 없음
+        }
     }
 
     fun getImageFromAssets(){
@@ -70,7 +95,7 @@ class GalleryActivity : AppCompatActivity() {
 
         btn_encrypt.setOnClickListener{
             //내부저장소에 파일 쓰기
-            var string: String = et_sample.text.toString()  //샘플텍스트
+            var string: String = editText.text.toString()  //샘플텍스트
 
             try{
                 var outputStream: FileOutputStream = openFileOutput(fileName, Context.MODE_PRIVATE)
