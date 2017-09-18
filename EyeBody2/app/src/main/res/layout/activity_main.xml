@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -8,6 +8,7 @@
     android:gravity="center"
     android:orientation="horizontal"
     tools:context=".MainActivity">
+<<<<<<< HEAD
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,5 +46,63 @@
             android:layout_height="150dp"
             android:text="@string/category_setting"
             android:textSize="20dp" />
+=======
+
+   <!-- TODO fragment 띄우야 함.
+    <fragment
+        android:id="@+id/main_page_fragment"
+        android:name="android.support.v7.app.AppCompatDialogFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />-->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btn_activity_photo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:contentDescription="Take a Picture"
+                android:src="@drawable/imagebutton_camera" />
+
+            <Button
+                android:id="@+id/btn_activity_func1"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:text="@string/category_exercise"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btn_activity_gallery"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:contentDescription="Go to Gallery"
+                android:src="@drawable/imagebutton_gallery" />
+
+            <Button
+                android:id="@+id/btn_activity_func2"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:text="@string/category_setting"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+>>>>>>> origin/develop
     </LinearLayout>
-</LinearLayout>
+</FrameLayout>
