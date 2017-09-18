@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-<<<<<<< HEAD
         fun onCreateOptionsMenu(menu: Menu): Boolean {
             super.onCreateOptionsMenu(menu)
             menuInflater.inflate(R.menu.menu_sel, menu)
@@ -24,14 +23,12 @@ class MainActivity : AppCompatActivity() {
 
         fun onOptionsItemSelected(item: MenuItem): Boolean {
             val id = item.itemId
-            if (id == R.id.settingButton) {
+            if (id == R.id.btn_activity_func2) {
                 val settingPage = Intent(this, SettingActivity::class.java)
                 startActivity(settingPage)
             }
             return super.onOptionsItemSelected(item)
         }
-=======
-
 
         /* lazy initializing (지연 선언)
         해당 변수를 사용하기 바로 직전에 부르기 때문에 처음 실행시 과부하가 적음.
@@ -43,7 +40,6 @@ class MainActivity : AppCompatActivity() {
         val galleryPage     by lazy {   Intent(this, GalleryActivity::class.java)   }
         val exercisePage    by lazy {   Intent(this, ExerciseActivity::class.java)  }
 
-
         /* SharedPreferences (앱 공유 데이터)
         isUserTypeInitSetting : 유저가 처음 시작할 때 비밀번호, 몸매목표 등을 세팅했는지 확인하는 파일
         MODE_PRIVATE : 다른 앱이 접근 불가(파일 권한 없이 불가를 뜻하는 것 같음) (mode_world_readable : 다른 앱이 공유 데이터에 접근 가능)
@@ -53,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         /* Listener (이벤트 리스너)
         클릭하면 반응
          */
->>>>>>> origin/develop
         btn_activity_photo.setOnClickListener {
             startActivity(cameraPage)
         }
@@ -106,8 +101,6 @@ class MainActivity : AppCompatActivity() {
                 toast.show()
             }
         }
-
-
         return super.onOptionsItemSelected(item)
     }
 }
