@@ -8,45 +8,6 @@
     android:gravity="center"
     android:orientation="horizontal"
     tools:context=".MainActivity">
-<<<<<<< HEAD
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <ImageButton
-            android:id="@+id/btn_activity_photo"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@drawable/imagebutton_camera"
-            android:contentDescription="Take a Picture" />
-        <Button
-            android:id="@+id/btn_activity_func1"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:text="@string/category_exercise"
-            android:textSize="20dp" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-        <ImageButton
-            android:id="@+id/btn_activity_gallery"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:text="@string/category_gallery"
-            android:textSize="20dp" />
-            android:src="@drawable/imagebutton_gallery"
-            android:contentDescription="Go to Gallery" />
-        <Button
-            android:id="@+id/btn_activity_func2"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:text="@string/category_setting"
-            android:textSize="20dp" />
-=======
 
    <!-- TODO fragment 띄우야 함.
     <fragment
@@ -55,7 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />-->
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -101,8 +61,6 @@
                 android:layout_height="150dp"
                 android:text="@string/category_setting"
                 android:textSize="20sp" />
-
         </LinearLayout>
->>>>>>> origin/develop
     </LinearLayout>
 </FrameLayout>

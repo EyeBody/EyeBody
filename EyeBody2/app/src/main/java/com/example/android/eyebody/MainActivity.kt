@@ -1,7 +1,5 @@
 package com.example.android.eyebody
 
-import android.app.Fragment
-import android.app.FragmentManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -47,16 +45,12 @@ class MainActivity : AppCompatActivity() {
         val galleryPage     by lazy {   Intent(this, GalleryActivity::class.java)   }
         val exercisePage    by lazy {   Intent(this, ExerciseActivity::class.java)  }
 
-<<<<<<< HEAD
         /* SharedPreferences (앱 공유 데이터)
         isUserTypeInitSetting : 유저가 처음 시작할 때 비밀번호, 몸매목표 등을 세팅했는지 확인하는 파일
         MODE_PRIVATE : 다른 앱이 접근 불가(파일 권한 없이 불가를 뜻하는 것 같음) (mode_world_readable : 다른 앱이 공유 데이터에 접근 가능)
          */
         val shared : SharedPreferences = getSharedPreferences("isUserTypeInitSetting", Context.MODE_PRIVATE)
         // TODO("공유데이터로 initActivity를 실행하게? 아니면 이닛에서 공유데이터를 판별할지 해야함")
-=======
-
->>>>>>> origin/develop
         /* Listener (이벤트 리스너)
         클릭하면 반응
          */
