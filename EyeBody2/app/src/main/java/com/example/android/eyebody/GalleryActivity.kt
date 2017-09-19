@@ -10,10 +10,14 @@ import kotlinx.android.synthetic.main.activity_gallery.*
 import android.graphics.BitmapFactory
 import android.os.Environment
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.widget.ImageView
 import android.widget.Toast
 import java.io.*
+
+//TODO image metadata로 1주전 2주전 정보 표시
 
 class GalleryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,13 +41,18 @@ class GalleryActivity : AppCompatActivity() {
             for(f in fileList){
                 //TODO RecyclerView로 갤러리 UI 만들기
                 var imageView: ImageView = ImageView(this)
-                imageView.layoutParams = ViewGroup.LayoutParams(500, ViewGroup.LayoutParams.WRAP_CONTENT)
+                var lp: LayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+                imageView.layoutParams = lp
 
                 //TODO 이미지를 암호화해서 저장해놓고 불러올 때만 복호화 하기
                 file = File(filedir, f.name)
                 var fis: FileInputStream = FileInputStream(file)   //InputStream으로 변환
                 var bitmapImg: Bitmap = BitmapFactory.decodeStream(fis)  //Bitmap으로 변환
                 imageView.setImageBitmap(bitmapImg)   //Bitmap까지 변환해야 이미지뷰에 띄울 수 있음
+
+                imageView.setOnClickListener {
+                    selectedImage.setImageBitmap(bitmapImg) //이미지 크게 보여주기
+                }
 
                 galleryLayout.addView(imageView)
             }

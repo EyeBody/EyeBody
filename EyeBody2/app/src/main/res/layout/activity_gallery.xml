@@ -6,28 +6,42 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.eyebody.GalleryActivity">
 
-
-    <LinearLayout
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:rowCount="2"
+        android:columnCount="2" >
 
+        <ImageView
+            android:id="@+id/selectedImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:layout_gravity="fill"
+            android:layout_rowWeight="3"
+            android:background="@color/colorPrimary"
+            app:srcCompat="@mipmap/ic_launcher" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:layout_gravity="fill"
+            android:layout_rowWeight="1"
+            >
 
             <LinearLayout
                 android:id="@+id/galleryLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="@color/colorAccent"
+                android:padding="10sp">
 
             </LinearLayout>
 
-        </ScrollView>
-
-    </LinearLayout>
+        </HorizontalScrollView>
+    </GridLayout>
 
 </android.support.constraint.ConstraintLayout>
