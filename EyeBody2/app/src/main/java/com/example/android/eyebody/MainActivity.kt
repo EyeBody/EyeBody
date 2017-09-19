@@ -3,15 +3,19 @@ package com.example.android.eyebody
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import io.vrinda.kotlinpermissions.PermissionCallBack
+import io.vrinda.kotlinpermissions.PermissionsActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : PermissionsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +25,6 @@ class MainActivity : AppCompatActivity() {
             menuInflater.inflate(R.menu.menu_sel, menu)
             return true
         }
-
         fun onOptionsItemSelected(item: MenuItem): Boolean {
             val id = item.itemId
             if (id == R.id.btn_activity_func2) {
@@ -30,8 +33,6 @@ class MainActivity : AppCompatActivity() {
             }
             return super.onOptionsItemSelected(item)
         }
-
-
 
         // TODO ----- 바탕화면에 toggle icon?? 형식으로 간단하게 클릭만으로 메인 액티비티를 접근할 수 있게 설정하기 (백그라운드?)
         // TODO ----- 메모리 릭 문제 해결 (점점 메모리 사용량이 증가한다.)
@@ -54,9 +55,26 @@ class MainActivity : AppCompatActivity() {
         /* Listener (이벤트 리스너)
         클릭하면 반응
          */
+        fun checkCAMERAPermission(): Boolean {
+            var result: Int = ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.CAMERA)
+            return result == PackageManager.PERMISSION_GRANTED
+        }
         btn_activity_photo.setOnClickListener {
-
-            startActivity(cameraPage)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!checkCAMERAPermission()) {
+                    requestPermissions(arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE), object : PermissionCallBack {
+                        override fun permissionGranted() {
+                            super.permissionGranted()
+                            Log.v("Camera permissions", "Granted")
+                        }
+                        override fun permissionDenied() {
+                            super.permissionDenied()
+                            Log.v("Camera permissions", "Denied")
+                        }
+                    })
+                } else startActivity(cameraPage)
+            }
+            else startActivity(cameraPage)
         }
         btn_activity_gallery.setOnClickListener {
             val share : SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
@@ -73,6 +91,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         btn_activity_func1.setOnClickListener {
+
             startActivity(exercisePage)
         }
     }
@@ -84,7 +103,6 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_sel, menu)
         return true
     }
-
     /* onOptionItemSelected
     옵션메뉴에서 아이템이 선택됐을 때 발생하는 이벤트
      */
@@ -92,7 +110,6 @@ class MainActivity : AppCompatActivity() {
         // TODO ----- 아예 싹 갈아 없고 네비게이션 뷰 구성하기" - fun onCreateOptionMenu 와 onOptionSelected 를 엎어야 함.
         val id      by lazy {   item.itemId     }
         val toast   by lazy {   Toast.makeText(this, "", Toast.LENGTH_SHORT)    }
-
 
         when (id) {
             R.id.Actionbar_Backup -> {
