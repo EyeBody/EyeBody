@@ -55,10 +55,10 @@ class MainActivity : AppCompatActivity() {
         클릭하면 반응
          */
         btn_activity_photo.setOnClickListener {
+
             startActivity(cameraPage)
         }
         btn_activity_gallery.setOnClickListener {
-
             val share : SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
             val isSetPassword = share.getBoolean("isSetting",false)
             Log.d("mydbg_main","유저가 gallery 접근을 요청함")
@@ -68,18 +68,14 @@ class MainActivity : AppCompatActivity() {
             }else{
                 // TODO(now2) fragment 를 이용하여 화면전환 - 패스워드입력창 : activity_main_enter_gallery
                 // 비밀번호 검증 프라그먼트 띄워야 함
-
                 startActivity(galleryPage)
                 //overridePendingTransition(0,0)
             }
-
         }
         btn_activity_func1.setOnClickListener {
             startActivity(exercisePage)
         }
     }
-
-
     /* onCreateOptionMenu
     액션바에 옵션메뉴를 띄우게 함. xml 긁어서
      */
@@ -88,7 +84,6 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_sel, menu)
         return true
     }
-
 
     /* onOptionItemSelected
     옵션메뉴에서 아이템이 선택됐을 때 발생하는 이벤트
