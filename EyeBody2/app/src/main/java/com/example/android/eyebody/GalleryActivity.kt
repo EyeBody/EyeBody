@@ -1,29 +1,49 @@
 package com.example.android.eyebody
 
-import android.app.ActionBar
-import android.content.Context
-import android.content.res.AssetManager
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_gallery.*
-import android.graphics.BitmapFactory
 import android.os.Environment
-import android.util.Log
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams
-import android.widget.ImageView
-import android.widget.Toast
+import android.support.v7.widget.LinearLayoutManager
 import java.io.*
 
 //TODO image metadata로 1주전 2주전 정보 표시
+//TODO RecyclerView로 갤러리 UI 만들기
 
 class GalleryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
 
+        var photoList = ArrayList<Photo>()
+
+        //외부저장소(SD카드)가 마운트되었는지 확인
+        var state: String = Environment.getExternalStorageState()
+        if(Environment.MEDIA_MOUNTED.equals(state)){
+            //디렉토리 생성
+            var filedir: String = getExternalFilesDir(null).toString() + "/gallery_body"  //Android/data/com.example.android.eyebody/files/gallery_body
+            var file: File = File(filedir)
+            if(!file.exists()){
+                if(!file.mkdirs()){
+                    //디렉토리가 만들어지지 않음
+                }
+            }
+
+            for(f in file.listFiles()){
+                photoList.add(Photo(f))
+            }
+        } else{
+            //외부저장소가 마운트되지 않아서 파일을 읽고 쓸 수 없음
+        }
+
+        list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        list.hasFixedSize()
+        list.adapter = GalleryAdapter(this, photoList)
+    }
+
+    /* 안쓰는 코드들
+
+    fun ShowSelectedImage(){
         //외부저장소(SD카드)가 마운트되었는지 확인
         var state: String = Environment.getExternalStorageState()
         if(Environment.MEDIA_MOUNTED.equals(state)){
@@ -39,7 +59,6 @@ class GalleryActivity : AppCompatActivity() {
             var fileList = file.listFiles() //폴더 안에 있는 파일들 리스트
 
             for(f in fileList){
-                //TODO RecyclerView로 갤러리 UI 만들기
                 var imageView: ImageView = ImageView(this)
                 var lp: LayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
                 imageView.layoutParams = lp
@@ -50,8 +69,10 @@ class GalleryActivity : AppCompatActivity() {
                 var bitmapImg: Bitmap = BitmapFactory.decodeStream(fis)  //Bitmap으로 변환
                 imageView.setImageBitmap(bitmapImg)   //Bitmap까지 변환해야 이미지뷰에 띄울 수 있음
 
-                imageView.setOnClickListener {
-                    selectedImage.setImageBitmap(bitmapImg) //이미지 크게 보여주기
+                imageView.setOnClickListener {  //이미지 크게 보여주기
+                    imageViewOnClickListener(imageView)
+                    //selectedImage.setImageBitmap(bitmapImg)
+                    //selectedImage.setImageDrawable(imageView.getDrawable())
                 }
 
                 galleryLayout.addView(imageView)
@@ -59,6 +80,11 @@ class GalleryActivity : AppCompatActivity() {
         } else{
             //외부저장소가 마운트되지 않아서 파일을 읽고 쓸 수 없음
         }
+    }
+
+    fun imageViewOnClickListener(v: View?){
+        var img = v as ImageView
+        selectedImage.setImageDrawable(img.getDrawable())
     }
 
     fun ExternalTextFileIO(){
@@ -159,4 +185,5 @@ class GalleryActivity : AppCompatActivity() {
             e.printStackTrace()
         }
     }
+    */
 }
