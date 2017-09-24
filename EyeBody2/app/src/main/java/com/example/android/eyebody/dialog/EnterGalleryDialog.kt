@@ -24,21 +24,32 @@ class EnterGalleryDialog : DialogFragment() {
 
         Log.d("mydbg_enterGallery", "다이얼로그 시작")
 
+
+
         val layoutInflater = activity.layoutInflater
         val dialogbuilder = AlertDialog.Builder(activity)
         val view = layoutInflater.inflate(R.layout.dialog_main_enter_gallery_input_pw, null)
+        val bt_pwSubmit = view.findViewById<Button>(R.id.Button_enter_gallery_pw_submit)
+        val tv_pwInput = view.findViewById<EditText>(R.id.EditText_enter_gallery_pw_input)
+
+
+        // 키보드-확인 눌렀을 때 반응
+        tv_pwInput.setOnEditorActionListener { textView, i, keyEvent ->
+            true
+            Log.d("mydbg_enterGallery", "is ok ????")
+            bt_pwSubmit.callOnClick()
+        }
+
 
         dialogbuilder.setView(view)
                 .setTitle("Input Password")
                 .setMessage("Please type your private password")
 
-        // button Listener
-        val bt_pwSubmit = view.findViewById<Button>(R.id.Button_enter_gallery_pw_submit)
-        bt_pwSubmit.setOnClickListener {
 
+        // button Listener
+        bt_pwSubmit.setOnClickListener {
             // EditText 친 부분 MD5 암호화
             val md5 = MessageDigest.getInstance("MD5")
-            val tv_pwInput = view.findViewById<EditText>(R.id.EditText_enter_gallery_pw_input)
             val str_inputPW: String = tv_pwInput.text.toString()
             val pwByte: ByteArray = str_inputPW.toByteArray(charset("unicode"))
             md5.update(pwByte)
@@ -56,12 +67,6 @@ class EnterGalleryDialog : DialogFragment() {
                 Toast.makeText(activity, "관계자 외 출입금지~", Toast.LENGTH_LONG).show()
             }
 
-            // 키보드-확인 눌렀을 때 반응
-            tv_pwInput.setOnEditorActionListener { textView, i, keyEvent ->
-                true
-                Log.d("mydbg_enterGallery", "is ok ????")
-                bt_pwSubmit.callOnClick()
-            }
         }
 
         return dialogbuilder.create()

@@ -14,6 +14,7 @@ import android.widget.Toast
 import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
 import com.example.android.eyebody.dialog.EnterGalleryDialog
+import com.example.android.eyebody.init.InitActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : PermissionsActivity() {
@@ -44,15 +45,8 @@ class MainActivity : PermissionsActivity() {
         이렇게하면 속도가 빨라지는 효과가 있는지는 모르겠다.***
          */
         val cameraPage by lazy { Intent(this, CameraActivity::class.java) }
-        val galleryPage by lazy { Intent(this, GalleryActivity::class.java) }
         val exercisePage by lazy { Intent(this, ExerciseActivity::class.java) }
 
-        /* SharedPreferences (앱 공유 데이터)
-        isUserTypeInitSetting : 유저가 처음 시작할 때 비밀번호, 몸매목표 등을 세팅했는지 확인하는 파일
-        MODE_PRIVATE : 다른 앱이 접근 불가(파일 권한 없이 불가를 뜻하는 것 같음) (mode_world_readable : 다른 앱이 공유 데이터에 접근 가능)
-         */
-        val shared : SharedPreferences = getSharedPreferences("isUserTypeInitSetting", Context.MODE_PRIVATE)
-        // TODO("공유데이터로 initActivity를 실행하게? 아니면 이닛에서 공유데이터를 판별할지 해야함")
         /* Listener (이벤트 리스너)
         클릭하면 반응
          */
@@ -77,6 +71,13 @@ class MainActivity : PermissionsActivity() {
             }
             else startActivity(cameraPage)
         }
+
+
+        /* SharedPreferences (앱 공유 데이터)
+        isUserTypeInitSetting : 유저가 처음 시작할 때 비밀번호, 몸매목표 등을 세팅했는지 확인하는 파일
+        MODE_PRIVATE : 다른 앱이 접근 불가(파일 권한 없이 불가를 뜻하는 것 같음) (mode_world_readable : 다른 앱이 공유 데이터에 접근 가능)
+         */
+        val shared : SharedPreferences = getSharedPreferences("isUserTypeInitSetting", Context.MODE_PRIVATE)
 
         btn_activity_gallery.setOnClickListener {
 
