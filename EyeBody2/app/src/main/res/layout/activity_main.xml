@@ -9,7 +9,7 @@
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
-   <!-- TODO fragment ¶ç¿ï ¼ö ÀÖÀ½
+   <!-- TODO fragment ?
     <fragment
         android:id="@+id/main_page_fragment"
         android:name="android.support.v7.app.AppCompatDialogFragment"
