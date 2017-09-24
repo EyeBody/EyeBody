@@ -33,12 +33,14 @@ class GalleryActivity : AppCompatActivity() {
                     //디렉토리가 만들어지지 않음
                 }
             }
+            //테스트용 이미지를 외부저장소에 따로 넣어놔야 함
 
             for(f in file.listFiles()){
                 photoList.add(Photo(f))
             }
 
             selectedImage.setImageBitmap(photoList[0].image)
+            selectedImage.setTag(0)
         } else{
             //외부저장소가 마운트되지 않아서 파일을 읽고 쓸 수 없음
         }
