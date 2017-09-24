@@ -21,8 +21,8 @@ class InitActivity : AppCompatActivity() {
         setContentView(R.layout.activity_init)
 
         val goMain by lazy { Intent(this, MainActivity::class.java) }
-        val tv_password = findViewById<EditText>(textview_password.id)
-        val bt_passwordSubmit = findViewById<Button>(button_passwordSubmit.id)
+        val viewPassword = findViewById<EditText>(textview_password.id)
+        val viewPasswordSubmit = findViewById<Button>(button_passwordSubmit.id)
 
 
         // TODO ----- 현재는 비밀번호를 hash로 변환하여 저장하고 있음.
@@ -35,8 +35,8 @@ class InitActivity : AppCompatActivity() {
         isUserTypeInitSetting : 유저가 처음 시작할 때 비밀번호, 몸매목표 등을 세팅했는지 확인하는 파일
         MODE_PRIVATE : 다른 앱이 접근 불가(파일 권한 없이 불가를 뜻하는 것 같음) (mode_world_readable : 다른 앱이 공유 데이터에 접근 가능)
          */
-        val share: SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
-        val isSetPassword = share.getBoolean("isSetting", false)
+        val sharedPref: SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
+        val isSetPassword = sharedPref.getBoolean("isSetting", false)
 
         if (isSetPassword) {
             Log.d("mydbg_init", "비밀번호 초기설정이 완료되어있으므로 MainActivity로 넘어갑니다.")
@@ -45,25 +45,25 @@ class InitActivity : AppCompatActivity() {
         }
 
 
-        tv_password.setOnEditorActionListener { textView, i, keyEvent ->
+        viewPassword.setOnEditorActionListener { textView, i, keyEvent ->
             true
-            bt_passwordSubmit.callOnClick()
+            viewPasswordSubmit.callOnClick()
         }
 
 
-        bt_passwordSubmit.setOnClickListener { view ->
-            val str_pw = tv_password.text
-            Log.d("mydbg_init", "password >>>> $str_pw")
+        viewPasswordSubmit.setOnClickListener { view ->
+            val strPW = viewPassword.text
+            Log.d("mydbg_init", "password >>>> $strPW")
 
-            if (str_pw.isNotEmpty()) {
-                Toast.makeText(this, "${str_pw}를 입력하였습니다.", Toast.LENGTH_LONG).show()
-                Log.d("mydbg_init", "${str_pw.length}")
+            if (strPW.isNotEmpty()) {
+                Toast.makeText(this, "${strPW}를 입력하였습니다.", Toast.LENGTH_LONG).show()
+                Log.d("mydbg_init", "${strPW.length}")
 
 
                 // TODO ----- MD5는 보안이 취약해 추후 바꿔야 함. SHA-3(KECCAK)을 후보로 생각하고 있음.
-                // 파라미터로 charset을 넣지 않으면 값이 보존되지 않는 현상에 대해 알아봐야 함.
+                // MIT license code : https://github.com/walleth/keccak/blob/master/keccak/src/main/kotlin/org/walleth/keccak/Keccak.kt
                 val md5 = MessageDigest.getInstance("MD5")
-                val pwByte = str_pw.toString().toByteArray(charset("unicode"))
+                val pwByte = strPW.toString().toByteArray(charset("unicode"))
                 md5.update(pwByte)
                 val hashedPW = md5.digest().toString(charset("unicode"))
 
@@ -71,8 +71,8 @@ class InitActivity : AppCompatActivity() {
                 Log.d("mydbg_init", "MD5 pw : $hashedPW")
 
 
-                val Editor = share.edit()
-                Editor.putString("hashedPW", hashedPW)
+                val spEditor = sharedPref.edit()
+                spEditor.putString("hashedPW", hashedPW)
                         .putBoolean("isSetting", true)
                         .commit()
                 startActivity(goMain)

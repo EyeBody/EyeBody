@@ -9,7 +9,7 @@
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
-   <!-- TODO fragment 띄우야 함.
+   <!-- TODO fragment 띄울 수 있음
     <fragment
         android:id="@+id/main_page_fragment"
         android:name="android.support.v7.app.AppCompatDialogFragment"
