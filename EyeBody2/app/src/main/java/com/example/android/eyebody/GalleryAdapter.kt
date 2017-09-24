@@ -28,18 +28,19 @@ class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        (holder as Item).bindData(lists[position])
+        (holder as Item).bindData(lists[position], position)
     }
 
     class Item(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindData(photo: Photo) {
+        fun bindData(photo: Photo, pos: Int) {
             itemView.imageView.setImageBitmap(photo.image)
             itemView.date.text = photo.date
 
             itemView.setOnClickListener{
-                Toast.makeText(itemView.context, photo.date, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(itemView.context, photo.date, Toast.LENGTH_SHORT).show()
                 var imgView: ImageView = (itemView.context as Activity).findViewById(R.id.selectedImage)
                 imgView.setImageBitmap(photo.image)
+                imgView.setTag(pos)
             }
         }
     }

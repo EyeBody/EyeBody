@@ -1,21 +1,26 @@
 package com.example.android.eyebody
 
+import android.app.Activity
+import android.content.res.AssetManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_gallery.*
 import android.os.Environment
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
+import android.widget.ImageView
+import android.widget.Toast
 import java.io.*
 
 //TODO image metadata로 1주전 2주전 정보 표시
 //TODO RecyclerView로 갤러리 UI 만들기
 
 class GalleryActivity : AppCompatActivity() {
+    var photoList = ArrayList<Photo>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
-
-        var photoList = ArrayList<Photo>()
 
         //외부저장소(SD카드)가 마운트되었는지 확인
         var state: String = Environment.getExternalStorageState()
@@ -32,6 +37,8 @@ class GalleryActivity : AppCompatActivity() {
             for(f in file.listFiles()){
                 photoList.add(Photo(f))
             }
+
+            selectedImage.setImageBitmap(photoList[0].image)
         } else{
             //외부저장소가 마운트되지 않아서 파일을 읽고 쓸 수 없음
         }
@@ -39,6 +46,30 @@ class GalleryActivity : AppCompatActivity() {
         list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         list.hasFixedSize()
         list.adapter = GalleryAdapter(this, photoList)
+    }
+
+    fun ShowPreviousImage(v: View){
+        try {
+            var prePosition: Int = (selectedImage.getTag() as Int) - 1
+            selectedImage.setImageBitmap(photoList[prePosition].image)
+            selectedImage.setTag(prePosition)
+        } catch(e: Exception){
+            Toast.makeText(this, "앞이 없음", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun ShowNextImage(v: View){
+        try {
+            var nextPosition: Int = (selectedImage.getTag() as Int) + 1
+            selectedImage.setImageBitmap(photoList[nextPosition].image)
+            selectedImage.setTag(nextPosition)
+        } catch(e: Exception){
+            Toast.makeText(this, "뒤가 없음", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun ImageFromAssets(){
+        //테스트용 코드
     }
 
     /* 안쓰는 코드들
