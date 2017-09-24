@@ -9,6 +9,14 @@
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
+   <!-- TODO fragment ¶ç¿ï ¼ö ÀÖÀ½
+    <fragment
+        android:id="@+id/main_page_fragment"
+        android:name="android.support.v7.app.AppCompatDialogFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />-->
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
