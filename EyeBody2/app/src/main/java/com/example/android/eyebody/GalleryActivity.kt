@@ -12,8 +12,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import java.io.*
 
+//TODO gallery UI 예쁘게 다듬기
 //TODO image metadata로 1주전 2주전 정보 표시
-//TODO RecyclerView로 갤러리 UI 만들기
 
 class GalleryActivity : AppCompatActivity() {
     var photoList = ArrayList<Photo>()
@@ -36,6 +36,8 @@ class GalleryActivity : AppCompatActivity() {
             //테스트용 이미지를 외부저장소에 따로 넣어놔야 함
 
             for(f in file.listFiles()){
+                //TODO 이미지 파일이 아닌경우 예외처리
+                //TODO 이미지를 암호화해서 저장해놓고 불러올 때만 복호화 하기
                 photoList.add(Photo(f))
             }
 
@@ -50,31 +52,67 @@ class GalleryActivity : AppCompatActivity() {
         list.adapter = GalleryAdapter(this, photoList)
     }
 
-    fun ShowPreviousImage(v: View){
+    fun showPreviousImage(v: View){
         try {
             var prePosition: Int = (selectedImage.getTag() as Int) - 1
             selectedImage.setImageBitmap(photoList[prePosition].image)
             selectedImage.setTag(prePosition)
         } catch(e: Exception){
-            Toast.makeText(this, "앞이 없음", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "앞이 없음", Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun ShowNextImage(v: View){
+    fun showNextImage(v: View){
         try {
             var nextPosition: Int = (selectedImage.getTag() as Int) + 1
             selectedImage.setImageBitmap(photoList[nextPosition].image)
             selectedImage.setTag(nextPosition)
         } catch(e: Exception){
-            Toast.makeText(this, "뒤가 없음", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "뒤가 없음", Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun ImageFromAssets(){
-        //테스트용 코드
-    }
-
     /* 안쓰는 코드들
+    fun assetsToExternalStorage(){
+        //assets에 있는 파일을 external storage로 옮기기(테스트용)
+        var assetManager = getAssets()
+        var files: Array<String>? = null
+
+        try{
+            files = assetManager.list("")
+        } catch (e: Exception) {
+            //Log.e("tag", "Failed to get asset file list.", e);
+        }
+
+        if(files != null){
+
+            for (filename: String in files){
+                try{
+                    var input: InputStream? = null
+                    var output: OutputStream? = null
+
+                    input = assetManager.open(filename)
+                    var outFile: File = File(getExternalFilesDir(null).toString() + "/gallery_body", filename)
+                    output = FileOutputStream(outFile)
+
+                    //copyFile(input, output)
+                    var buffer: ByteArray = kotlin.ByteArray(1024)
+                    var read: Int = 0
+                    do{
+                        read = input.read(buffer)
+                        if(read == -1) break
+
+                        output.write(buffer, 0, read)
+                    }while(true)
+
+                    input.close()
+                    output.close()
+                } catch(e: Exception){
+
+                }
+            }
+        }
+    }
 
     fun ShowSelectedImage(){
         //외부저장소(SD카드)가 마운트되었는지 확인
@@ -96,7 +134,6 @@ class GalleryActivity : AppCompatActivity() {
                 var lp: LayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
                 imageView.layoutParams = lp
 
-                //TODO 이미지를 암호화해서 저장해놓고 불러올 때만 복호화 하기
                 file = File(filedir, f.name)
                 var fis: FileInputStream = FileInputStream(file)   //InputStream으로 변환
                 var bitmapImg: Bitmap = BitmapFactory.decodeStream(fis)  //Bitmap으로 변환
