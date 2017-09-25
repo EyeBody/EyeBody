@@ -46,6 +46,7 @@ class MainActivity : PermissionsActivity() {
          */
         val cameraPage by lazy { Intent(this, CameraActivity::class.java) }
         val exercisePage by lazy { Intent(this, ExerciseActivity::class.java) }
+        val settingPage by lazy { Intent(this, SettingActivity::class.java) }
 
         /* Listener (이벤트 리스너)
         클릭하면 반응
@@ -97,9 +98,12 @@ class MainActivity : PermissionsActivity() {
             }
         }
         btn_activity_func1.setOnClickListener {
-
             startActivity(exercisePage)
         }
+        btn_activity_func2.setOnClickListener {
+            startActivity(settingPage)
+        }
+
     }
     /* onCreateOptionMenu
     액션바에 옵션메뉴를 띄우게 함. xml 긁어서

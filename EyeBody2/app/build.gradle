@@ -24,7 +24,7 @@ android {
     sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/gallery_body'] } }
 }
 dependencies {
-   /* compile 'com.google.android.gms:play-services-drive:11.4.0'*/
+    compile 'com.google.android.gms:play-services-drive:11.4.0'
     compile 'io.vrinda.kotlinpermissions:kotlinpermissions:1.1'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
