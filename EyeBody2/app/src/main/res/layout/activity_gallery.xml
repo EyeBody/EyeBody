@@ -39,67 +39,9 @@
             android:text="▶" />
     </LinearLayout>
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"/>
-
-    <!--
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:rowCount="2"
-        android:columnCount="2" >
-
-        <ImageView
-            android:id="@+id/selectedImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_gravity="fill"
-            android:layout_rowWeight="3" />
-
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_gravity="fill"
-            android:layout_rowWeight="1" >
-
-            <LinearLayout
-                android:id="@+id/galleryLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10sp">
-
-                 sample image
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
-                    android:background="#00000F"
-                    android:onClick="imageViewOnClickListener"
-                    app:srcCompat="@mipmap/ic_launcher_foreground" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerInside"
-                    android:background="#00F00F"
-                    android:onClick="imageViewOnClickListener"
-                    app:srcCompat="@mipmap/ic_launcher" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="#F0000F"
-                    android:onClick="imageViewOnClickListener"
-                    app:srcCompat="@mipmap/ic_launcher_round" />
-            </LinearLayout>
-
-        </HorizontalScrollView>
-    </GridLayout>
-    -->
 </LinearLayout>
