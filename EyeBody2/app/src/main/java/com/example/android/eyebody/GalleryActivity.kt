@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_gallery.*
 import android.os.Environment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -33,7 +34,9 @@ class GalleryActivity : AppCompatActivity() {
                     //디렉토리가 만들어지지 않음
                 }
             }
+
             //테스트용 이미지를 외부저장소에 따로 넣어놔야 함
+            assetsToExternalStorage()
 
             for(f in file.listFiles()){
                 //TODO 이미지 파일이 아닌경우 예외처리
@@ -41,8 +44,10 @@ class GalleryActivity : AppCompatActivity() {
                 photoList.add(Photo(f))
             }
 
-            selectedImage.setImageBitmap(photoList[0].image)
-            selectedImage.setTag(0)
+            if(photoList.size != 0){    //이미지가 아무것도 없는경우에는 selectedImage를 세팅하지 않음
+                selectedImage.setImageBitmap(photoList[0].image)
+                selectedImage.setTag(0)
+            }
         } else{
             //외부저장소가 마운트되지 않아서 파일을 읽고 쓸 수 없음
         }
@@ -72,48 +77,31 @@ class GalleryActivity : AppCompatActivity() {
         }
     }
 
-    /* 안쓰는 코드들
     fun assetsToExternalStorage(){
-        //assets에 있는 파일을 external storage로 옮기기(테스트용)
-        var assetManager = getAssets()
-        var files: Array<String>? = null
+        //assets에 있는 파일을 외부저장소로 복사(테스트용)
+        for(i in 1..4){
+            var filename: String = "front_week" + i + ".jpg"
+            var assetManager: AssetManager = getAssets()
+            var input: InputStream = assetManager.open("gallery_body/" + filename)
+            var outputfile:String = getExternalFilesDir(null).toString() + "/gallery_body/" + filename
+            Log.d("file", i.toString()+"번째, " + outputfile)
+            var output: OutputStream = FileOutputStream(outputfile)
+            var buffer: ByteArray = ByteArray(1024)
+            var length: Int
 
-        try{
-            files = assetManager.list("")
-        } catch (e: Exception) {
-            //Log.e("tag", "Failed to get asset file list.", e);
-        }
+            do{
+                length = input.read(buffer)
+                if(length <= 0) break;
+                output.write(buffer, 0, length)
+            }while(true)
 
-        if(files != null){
-
-            for (filename: String in files){
-                try{
-                    var input: InputStream? = null
-                    var output: OutputStream? = null
-
-                    input = assetManager.open(filename)
-                    var outFile: File = File(getExternalFilesDir(null).toString() + "/gallery_body", filename)
-                    output = FileOutputStream(outFile)
-
-                    //copyFile(input, output)
-                    var buffer: ByteArray = kotlin.ByteArray(1024)
-                    var read: Int = 0
-                    do{
-                        read = input.read(buffer)
-                        if(read == -1) break
-
-                        output.write(buffer, 0, read)
-                    }while(true)
-
-                    input.close()
-                    output.close()
-                } catch(e: Exception){
-
-                }
-            }
+            output.flush();
+            output.close();
+            input.close();
         }
     }
 
+/* 안쓰는 코드들
     fun ShowSelectedImage(){
         //외부저장소(SD카드)가 마운트되었는지 확인
         var state: String = Environment.getExternalStorageState()
@@ -134,6 +122,11 @@ class GalleryActivity : AppCompatActivity() {
                 var lp: LayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
                 imageView.layoutParams = lp
 
+                //TODO RecyclerView로 갤러리 UI 만들기
+                var imageView: ImageView = ImageView(this)
+                imageView.layoutParams = ViewGroup.LayoutParams(500, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+                //TODO 이미지를 암호화해서 저장해놓고 불러올 때만 복호화 하기
                 file = File(filedir, f.name)
                 var fis: FileInputStream = FileInputStream(file)   //InputStream으로 변환
                 var bitmapImg: Bitmap = BitmapFactory.decodeStream(fis)  //Bitmap으로 변환
