@@ -9,7 +9,6 @@ public abstract class PermissionsUtil{
         if (grantResults.size < 1) {
             return false
         }
-
         // Verify that each required permission has been granted, otherwise return false.
         for (result in grantResults) {
             if (result != PackageManager.PERMISSION_GRANTED) {
