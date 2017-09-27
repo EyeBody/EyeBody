@@ -1,17 +1,22 @@
 package com.example.android.eyebody
 
-import android.app.Activity
+import android.content.Intent
 import android.content.res.AssetManager
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_gallery.*
 import android.os.Environment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
-import java.io.*
+import android.widget.Toolbar
+import kotlinx.android.synthetic.main.activity_gallery.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
+
 
 //TODO gallery UI 예쁘게 다듬기
 //TODO image metadata로 1주전 2주전 정보 표시
@@ -57,6 +62,22 @@ class GalleryActivity : AppCompatActivity() {
         list.adapter = GalleryAdapter(this, photoList)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.menu_gallery, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_collage -> {    //콜라주 하러가기
+                val intent = Intent(this, CollageActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     fun showPreviousImage(v: View){
         try {
             var prePosition: Int = (selectedImage.getTag() as Int) - 1
@@ -81,11 +102,13 @@ class GalleryActivity : AppCompatActivity() {
         //assets에 있는 파일을 외부저장소로 복사(테스트용)
         for(i in 1..4){
             var filename: String = "front_week" + i + ".jpg"
+
             var assetManager: AssetManager = getAssets()
             var input: InputStream = assetManager.open("gallery_body/" + filename)
+
             var outputfile:String = getExternalFilesDir(null).toString() + "/gallery_body/" + filename
-            Log.d("file", i.toString()+"번째, " + outputfile)
             var output: OutputStream = FileOutputStream(outputfile)
+
             var buffer: ByteArray = ByteArray(1024)
             var length: Int
 

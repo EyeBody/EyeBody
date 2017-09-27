@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.eyebody">
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android:permission.CAMERA" />
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
@@ -14,23 +16,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
-        <activity android:name=".CameraActivity"
-                  android:label="@string/category_camera" />
-        <activity android:name=".GalleryActivity"
-                  android:label="@string/category_gallery" />
-        <activity android:name=".ExerciseActivity"
-                  android:label="@string/category_exercise" />
-        <activity android:name=".SettingActivity"
-                  android:label="@string/category_setting" >
-        </activity>
-
-        <activity android:name=".InitActivity"
+        <activity
+            android:name=".CameraActivity"
+            android:label="@string/category_camera" />
+        <activity
+            android:name=".GalleryActivity"
+            android:label="@string/category_gallery" />
+        <activity
+            android:name=".ExerciseActivity"
+            android:label="@string/category_exercise" />
+        <activity
+            android:name=".SettingActivity"
+            android:label="@string/category_setting"></activity>
+        <activity
+            android:name=".InitActivity"
             android:label="시작">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity android:name=".CollageActivity"></activity>
     </application>
+
 </manifest>
