@@ -9,8 +9,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
-import android.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_gallery.*
 import java.io.File
 import java.io.FileOutputStream
@@ -28,20 +26,19 @@ class GalleryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
 
-        //외부저장소(SD카드)가 마운트되었는지 확인
-        var state: String = Environment.getExternalStorageState()
+        //이미지 불러오기
+        var state: String = Environment.getExternalStorageState()   //외부저장소(SD카드)가 마운트되었는지 확인
         if(Environment.MEDIA_MOUNTED.equals(state)){
             //디렉토리 생성
             var filedir: String = getExternalFilesDir(null).toString() + "/gallery_body"  //Android/data/com.example.android.eyebody/files/gallery_body
             var file: File = File(filedir)
             if(!file.exists()){
                 if(!file.mkdirs()){
-                    //디렉토리가 만들어지지 않음
+                    //EXCEPTION 디렉토리가 만들어지지 않음
                 }
             }
 
-            //테스트용 이미지를 외부저장소에 따로 넣어놔야 함
-            assetsToExternalStorage()
+            assetsToExternalStorage()   //assets에 있는 테스트용 이미지를 외부저장소에 복사
 
             for(f in file.listFiles()){
                 //TODO 이미지 파일이 아닌경우 예외처리
@@ -49,17 +46,18 @@ class GalleryActivity : AppCompatActivity() {
                 photoList.add(Photo(f))
             }
 
-            if(photoList.size != 0){    //이미지가 아무것도 없는경우에는 selectedImage를 세팅하지 않음
+            if(photoList.size != 0){    //이미지가 하나도 없는 경우에는 selectedImage를 세팅하지 않음
                 selectedImage.setImageBitmap(photoList[0].image)
                 selectedImage.setTag(0)
             }
         } else{
-            //외부저장소가 마운트되지 않아서 파일을 읽고 쓸 수 없음
+            //EXCEPTION 외부저장소가 마운트되지 않아서 파일을 읽고 쓸 수 없음
         }
 
-        list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        list.hasFixedSize()
-        list.adapter = GalleryAdapter(this, photoList)
+        //RecyclerView
+        galleryView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        galleryView.hasFixedSize()
+        galleryView.adapter = GalleryAdapter(this, photoList)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
