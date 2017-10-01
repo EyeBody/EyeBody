@@ -1,24 +1,20 @@
 package com.example.android.eyebody
 
 import android.app.Activity
-import android.content.ContentValues
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.content.Intent
 import android.graphics.PixelFormat
 import android.hardware.Camera
 import android.hardware.Camera.PictureCallback
 import android.hardware.Camera.ShutterCallback
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.SurfaceHolder
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.File
-import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import java.io.IOException
-import java.io.OutputStream
 import java.util.*
 
 /*
@@ -28,6 +24,7 @@ import java.util.*
  */
 class CameraActivity : Activity(), SurfaceHolder.Callback {
     var TAG: String = "CameraActivity"
+    var rootPath:String?=null
     private var surfaceHolder: SurfaceHolder? = null
     private var camera: Camera? = null
     private var previewing: Boolean = false
@@ -47,46 +44,44 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
 
     //이미 앱을 실행시킨 전적이 있으면 그냥 패스, 아니면 폴더를 생성한다.
     fun makeFolder() {
-        var filedir: String = getExternalFilesDir(null).toString() + "/gallery_body"
-        var file = File(filedir)
+        rootPath = getExternalFilesDir(null).toString() + "/gallery_body"
+        var file = File(rootPath)
         file.mkdirs()
     }
 
     //Called as near as possible to the moment when a photo is captured from the sensor.
     private var shutterCallback = ShutterCallback {
-        fun onShutter() {
-            Log.d(TAG, "onShutter'd")
-            //Toast.makeText(baseContext,"shutter Clicked",Toast.LENGTH_SHORT)
-        }
+        Log.d(TAG, "onShutter'd")
+        Toast.makeText(baseContext, "shutter Clicked", Toast.LENGTH_SHORT)
     }
 
-    private var rawCallback = PictureCallback { bytes: ByteArray, camera: Camera ->
-        fun onPictureTaken() {
-            Log.d(TAG, "onPictureTaken-raw")
-        }
+    private var rawCallback = PictureCallback { bytes: ByteArray?, camera: Camera? ->
+        Log.d(TAG, "onPictureTaken-raw")
     }
+
     //TODO : 사진 저장시 용량이 터질 경우 예외처리.
-    private var jpegCallback = PictureCallback { bytes, camera ->
-        fun onPictureTaken(bytes: ByteArray, camera: Camera) {
-            makeFolder()
-            var timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
-            var bitmapPicture: Bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            var uriTarget: Uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, ContentValues())
-            Log.d(TAG, "onPictureTaken - jp")
-            var imageFile: OutputStream? = null
-            try {
-                imageFile = contentResolver.openOutputStream(uriTarget)
-                imageFile.write(bytes)
-                imageFile.flush()
-                imageFile.close()
-                Toast.makeText(baseContext, "image save", Toast.LENGTH_SHORT)
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-            camera?.startPreview()
+    private var jpegCallback = PictureCallback { bytes: ByteArray?, camera: Camera? ->
+        makeFolder()
+        //TODO : 옆을 찍을때랑 앞을 찍을때랑 이름이 바뀐다.이부분은 처음찍을때랑 두번째 찍을때 플래그를 바꿔가면서 처리하는걸로 한다.
+        var timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
+        var FileName=String.format("body_$timeStamp.jpg")
+        var path:String=rootPath+"/"+FileName
+
+        var file=File(path)
+        try{
+            var fos=FileOutputStream(file)
+            fos.write(bytes)
+            fos.flush()
+            fos.close()
+        }catch(e:Exception){
+            e.printStackTrace()
         }
+        var intent= Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+        var uri=Uri.parse("file://"+path)
+        intent.data = uri
+        sendBroadcast(intent)
+
+        Toast.makeText(baseContext,"저장완료",Toast.LENGTH_SHORT).show()
         camera?.startPreview()
     }
 
