@@ -7,13 +7,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
- <!--   <fragment
+    <fragment
         android:id="@+id/fragment_init_content"
         class="com.example.android.eyebody.init.Init1Fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_init1"
-        android:layout_weight="1"/>-->
+        android:layout_weight="1"/>
 
 
     <FrameLayout

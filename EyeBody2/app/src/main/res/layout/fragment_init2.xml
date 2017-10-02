@@ -8,7 +8,7 @@
 
 
     <ImageView
-        android:id="@+id/Init_background"
+        android:id="@+id/ImageView_Init2_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="배경"
@@ -22,17 +22,17 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/textview_password"
+            android:id="@+id/EditText_input_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
-            android:imeOptions="actionDone|flagNoFullscreen"
+            android:imeOptions="actionDone"
             android:inputType="textPassword"
-            android:labelFor="@+id/textview_password"
+            android:labelFor="@+id/EditText_input_password"
             android:padding="20dp" />
 
         <Button
-            android:id="@+id/button_passwordSubmit"
+            android:id="@+id/Button_submit_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"

@@ -17,19 +17,21 @@ import com.example.android.eyebody.R
 // progress dot (1/3)
 
 class Init1Fragment : Fragment() {
-   /* override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreate(savedInstanceState)
+        val v = inflater!!.inflate(R.layout.fragment_init1, container, false)
         Log.d("mydbg_init1","init1 진입")
 
-        val startButton = activity.findViewById<ImageButton>(R.id.button_init1_start)
+        val startButton = v.findViewById<ImageButton>(R.id.ImageButton_init1_start_to_init2)
 
-        startButton.setOnClickListener { view ->
+        startButton.setOnClickListener {
             val init2 = Init2Fragment()
             activity.fragmentManager.beginTransaction()
                     .replace(R.id.fragment_init_content, init2)
                     .commit()
         }
 
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }*/
+        return v
+    }
+
 }

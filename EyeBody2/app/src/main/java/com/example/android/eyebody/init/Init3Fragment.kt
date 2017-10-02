@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.android.eyebody.R
 
 /**
  * Created by YOON on 2017-09-24.
@@ -18,10 +19,11 @@ class Init3Fragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreate(savedInstanceState)
+        val v = inflater!!.inflate(R.layout.fragment_init3, container, false)
 
         Log.d("mydbg_init3","init3 진입")
 
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return v
     }
 
 }

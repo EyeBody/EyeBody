@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/EyeBody2.iml" filepath="$PROJECT_DIR$/EyeBody2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlinpermissions/kotlinpermissions.iml" filepath="$PROJECT_DIR$/kotlinpermissions/kotlinpermissions.iml" />
-      <module fileurl="file://E:\workspaces\GitHub\eyebody\EyeBody2\kotlinpermissions\kotlinpermissions.iml" filepath="E:\workspaces\GitHub\eyebody\EyeBody2\kotlinpermissions\kotlinpermissions.iml" />
     </modules>
   </component>
 </project>

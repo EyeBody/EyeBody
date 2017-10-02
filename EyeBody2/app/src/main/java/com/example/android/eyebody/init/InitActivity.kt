@@ -49,7 +49,7 @@ class InitActivity : AppCompatActivity() {
         //debug end----------------------------------------------------------------------
 
 
-        if (isSetPassword /*|| isSetGoal*/) {
+        if (!isSetPassword /*|| isSetGoal*/) {
             Log.d("mydbg_init", "초기설정(비밀번호-init2, 목표-init3)이 완료되어있으므로 MainActivity로 넘어갑니다.")
 
             val goMain = Intent(this, MainActivity::class.java)
@@ -57,11 +57,6 @@ class InitActivity : AppCompatActivity() {
             finish()
         }
 
-
-        /*val init2 = Init2Fragment()
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_init_content,init2 as Fragment)
-                .commit()*/
 
     }
 }

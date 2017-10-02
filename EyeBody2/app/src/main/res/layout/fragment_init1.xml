@@ -5,13 +5,13 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/init1_background"
+        android:id="@+id/ImageView_init1_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageButton
-        android:id="@+id/button_init1_start"
+        android:id="@+id/ImageButton_init1_start_to_init2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

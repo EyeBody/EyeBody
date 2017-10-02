@@ -34,10 +34,11 @@ class Init2Fragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreate(savedInstanceState)
+        val v = inflater!!.inflate(R.layout.fragment_init2, container, false)
         Log.d("mydbg_init2","init2 진입")
 
-        val viewPassword = view.findViewById<EditText>(R.id.textview_password)
-        val viewPasswordSubmit = view.findViewById<Button>(R.id.button_passwordSubmit)
+        val viewPassword = v.findViewById<EditText>(R.id.EditText_input_password)
+        val viewPasswordSubmit = v.findViewById<Button>(R.id.Button_submit_password)
 
         viewPassword.setOnEditorActionListener { textView, i, keyEvent ->
             viewPasswordSubmit.callOnClick()
@@ -78,7 +79,7 @@ class Init2Fragment : Fragment() {
         }
 
 
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return v
     }
 
 
