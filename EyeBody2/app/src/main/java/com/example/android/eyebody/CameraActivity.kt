@@ -84,30 +84,6 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         Toast.makeText(baseContext,"저장완료",Toast.LENGTH_SHORT).show()
         camera?.startPreview()
     }
-
-    //셔터 버튼이 눌리면 실행.
-    //setCameraDisplayOrientation 함수 -> 카메라가 회전하는대로 카메라도 회전하도록 설정
-    /* fun setCameraDisplayOrientation(activity: Activity, cameraId: Int, camera: Camera): Int {
-         var info = android.hardware.Camera.CameraInfo()
-         android.hardware.Camera.getCameraInfo(cameraId, info)
-         var rotation = activity.windowManager.defaultDisplay.rotation
-         var degree: Int = 0
-         when (rotation) {
-             Surface.ROTATION_0 -> degree = 0
-             Surface.ROTATION_90 -> degree = 90
-             Surface.ROTATION_180 -> degree = 180
-             Surface.ROTATION_270 -> degree = 270
-         }
-         var result: Int=0
-         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-             result = (info.orientation + degree) % 360
-             result = (360 - result) % 360
-         } else {
-             result = (info.orientation - degree + 360) % 360
-         }
-         return result
-     }
-     */
     private fun init() {
         window.setFormat(PixelFormat.UNKNOWN)
         surfaceHolder = cameraScreen.holder
