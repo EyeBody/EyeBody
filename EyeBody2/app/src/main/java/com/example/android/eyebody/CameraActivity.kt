@@ -24,10 +24,13 @@ import java.util.*
  */
 class CameraActivity : Activity(), SurfaceHolder.Callback {
     var TAG: String = "CameraActivity"
-    var rootPath:String?=null
+    var rootPath: String? = null
     private var surfaceHolder: SurfaceHolder? = null
     private var camera: Camera? = null
     private var previewing: Boolean = false
+    var count: Int = 0
+    private var frontImage: ByteArray? = null
+    private var sideImage: ByteArray? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,13 +45,22 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         }
     }
 
+    private fun changeIntent() {
+        var confirmIntent = Intent(this, ConfirmActivity::class.java)
+        confirmIntent.putExtra("front",frontImage)
+        confirmIntent.putExtra("side",sideImage)
+        startActivity(confirmIntent)
+
+    }
+
     //이미 앱을 실행시킨 전적이 있으면 그냥 패스, 아니면 폴더를 생성한다.
-    fun makeFolder() {
+    private fun makeFolder() {
         rootPath = getExternalFilesDir(null).toString() + "/gallery_body"
         var file = File(rootPath)
         file.mkdirs()
     }
 
+    //TODO : 카메라 전후면 변경 토글키를 넣을까 말까고민중
     //Called as near as possible to the moment when a photo is captured from the sensor.
     private var shutterCallback = ShutterCallback {
         Log.d(TAG, "onShutter'd")
@@ -63,33 +75,39 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     private var jpegCallback = PictureCallback { bytes: ByteArray?, camera: Camera? ->
         makeFolder()
         //TODO : 옆을 찍을때랑 앞을 찍을때랑 이름이 바뀐다.이부분은 처음찍을때랑 두번째 찍을때 플래그를 바꿔가면서 처리하는걸로 한다.
-        var timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
-        var FileName=String.format("body_$timeStamp.jpg")
-        var path:String=rootPath+"/"+FileName
+        var timeStamp: String = java.text.SimpleDateFormat("yyyyMMddHHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
+        var fileName = String.format("body_$timeStamp.jpg")
+        var path: String = rootPath + "/" + fileName
 
-        var file=File(path)
-        try{
-            var fos=FileOutputStream(file)
+        var file = File(path)
+        try {
+            var fos = FileOutputStream(file)
             fos.write(bytes)
             fos.flush()
             fos.close()
-        }catch(e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
-        var intent= Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-        var uri=Uri.parse("file://"+path)
+        var intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+        var uri = Uri.parse("file://" + path)
         intent.data = uri
         sendBroadcast(intent)
-
-        Toast.makeText(baseContext,"저장완료",Toast.LENGTH_SHORT).show()
-        camera?.startPreview()
+        count++
+        if (count == 2) {
+            sideImage = bytes
+            count = 0
+            changeIntent()
+        } else {
+            frontImage = bytes
+            camera?.startPreview()
+        }
     }
+
     private fun init() {
         window.setFormat(PixelFormat.UNKNOWN)
         surfaceHolder = cameraScreen.holder
         surfaceHolder?.addCallback(this)
         surfaceHolder?.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
-        //controlInflator = LayoutInflater.from(baseContext)
     }
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {

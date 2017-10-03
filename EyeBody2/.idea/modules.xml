@@ -3,11 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/EyeBody2.iml" filepath="$PROJECT_DIR$/EyeBody2.iml" />
-      <module fileurl="file://C:\Users\Tae_woong\Desktop\EyeBody\EyeBody2\EyeBody2.iml" filepath="C:\Users\Tae_woong\Desktop\EyeBody\EyeBody2\EyeBody2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\Tae_woong\Desktop\EyeBody\EyeBody2\app\app.iml" filepath="C:\Users\Tae_woong\Desktop\EyeBody\EyeBody2\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlinpermissions/kotlinpermissions.iml" filepath="$PROJECT_DIR$/kotlinpermissions/kotlinpermissions.iml" />
-      <module fileurl="file://C:\Users\Tae_woong\Desktop\EyeBody\EyeBody2\kotlinpermissions\kotlinpermissions.iml" filepath="C:\Users\Tae_woong\Desktop\EyeBody\EyeBody2\kotlinpermissions\kotlinpermissions.iml" />
     </modules>
   </component>
 </project>
