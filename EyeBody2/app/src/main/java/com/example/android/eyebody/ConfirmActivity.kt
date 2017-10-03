@@ -56,6 +56,14 @@ class ConfirmActivity : AppCompatActivity() {
             goHomeActivity()
         }
     }
+
+    private fun deleteFile() {
+        var frontFile = File(frontFileName)
+        var sideFile = File(sideFileName)
+        frontFile.delete()
+        sideFile.delete()
+    }
+
     //삭제버튼 누르면 파일삭제. 다시 찍으시겠습니까?alertDialog뜨고 거절하면 홈으로 아니면 카메라 액티비티로 돌아감
     private fun deleteButtonClicked() {
         button_delete.setOnClickListener {
@@ -77,13 +85,6 @@ class ConfirmActivity : AppCompatActivity() {
             })
             alertDilog.show()
         }
-    }
-
-    fun deleteFile() {
-        var frontFile = File(frontFileName)
-        var sideFile = File(sideFileName)
-        frontFile.delete()
-        sideFile.delete()
     }
 }
 
