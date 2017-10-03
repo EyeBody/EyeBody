@@ -1,4 +1,4 @@
-package com.example.android.eyebody
+package com.example.android.eyebody.gallery
 
 import android.content.Intent
 import android.content.res.AssetManager
@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.activity_gallery.*
 import java.io.File
 import java.io.FileOutputStream

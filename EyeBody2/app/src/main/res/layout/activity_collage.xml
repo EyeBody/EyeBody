@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.eyebody.CollageActivity">
+    tools:context="com.example.android.eyebody.gallery.CollageActivity">
 
 </android.support.constraint.ConstraintLayout>

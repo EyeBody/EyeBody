@@ -14,6 +14,7 @@ import android.widget.Toast
 import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
 import com.example.android.eyebody.dialog.EnterGalleryDialog
+import com.example.android.eyebody.gallery.GalleryActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : PermissionsActivity() {

@@ -1,7 +1,8 @@
-package com.example.android.eyebody
+package com.example.android.eyebody.gallery
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.example.android.eyebody.R
 
 class CollageActivity : AppCompatActivity() {
 

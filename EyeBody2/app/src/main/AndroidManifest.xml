@@ -20,7 +20,7 @@
             android:name=".CameraActivity"
             android:label="@string/category_camera" />
         <activity
-            android:name=".GalleryActivity"
+            android:name=".gallery.GalleryActivity"
             android:label="@string/category_gallery" />
         <activity
             android:name=".ExerciseActivity"
@@ -37,7 +37,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CollageActivity"></activity>
+        <activity
+            android:name=".gallery.CollageActivity"
+            android:label="@string/collage" />
     </application>
 
 </manifest>

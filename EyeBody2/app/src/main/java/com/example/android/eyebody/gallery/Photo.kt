@@ -1,4 +1,4 @@
-package com.example.android.eyebody
+package com.example.android.eyebody.gallery
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
