@@ -31,6 +31,8 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     var count: Int = 0
     private var frontImage: ByteArray? = null
     private var sideImage: ByteArray? = null
+    private var frontImageName:String?=null
+    private var sideImageName:String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +51,9 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         var confirmIntent = Intent(this, ConfirmActivity::class.java)
         confirmIntent.putExtra("front",frontImage)
         confirmIntent.putExtra("side",sideImage)
+        confirmIntent.putExtra("frontName",frontImageName)
+        confirmIntent.putExtra("sideName",sideImageName)
         startActivity(confirmIntent)
-
     }
 
     //이미 앱을 실행시킨 전적이 있으면 그냥 패스, 아니면 폴더를 생성한다.
@@ -76,7 +79,14 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         makeFolder()
         //TODO : 옆을 찍을때랑 앞을 찍을때랑 이름이 바뀐다.이부분은 처음찍을때랑 두번째 찍을때 플래그를 바꿔가면서 처리하는걸로 한다.
         var timeStamp: String = java.text.SimpleDateFormat("yyyyMMddHHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
-        var fileName = String.format("body_$timeStamp.jpg")
+        var fileName:String?=null
+        if(count==0){
+            var fileName = String.format("body_$timeStamp.eyebody")
+            frontImageName=rootPath+"/"+fileName
+        }else{
+            var fileName = String.format("body_$timeStamp.eyebody")
+            sideImageName=rootPath+"/"+fileName
+        }
         var path: String = rootPath + "/" + fileName
 
         var file = File(path)
