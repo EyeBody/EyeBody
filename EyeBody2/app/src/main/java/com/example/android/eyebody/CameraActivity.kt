@@ -47,7 +47,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         }
     }
 
-    private fun changeIntent() {
+    private fun goConfirmActivity() {
         var confirmIntent = Intent(this, ConfirmActivity::class.java)
         confirmIntent.putExtra("front",frontImage)
         confirmIntent.putExtra("side",sideImage)
@@ -106,7 +106,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         if (count == 2) {
             sideImage = bytes
             count = 0
-            changeIntent()
+            goConfirmActivity()
         } else {
             frontImage = bytes
             camera?.startPreview()
