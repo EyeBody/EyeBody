@@ -31,12 +31,12 @@ class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
 
     class Item(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindData(photo: Photo, pos: Int) {
-            itemView.imageView.setImageBitmap(photo.image)
-            itemView.date.text = photo.date
+            itemView.imageView.setImageBitmap(photo.getImage())
+            itemView.date.text = photo.getMemo()
 
             itemView.setOnClickListener{
                 var imgView: ImageView = (itemView.context as Activity).findViewById(R.id.selectedImage)
-                imgView.setImageBitmap(photo.image)
+                imgView.setImageBitmap(photo.getImage())
                 imgView.setTag(pos)
             }
         }

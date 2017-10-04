@@ -48,7 +48,7 @@ class GalleryActivity : AppCompatActivity() {
             }
 
             if(photoList.size != 0){    //이미지가 하나도 없는 경우에는 selectedImage를 세팅하지 않음
-                selectedImage.setImageBitmap(photoList[0].image)
+                selectedImage.setImageBitmap(photoList[0].getImage())
                 selectedImage.setTag(0)
             }
         } else{
@@ -70,7 +70,8 @@ class GalleryActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_collage -> {    //콜라주 하러가기
-                val intent = Intent(this, CollageActivity::class.java)
+                var intent = Intent(this, CollageActivity::class.java)
+                intent.putExtra("photoList", photoList)
                 startActivity(intent)
             }
         }
@@ -80,7 +81,7 @@ class GalleryActivity : AppCompatActivity() {
     fun showPreviousImage(v: View){
         try {
             var prePosition: Int = (selectedImage.getTag() as Int) - 1
-            selectedImage.setImageBitmap(photoList[prePosition].image)
+            selectedImage.setImageBitmap(photoList[prePosition].getImage())
             selectedImage.setTag(prePosition)
         } catch(e: Exception){
             //Toast.makeText(this, "앞이 없음", Toast.LENGTH_SHORT).show()
@@ -90,7 +91,7 @@ class GalleryActivity : AppCompatActivity() {
     fun showNextImage(v: View){
         try {
             var nextPosition: Int = (selectedImage.getTag() as Int) + 1
-            selectedImage.setImageBitmap(photoList[nextPosition].image)
+            selectedImage.setImageBitmap(photoList[nextPosition].getImage())
             selectedImage.setTag(nextPosition)
         } catch(e: Exception){
             //Toast.makeText(this, "뒤가 없음", Toast.LENGTH_SHORT).show()
