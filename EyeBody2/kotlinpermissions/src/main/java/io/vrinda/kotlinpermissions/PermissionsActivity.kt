@@ -8,8 +8,6 @@ import android.widget.Toast
 
 abstract class PermissionsActivity : AppCompatActivity() {
 
-
-
     private val REQUEST_PERMISSION = 1111
     private val NEEDED_PERMISSIONS = 2222
     var pCallback: PermissionCallBack? = null;
@@ -51,7 +49,6 @@ abstract class PermissionsActivity : AppCompatActivity() {
     fun AppCompatActivity.toast(msg: String) {
         Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
     }
-
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {

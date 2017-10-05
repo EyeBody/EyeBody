@@ -44,9 +44,9 @@ class MainActivity : PermissionsActivity() {
         ***리스너에 넣으면 매번 Intent 함수를 사용하기 때문에 부하가 심할 거 같은데
         이렇게하면 속도가 빨라지는 효과가 있는지는 모르겠다.***
          */
-        val cameraPage by lazy { Intent(this, CameraActivity::class.java) }
-        val galleryPage by lazy { Intent(this, GalleryActivity::class.java) }
-        val exercisePage by lazy { Intent(this, ExerciseActivity::class.java) }
+        val cameraPage      by lazy {   Intent(this, CameraActivity::class.java)    }
+        val galleryPage     by lazy {   Intent(this, GalleryActivity::class.java)   }
+        val exercisePage    by lazy {   Intent(this, ExerciseActivity::class.java)  }
 
         /* SharedPreferences (앱 공유 데이터)
         isUserTypeInitSetting : 유저가 처음 시작할 때 비밀번호, 몸매목표 등을 세팅했는지 확인하는 파일
@@ -80,20 +80,17 @@ class MainActivity : PermissionsActivity() {
         }
 
         btn_activity_gallery.setOnClickListener {
-
-            val sharedPref: SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
-            val isSetPassword = sharedPref.getBoolean("isSetting", false)
-            Log.d("mydbg_main", "유저가 gallery 접근을 요청함")
-
-            if (!isSetPassword) {
-
-                Log.d("mydbg_main", "SharedPreferences.isSetting is false or null / hacked or 유저가 앱 실행 중 데이터를 지운 경우")
-                Toast.makeText(this, "에러 : 초기비밀번호가 설정되어있지 않습니다.", Toast.LENGTH_LONG).show()
-
-            } else {
-
-                val enterGalleryDialog = EnterGalleryDialog()
-                enterGalleryDialog.show(fragmentManager, "enter_gallery")
+            val share : SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
+            val isSetPassword = share.getBoolean("isSetting",false)
+            Log.d("mydbg_main","유저가 gallery 접근을 요청함")
+            if(!isSetPassword) {
+                Log.d("mydbg_main","SharedPreferences.isSetting is false or null / hacked or 유저가 앱 실행 중 데이터를 지운 경우")
+                Toast.makeText(this,"에러 : 초기비밀번호가 설정되어있지 않습니다.",Toast.LENGTH_LONG).show()
+            }else{
+                // TODO(now2) fragment 를 이용하여 화면전환 - 패스워드입력창 : activity_main_enter_gallery
+                // 비밀번호 검증 프라그먼트 띄워야 함
+                startActivity(galleryPage)
+                //overridePendingTransition(0,0)
             }
         }
         btn_activity_func1.setOnClickListener {
@@ -114,8 +111,8 @@ class MainActivity : PermissionsActivity() {
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // TODO ----- 아예 싹 갈아 없고 네비게이션 뷰 구성하기" - fun onCreateOptionMenu 와 onOptionSelected 를 엎어야 함.
-        val id by lazy { item.itemId }
-        val toast by lazy { Toast.makeText(this, "", Toast.LENGTH_SHORT) }
+        val id      by lazy {   item.itemId     }
+        val toast   by lazy {   Toast.makeText(this, "", Toast.LENGTH_SHORT)    }
 
         when (id) {
             R.id.Actionbar_Backup -> {
