@@ -1,23 +1,17 @@
 package com.example.android.eyebody.gallery
 
-import android.app.Activity
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.list_gallery.view.*
 
-/**
- * Created by yeaji on 2017-09-29.
- */
 class CollageAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    //TODO gallery adapter 복붙해놓은거임. 수정해야함
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
-        var v = LayoutInflater.from(c).inflate(R.layout.list_gallery, parent, false)
+        var v = LayoutInflater.from(c).inflate(R.layout.list_collage, parent, false)
         return Item(v)
     }
 
@@ -32,12 +26,10 @@ class CollageAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
     class Item(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindData(photo: Photo, pos: Int) {
             itemView.imageView.setImageBitmap(photo.getImage())
-            itemView.date.text = photo.getMemo()
+            itemView.date.text = photo.getDate()
 
             itemView.setOnClickListener{
-                var imgView: ImageView = (itemView.context as Activity).findViewById(R.id.selectedImage)
-                imgView.setImageBitmap(photo.getImage())
-                imgView.setTag(pos)
+                itemView.date.text = photo.getMemo()
             }
         }
     }

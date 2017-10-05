@@ -46,8 +46,8 @@ class Photo(): AppCompatActivity(), Parcelable {
         return img
     }
 
-    fun getDate(){
-        //return date
+    fun getDate(): String{
+        return "날짜라능"
     }
 
     fun getMemo(): String{
