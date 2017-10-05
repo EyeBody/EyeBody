@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.eyebody">
 
+    <meta-data
+        android:name="com.kakao.sdk.AppKey"
+        android:value="7c296e7f4ef2df9fe4c9aa3aa6724a83" />
     <uses-sdk android:minSdkVersion="4" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

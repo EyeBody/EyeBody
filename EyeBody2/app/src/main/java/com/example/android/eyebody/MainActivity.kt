@@ -15,16 +15,19 @@ import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : PermissionsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         fun onCreateOptionsMenu(menu: Menu): Boolean {
             super.onCreateOptionsMenu(menu)
             menuInflater.inflate(R.menu.menu_sel, menu)
             return true
         }
+
         fun onOptionsItemSelected(item: MenuItem): Boolean {
             val id = item.itemId
             if (id == R.id.btn_activity_func2) {
@@ -42,15 +45,15 @@ class MainActivity : PermissionsActivity() {
         ***리스너에 넣으면 매번 Intent 함수를 사용하기 때문에 부하가 심할 거 같은데
         이렇게하면 속도가 빨라지는 효과가 있는지는 모르겠다.***
          */
-        val cameraPage      by lazy {   Intent(this, CameraActivity::class.java)    }
-        val galleryPage     by lazy {   Intent(this, GalleryActivity::class.java)   }
-        val exercisePage    by lazy {   Intent(this, ExerciseActivity::class.java)  }
+        val cameraPage by lazy { Intent(this, CameraActivity::class.java) }
+        val galleryPage by lazy { Intent(this, GalleryActivity::class.java) }
+        val exercisePage by lazy { Intent(this, ExerciseActivity::class.java) }
 
         /* SharedPreferences (앱 공유 데이터)
         isUserTypeInitSetting : 유저가 처음 시작할 때 비밀번호, 몸매목표 등을 세팅했는지 확인하는 파일
         MODE_PRIVATE : 다른 앱이 접근 불가(파일 권한 없이 불가를 뜻하는 것 같음) (mode_world_readable : 다른 앱이 공유 데이터에 접근 가능)
          */
-        val shared : SharedPreferences = getSharedPreferences("isUserTypeInitSetting", Context.MODE_PRIVATE)
+        val shared: SharedPreferences = getSharedPreferences("isUserTypeInitSetting", Context.MODE_PRIVATE)
         // TODO("공유데이터로 initActivity를 실행하게? 아니면 이닛에서 공유데이터를 판별할지 해야함")
         /* Listener (이벤트 리스너)
         클릭하면 반응
@@ -67,23 +70,23 @@ class MainActivity : PermissionsActivity() {
                             super.permissionGranted()
                             Log.v("Camera permissions", "Granted")
                         }
+
                         override fun permissionDenied() {
                             super.permissionDenied()
                             Log.v("Camera permissions", "Denied")
                         }
                     })
                 } else startActivity(cameraPage)
-            }
-            else startActivity(cameraPage)
+            } else startActivity(cameraPage)
         }
         btn_activity_gallery.setOnClickListener {
-            val share : SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
-            val isSetPassword = share.getBoolean("isSetting",false)
-            Log.d("mydbg_main","유저가 gallery 접근을 요청함")
-            if(!isSetPassword) {
-                Log.d("mydbg_main","SharedPreferences.isSetting is false or null / hacked or 유저가 앱 실행 중 데이터를 지운 경우")
-                Toast.makeText(this,"에러 : 초기비밀번호가 설정되어있지 않습니다.",Toast.LENGTH_LONG).show()
-            }else{
+            val share: SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
+            val isSetPassword = share.getBoolean("isSetting", false)
+            Log.d("mydbg_main", "유저가 gallery 접근을 요청함")
+            if (!isSetPassword) {
+                Log.d("mydbg_main", "SharedPreferences.isSetting is false or null / hacked or 유저가 앱 실행 중 데이터를 지운 경우")
+                Toast.makeText(this, "에러 : 초기비밀번호가 설정되어있지 않습니다.", Toast.LENGTH_LONG).show()
+            } else {
                 // TODO(now2) fragment 를 이용하여 화면전환 - 패스워드입력창 : activity_main_enter_gallery
                 // 비밀번호 검증 프라그먼트 띄워야 함
                 startActivity(galleryPage)
@@ -95,6 +98,7 @@ class MainActivity : PermissionsActivity() {
             startActivity(exercisePage)
         }
     }
+
     /* onCreateOptionMenu
     액션바에 옵션메뉴를 띄우게 함. xml 긁어서
      */
@@ -103,18 +107,19 @@ class MainActivity : PermissionsActivity() {
         menuInflater.inflate(R.menu.menu_sel, menu)
         return true
     }
+
     /* onOptionItemSelected
     옵션메뉴에서 아이템이 선택됐을 때 발생하는 이벤트
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // TODO ----- 아예 싹 갈아 없고 네비게이션 뷰 구성하기" - fun onCreateOptionMenu 와 onOptionSelected 를 엎어야 함.
-        val id      by lazy {   item.itemId     }
-        val toast   by lazy {   Toast.makeText(this, "", Toast.LENGTH_SHORT)    }
+        val id by lazy { item.itemId }
+        val toast by lazy { Toast.makeText(this, "", Toast.LENGTH_SHORT) }
 
         when (id) {
             R.id.Actionbar_Backup -> {
                 // TODO ----- init 으로 가게 해놓았음
-                val dd=Intent(this,InitActivity::class.java)
+                val dd = Intent(this, InitActivity::class.java)
                 startActivity(dd)
                 // TODO ----- intent 전환효과 바꾸기 :: overridePendingTransition(int, int) / xml 파일 같이 쓰면 더 예쁘게 가능.
                 // (왜 startActivity 함수 다음에 쓰는 건지 알아봐야 할 거 같음)
@@ -140,6 +145,9 @@ class MainActivity : PermissionsActivity() {
                 // TODO ----- 알람 세팅에 대하여 새로운 액티비티 구성
                 toast.setText("TODO : Alarm Setting")
                 toast.show()
+            }
+            R.id.Actionbar_kakaoTalk->{
+                //TODO ------ 카카오톡 공유기능으로 구성
             }
         }
         return super.onOptionsItemSelected(item)
