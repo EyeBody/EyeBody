@@ -9,7 +9,9 @@ import android.hardware.Camera.ShutterCallback
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.SurfaceHolder
+import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.File
@@ -33,11 +35,28 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     private var sideImage: ByteArray? = null
     private var frontImageName:String?=null
     private var sideImageName:String?=null
+    var controlInflater:LayoutInflater=LayoutInflater.from(baseContext)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
         init()
+        shutterButtonClicked()
+        setLayout()
+    }
+    private fun setLayout()
+    {
+        var viewControl=controlInflater.inflate(R.layout.guide_pic,null)
+        var layoutParamsControl= ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT)
+        this.addContentView(viewControl,layoutParamsControl)
+    }
+    private fun setTextView() {
+        textView_setOrder.text="옆면을 찍어주세요"
+    }//앞을 찍을지 옆을 찍을지 말해주는 기능
+    private fun changeImage(){
+
+    }
+    private fun shutterButtonClicked(){
         btn_shutter.setOnClickListener {
             try {
                 camera?.takePicture(shutterCallback, rawCallback, jpegCallback)
@@ -46,7 +65,6 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
             }
         }
     }
-
     private fun goConfirmActivity() {
         var confirmIntent = Intent(this, ConfirmActivity::class.java)
         confirmIntent.putExtra("front",frontImage)
@@ -77,6 +95,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     //TODO : 사진 저장시 용량이 터질 경우 예외처리.
     private var jpegCallback = PictureCallback { bytes: ByteArray?, camera: Camera? ->
         makeFolder()
+        setTextView()
         //TODO : 옆을 찍을때랑 앞을 찍을때랑 이름이 바뀐다.이부분은 처음찍을때랑 두번째 찍을때 플래그를 바꿔가면서 처리하는걸로 한다.
         var timeStamp: String = java.text.SimpleDateFormat("yyyyMMddHHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
         var fileName:String?=null
@@ -84,6 +103,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
             var fileName = String.format("body_$timeStamp.eyebody")
             frontImageName=rootPath+"/"+fileName
         }else{
+            changeImage()
             var fileName = String.format("body_$timeStamp.eyebody")
             sideImageName=rootPath+"/"+fileName
         }
