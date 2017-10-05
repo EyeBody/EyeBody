@@ -38,6 +38,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
         init()
+
         btn_shutter.setOnClickListener {
             try {
                 camera?.takePicture(shutterCallback, rawCallback, jpegCallback)
@@ -147,4 +148,3 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         previewing = false
     }
 }
-

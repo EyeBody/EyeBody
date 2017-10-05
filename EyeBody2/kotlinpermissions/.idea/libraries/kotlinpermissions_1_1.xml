@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="kotlinpermissions-1.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/kotlinpermissions-1.1.aar/787c7685de02911c5f558ef0f5f74feb/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/kotlinpermissions-1.1.aar/787c7685de02911c5f558ef0f5f74feb/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.vrinda.kotlinpermissions/kotlinpermissions/1.1/103352d8d925756f3aee99aa75719be7ecd8a87d/kotlinpermissions-1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

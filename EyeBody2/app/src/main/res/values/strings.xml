@@ -4,4 +4,6 @@
     <string name="category_gallery">갤러리</string>
     <string name="category_exercise">운동</string>
     <string name="category_setting">설정</string>
+
+    <string name="collage">콜라주</string>
 </resources>
