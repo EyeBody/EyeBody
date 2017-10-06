@@ -2,6 +2,7 @@ package io.vrinda.kotlinpermissions
 
 import android.Manifest
 import android.accounts.AccountManager
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
@@ -626,6 +627,7 @@ public class DeviceInfo {
          * @return the network type
          */
         //TODO
+        @SuppressLint("ServiceCast")
         @JvmStatic fun getNetworkType(context: Context): String {
             val networkStatePermission = context.checkCallingOrSelfPermission(Manifest.permission.ACCESS_NETWORK_STATE)
 
@@ -895,7 +897,8 @@ public class DeviceInfo {
             // Only devices with API >= 9 have android.os.Build.SERIAL
             // http://developer.android.com/reference/android/os/Build.html#SERIAL
             // If a user upgrades software or roots their phone, there will be a duplicate entry
-            val serial: String
+
+            var serial: String
             try {
                 serial = Build::class.java.getField("SERIAL").get(null).toString()
 
@@ -1199,7 +1202,8 @@ public class DeviceInfo {
         @JvmStatic fun getAppName(context: Context): String {
             val result: String
             val pm = context.getPackageManager()
-            val ai: ApplicationInfo?
+            var ai: ApplicationInfo?
+
             try {
                 ai = pm.getApplicationInfo(context.getPackageName(), 0)
             } catch (e: PackageManager.NameNotFoundException) {

@@ -11,7 +11,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.example.android.eyebody.GalleryActivity
+import com.example.android.eyebody.gallery.GalleryActivity
 import com.example.android.eyebody.R
 import java.security.MessageDigest
 

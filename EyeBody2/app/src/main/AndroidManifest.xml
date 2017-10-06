@@ -1,8 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.eyebody">
 
+    <uses-sdk android:minSdkVersion="4" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +27,7 @@
             android:name=".CameraActivity"
             android:label="@string/category_camera" />
         <activity
-            android:name=".GalleryActivity"
+            android:name=".gallery.GalleryActivity"
             android:label="@string/category_gallery" />
         <activity
             android:name=".ExerciseActivity"
@@ -38,11 +49,12 @@
         <!--<meta-data
             android:value="@integer/google_play_services_version"
             anroid:name="com.google.android.gms.version" />-->
+
+        <activity
+            android:name=".gallery.CollageActivity"
+            android:label="@string/collage" />
+        <activity
+            android:name=".ConfirmActivity" />
     </application>
-    <uses-sdk android:minSdkVersion="21" />
-    <uses-permission android:name="android:permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
 </manifest>

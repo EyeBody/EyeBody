@@ -1,4 +1,4 @@
-package com.example.android.eyebody
+﻿package com.example.android.eyebody
 
 import android.content.Context
 import android.content.Intent
@@ -15,6 +15,7 @@ import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
 import com.example.android.eyebody.dialog.EnterGalleryDialog
 import com.example.android.eyebody.init.InitActivity
+import com.example.android.eyebody.gallery.GalleryActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : PermissionsActivity() {
@@ -81,20 +82,17 @@ class MainActivity : PermissionsActivity() {
         val shared : SharedPreferences = getSharedPreferences("isUserTypeInitSetting", Context.MODE_PRIVATE)
 
         btn_activity_gallery.setOnClickListener {
-
-            val sharedPref: SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
-            val isSetPassword = sharedPref.getBoolean("isSetting", false)
-            Log.d("mydbg_main", "유저가 gallery 접근을 요청함")
-
-            if (!isSetPassword) {
-
-                Log.d("mydbg_main", "SharedPreferences.isSetting is false or null / hacked or 유저가 앱 실행 중 데이터를 지운 경우")
-                Toast.makeText(this, "에러 : 초기비밀번호가 설정되어있지 않습니다.", Toast.LENGTH_LONG).show()
-
-            } else {
-
-                val enterGalleryDialog = EnterGalleryDialog()
-                enterGalleryDialog.show(fragmentManager, "enter_gallery")
+            val share : SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
+            val isSetPassword = share.getBoolean("isSetting",false)
+            Log.d("mydbg_main","유저가 gallery 접근을 요청함")
+            if(!isSetPassword) {
+                Log.d("mydbg_main","SharedPreferences.isSetting is false or null / hacked or 유저가 앱 실행 중 데이터를 지운 경우")
+                Toast.makeText(this,"에러 : 초기비밀번호가 설정되어있지 않습니다.",Toast.LENGTH_LONG).show()
+            }else{
+                // TODO(now2) fragment 를 이용하여 화면전환 - 패스워드입력창 : activity_main_enter_gallery
+                // 비밀번호 검증 프라그먼트 띄워야 함
+                startActivity(galleryPage)
+                //overridePendingTransition(0,0)
             }
         }
         btn_activity_func1.setOnClickListener {
@@ -118,8 +116,8 @@ class MainActivity : PermissionsActivity() {
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // TODO ----- 아예 싹 갈아 없고 네비게이션 뷰 구성하기" - fun onCreateOptionMenu 와 onOptionSelected 를 엎어야 함.
-        val id by lazy { item.itemId }
-        val toast by lazy { Toast.makeText(this, "", Toast.LENGTH_SHORT) }
+        val id      by lazy {   item.itemId     }
+        val toast   by lazy {   Toast.makeText(this, "", Toast.LENGTH_SHORT)    }
 
         when (id) {
             R.id.Actionbar_Backup -> {
