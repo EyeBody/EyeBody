@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.eyebody">
-
-    <meta-data
-        android:name="com.kakao.sdk.AppKey"
-        android:value="7c296e7f4ef2df9fe4c9aa3aa6724a83" />
     <uses-sdk android:minSdkVersion="4" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -46,10 +42,22 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <data
+                    android:host="@string/kakaolink_host"
+                    android:scheme="@string/kakao_scheme" />
+
             </intent-filter>
         </activity>
         <activity android:name=".ConfirmActivity"></activity>
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
+
     </application>
 
 </manifest>
