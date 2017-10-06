@@ -13,6 +13,8 @@ import android.view.MenuItem
 import android.widget.Toast
 import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
+import com.example.android.eyebody.dialog.EnterGalleryDialog
+import com.example.android.eyebody.gallery.GalleryActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -79,6 +81,7 @@ class MainActivity : PermissionsActivity() {
                 } else startActivity(cameraPage)
             } else startActivity(cameraPage)
         }
+
         btn_activity_gallery.setOnClickListener {
             val share: SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
             val isSetPassword = share.getBoolean("isSetting", false)
@@ -119,8 +122,9 @@ class MainActivity : PermissionsActivity() {
         when (id) {
             R.id.Actionbar_Backup -> {
                 // TODO ----- init 으로 가게 해놓았음
-                val dd = Intent(this, InitActivity::class.java)
-                startActivity(dd)
+
+                val initActivityIntent = Intent(this, InitActivity::class.java)
+                startActivity(initActivityIntent)
                 // TODO ----- intent 전환효과 바꾸기 :: overridePendingTransition(int, int) / xml 파일 같이 쓰면 더 예쁘게 가능.
                 // (왜 startActivity 함수 다음에 쓰는 건지 알아봐야 할 거 같음)
                 // 사진찍기 같은 경우 드래그로 동그란거 샤악~ ????

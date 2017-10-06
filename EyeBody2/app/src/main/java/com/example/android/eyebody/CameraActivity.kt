@@ -24,11 +24,11 @@ import java.util.*
  */
 class CameraActivity : Activity(), SurfaceHolder.Callback {
     var TAG: String = "CameraActivity"
-    var rootPath: String? = null
+    private var rootPath: String? = null
     private var surfaceHolder: SurfaceHolder? = null
     private var camera: Camera? = null
     private var previewing: Boolean = false
-    var count: Int = 0
+    private var count: Int = 0
     private var frontImage: ByteArray? = null
     private var sideImage: ByteArray? = null
     private var frontImageName:String?=null
@@ -164,4 +164,3 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         previewing = false
     }
 }
-

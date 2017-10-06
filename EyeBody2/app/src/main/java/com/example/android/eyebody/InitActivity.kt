@@ -24,7 +24,6 @@ class InitActivity : AppCompatActivity() {
         val tv_password = findViewById<EditText>(textview_password.id)
         val bt_passwordSubmit = findViewById<Button>(button_passwordSubmit.id)
 
-
         // TODO ----- 현재는 비밀번호를 hash로 변환하여 저장하고 있음.
         // TODO ----> 비밀번호 검증 : hash / 이미지 암호화 : AES n-bit (key = hash) / 백업 : hash
         // 유저가 비밀번호를 치면 hash값으로 변환 후 이 값을 이용하여 암호화/복호화
