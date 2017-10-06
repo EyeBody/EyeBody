@@ -1,7 +1,9 @@
 package com.example.android.eyebody.gallery
 
-import android.os.Bundle
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
+import android.os.Bundle
+import android.support.v7.widget.GridLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import com.example.android.eyebody.R
@@ -29,7 +31,6 @@ class CollageActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> {
-                
                 //TODO 카카오톡 공유하기
             }
         }
