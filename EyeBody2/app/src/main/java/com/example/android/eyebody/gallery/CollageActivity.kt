@@ -44,7 +44,7 @@ class CollageActivity : AppCompatActivity() {
             val kakaoBuilder: KakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder()
 
             /*메시지 추가*/
-            kakaoBuilder.addText("같이 다이어트 해요")
+            kakaoBuilder.addText("친구야 같이 다이어트 하자!")
 
             /*이미지 가로/세로 사이즈는 80px 보다 커야하며, 이미지 용량은 500kb 이하로 제한된다.*/
             var url:String  = "https://cdn.iconscout.com/public/images/icon/premium/png-512/dumbbells-weight-lifting-gym-fitness-3250aa06165832ea-512x512.png"
