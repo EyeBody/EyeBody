@@ -56,7 +56,6 @@ class GalleryActivity : AppCompatActivity() {
         }
 
         //RecyclerView
-        galleryView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         galleryView.hasFixedSize()
         galleryView.adapter = GalleryAdapter(this, photoList)
     }
