@@ -1,6 +1,7 @@
 package com.example.android.eyebody.gallery
 
 import android.content.Context
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +30,13 @@ class CollageAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
             itemView.date.text = photo.getDate()
 
             itemView.setOnClickListener{
-                itemView.date.text = photo.getMemo()
+                itemView.isSelected = !itemView.isSelected
+
+                if(itemView.isSelected){
+                    itemView.setBackgroundColor(Color.BLUE)
+                }else{
+                    itemView.setBackgroundColor(Color.TRANSPARENT)
+                }
             }
         }
     }
