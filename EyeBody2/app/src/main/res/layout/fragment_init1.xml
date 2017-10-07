@@ -4,11 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <pl.droidsonroids.gif.GifTextView
         android:id="@+id/ImageView_init1_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        android:background="@drawable/initBackgroundGif"
+        />
 
     <ImageButton
         android:id="@+id/ImageButton_init1_start_to_init2"

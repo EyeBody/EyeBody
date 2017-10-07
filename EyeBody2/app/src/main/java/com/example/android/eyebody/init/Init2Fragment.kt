@@ -35,7 +35,7 @@ class Init2Fragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreate(savedInstanceState)
         val v = inflater!!.inflate(R.layout.fragment_init2, container, false)
-        Log.d("mydbg_init2","init2 진입")
+        Log.d("mydbg_init2", "init2 진입")
 
         val viewPassword = v.findViewById<EditText>(R.id.EditText_input_password)
         val viewPasswordSubmit = v.findViewById<Button>(R.id.Button_submit_password)
@@ -70,9 +70,12 @@ class Init2Fragment : Fragment() {
                 spEditor.putString("hashedPW", hashedPW)
                         .putBoolean("isSetting", true)
                         .commit()
-                val goMain = Intent(activity, MainActivity::class.java)
-                startActivity(goMain)
-                activity.finish()
+
+                val init3 = Init3Fragment()
+                activity.fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_init_content, init3)
+                        .commit()
+
             } else {
                 Toast.makeText(activity, "password를 입력해주세요 (1자 이상)", Toast.LENGTH_LONG).show()
             }

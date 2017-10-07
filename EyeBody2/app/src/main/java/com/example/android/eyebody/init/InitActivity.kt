@@ -33,6 +33,7 @@ class InitActivity : AppCompatActivity() {
          */
         val sharedPref: SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
         val isSetPassword = sharedPref.getBoolean("isSetting", false)
+        val isSetTarget = sharedPref.getBoolean("isSetTarget",false)
 
 
         //debug start (password injection)-------------------------------------------------
@@ -49,7 +50,7 @@ class InitActivity : AppCompatActivity() {
         //debug end----------------------------------------------------------------------
 
 
-        if (!isSetPassword /*|| isSetGoal*/) {
+        if (isSetPassword && isSetTarget) {
             Log.d("mydbg_init", "초기설정(비밀번호-init2, 목표-init3)이 완료되어있으므로 MainActivity로 넘어갑니다.")
 
             val goMain = Intent(this, MainActivity::class.java)

@@ -7,4 +7,8 @@
 
     <string name="collage">콜라주</string>
     <string name="share">공유하기</string>
+    <string name="googleDrive_manualSave">Google 수동 저장</string>
+    <string name="googleDrive_manualLoad">Google 수동 불러오기</string>
+    <string name="googleDrive_do_signIn">Google 로그인</string>
+    <string name="googleDrive_do_signOut">Google 로그아웃</string>
 </resources>

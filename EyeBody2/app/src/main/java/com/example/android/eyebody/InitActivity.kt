@@ -10,7 +10,6 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_init.*
 import java.security.MessageDigest
 
 class InitActivity : AppCompatActivity() {
@@ -21,8 +20,6 @@ class InitActivity : AppCompatActivity() {
         setContentView(R.layout.activity_init)
 
         val goMain by lazy { Intent(this, MainActivity::class.java) }
-        val tv_password = findViewById<EditText>(textview_password.id)
-        val bt_passwordSubmit = findViewById<Button>(button_passwordSubmit.id)
 
         // TODO ----- 현재는 비밀번호를 hash로 변환하여 저장하고 있음.
         // TODO ----> 비밀번호 검증 : hash / 이미지 암호화 : AES n-bit (key = hash) / 백업 : hash
@@ -44,43 +41,6 @@ class InitActivity : AppCompatActivity() {
         }
 
 
-        tv_password.setOnEditorActionListener { textView, i, keyEvent ->
-            true
-            bt_passwordSubmit.callOnClick()
-        }
-
-
-        bt_passwordSubmit.setOnClickListener { view ->
-            val str_pw = tv_password.text
-            Log.d("mydbg_init", "password >>>> $str_pw")
-
-            if (str_pw.isNotEmpty()) {
-                Toast.makeText(this, "${str_pw}를 입력하였습니다.", Toast.LENGTH_LONG).show()
-                Log.d("mydbg_init", "${str_pw.length}")
-
-
-                // TODO ----- MD5는 보안이 취약해 추후 바꿔야 함. SHA-3(KECCAK)을 후보로 생각하고 있음.
-                // 파라미터로 charset을 넣지 않으면 값이 보존되지 않는 현상에 대해 알아봐야 함.
-                val md5 = MessageDigest.getInstance("MD5")
-                val pwByte = str_pw.toString().toByteArray(charset("unicode"))
-                md5.update(pwByte)
-                val hashedPW = md5.digest().toString(charset("unicode"))
-
-                Log.d("mydbg_init", "평문 pw : ${pwByte.toString(charset("unicode"))}")
-                Log.d("mydbg_init", "MD5 pw : $hashedPW")
-
-
-                val Editor = share.edit()
-                Editor.putString("hashedPW", hashedPW)
-                        .putBoolean("isSetting", true)
-                        .commit()
-                startActivity(goMain)
-                finish()
-
-            } else {
-                Toast.makeText(this, "password를 입력해주세요 (1자 이상)", Toast.LENGTH_LONG).show()
-            }
-        }
 
     }
 }
