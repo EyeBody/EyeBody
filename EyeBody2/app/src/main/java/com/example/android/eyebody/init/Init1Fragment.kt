@@ -2,6 +2,9 @@ package com.example.android.eyebody.init
 
 import android.os.Bundle
 import android.app.Fragment
+import android.app.FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
+import android.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE
+import android.transition.Transition
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View

@@ -13,7 +13,6 @@ import android.view.MenuItem
 import android.widget.Toast
 import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
-import com.example.android.eyebody.dialog.EnterGalleryDialog
 import com.example.android.eyebody.init.InitActivity
 import com.example.android.eyebody.gallery.GalleryActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -76,17 +75,14 @@ class MainActivity : PermissionsActivity() {
         }
 
 
-        /* SharedPreferences (앱 공유 데이터)
-        isUserTypeInitSetting : 유저가 처음 시작할 때 비밀번호, 몸매목표 등을 세팅했는지 확인하는 파일
-        MODE_PRIVATE : 다른 앱이 접근 불가(파일 권한 없이 불가를 뜻하는 것 같음) (mode_world_readable : 다른 앱이 공유 데이터에 접근 가능)
-         */
-        val shared : SharedPreferences = getSharedPreferences("isUserTypeInitSetting", Context.MODE_PRIVATE)
 
         btn_activity_gallery.setOnClickListener {
-            val share : SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
-            val isSetPassword = share.getBoolean("isSetting",false)
-            Log.d("mydbg_main","유저가 gallery 접근을 요청함")
-            if(!isSetPassword) {
+            val sharedPref: SharedPreferences = getSharedPreferences(
+                    getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+            val sharedPref_hashedPW = sharedPref.getString(
+                    getString(R.string.sharedPreference_hashedPW), getString(R.string.sharedPreference_default_hashedPW))
+
+            if(sharedPref_hashedPW != getString(R.string.sharedPreference_default_hashedPW)) {
                 Log.d("mydbg_main","SharedPreferences.isSetting is false or null / hacked or 유저가 앱 실행 중 데이터를 지운 경우")
                 Toast.makeText(this,"에러 : 초기비밀번호가 설정되어있지 않습니다.",Toast.LENGTH_LONG).show()
             }else{

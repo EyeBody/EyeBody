@@ -8,15 +8,20 @@
         android:id="@+id/ImageView_init1_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/initBackgroundGif"
+        android:background="@drawable/background_init_gif_image"
+        android:alpha="0.75"
         />
 
     <ImageButton
         android:id="@+id/ImageButton_init1_start_to_init2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="240dp"
+        android:layout_height="80dp"
         android:layout_gravity="center"
-        app:srcCompat="@drawable/imagebutton_gallery" />
+        android:adjustViewBounds="false"
+        android:cropToPadding="false"
+        android:scaleType="fitXY"
+        android:background="@null"
+        app:srcCompat="@drawable/button_get_started" />
 </FrameLayout>
 
 

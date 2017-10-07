@@ -9,9 +9,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import com.example.android.eyebody.R
-import com.example.android.eyebody.googleDrive.GoogleDriveManager
+import com.example.android.eyebody.googleDriveManage.GoogleDriveManager
 import kotlinx.android.synthetic.main.activity_gallery.*
 import java.io.File
 import java.io.FileOutputStream

@@ -22,7 +22,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:label="메인"/>
         <activity
             android:name=".CameraActivity"
             android:label="@string/category_camera" />
@@ -37,8 +39,7 @@
             android:label="@string/category_setting" />
 
         <activity
-            android:name=".init.InitActivity"
-            android:label="시작">
+            android:name=".init.InitActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

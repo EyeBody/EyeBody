@@ -1,10 +1,9 @@
-package com.example.android.eyebody.googleDrive
+package com.example.android.eyebody.googleDriveManage
 
 import android.view.View
 import android.widget.TextView
 import com.example.android.eyebody.R
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.drive.Drive
 
 /**
  * Created by Yoon on 2017-10-07.

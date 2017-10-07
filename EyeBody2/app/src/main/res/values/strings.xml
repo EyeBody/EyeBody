@@ -1,9 +1,18 @@
 <resources>
     <string name="app_name">눈바디</string>
+
     <string name="category_camera">카메라</string>
     <string name="category_gallery">갤러리</string>
     <string name="category_exercise">운동</string>
     <string name="category_setting">설정</string>
+
+    <string name="sharedPreference_initSetting">initSetting</string>
+    <string name="sharedPreference_hashedPW">hashedPW</string>
+    <string name="sharedPreference_targetWeight">targetWeight</string>
+    <string name="sharedPreference_targetDate">targetDate</string>
+    <string name="sharedPreference_default_hashedPW">none</string>
+    <integer name="sharedPreference_default_targetWeight">0</integer>
+    <string name="sharedPreference_default_targetDate">none</string>
 
     <string name="collage">콜라주</string>
     <string name="share">공유하기</string>
@@ -11,4 +20,8 @@
     <string name="googleDrive_manualLoad">Google 수동 불러오기</string>
     <string name="googleDrive_do_signIn">Google 로그인</string>
     <string name="googleDrive_do_signOut">Google 로그아웃</string>
+    <string name="textview_target1">목표 몸무게 : </string>
+    <string name="textview_target2">목표 날짜 : </string>
+    <string name="button_cancel">취소</string>
+    <string name="button_submit">확인</string>
 </resources>

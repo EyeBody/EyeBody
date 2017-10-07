@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="배경"
-        app:srcCompat="@drawable/imagebutton_setting"
+        android:background="@drawable/background_image"
+        android:alpha="0.5"
         tools:ignore="HardcodedText" />
 
     <LinearLayout

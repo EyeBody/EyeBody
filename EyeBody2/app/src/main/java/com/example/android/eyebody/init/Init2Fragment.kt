@@ -3,7 +3,6 @@ package com.example.android.eyebody.init
 import android.annotation.SuppressLint
 import android.app.Fragment
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.example.android.eyebody.MainActivity
 import com.example.android.eyebody.R
 import java.security.MessageDigest
 
@@ -65,10 +63,9 @@ class Init2Fragment : Fragment() {
                 Log.d("mydbg_init", "MD5 pw : $hashedPW")
 
 
-                val sharedPref: SharedPreferences = activity.getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
-                val spEditor = sharedPref.edit()
-                spEditor.putString("hashedPW", hashedPW)
-                        .putBoolean("isSetting", true)
+                activity.getSharedPreferences(getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+                        .edit()
+                        .putString("hashedPW", hashedPW)
                         .commit()
 
                 val init3 = Init3Fragment()
