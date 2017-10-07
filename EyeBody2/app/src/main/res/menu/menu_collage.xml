@@ -5,8 +5,15 @@
     tools:context=".gallery.GalleryActivity">
 
     <item
+        android:id="@+id/action_editImage"
+        android:icon="@drawable/icon_magic"
+        app:showAsAction="always"
+        android:title="@string/editImage"/>
+
+    <item
         android:id="@+id/action_share"
         android:icon="@drawable/icon_share"
         app:showAsAction="always"
         android:title="@string/share"/>
+
 </menu>
