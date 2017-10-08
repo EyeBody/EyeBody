@@ -1,4 +1,4 @@
-package com.example.android.eyebody
+package com.example.android.eyebody.camera
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.example.android.eyebody.MainActivity
+import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.activity_confirm.*
 import java.io.File
 
@@ -70,15 +72,15 @@ class ConfirmActivity : AppCompatActivity() {
             val alertDilog = AlertDialog.Builder(this@ConfirmActivity).create()
             alertDilog.setTitle("삭제")
             alertDilog.setMessage("삭제 하시겠습니까?")
-            alertDilog.setButton(AlertDialog.BUTTON_POSITIVE, "삭제후 다시촬영", { dialogInterface, i ->
+            alertDilog.setButton(AlertDialog.BUTTON_NEUTRAL, "삭제후 다시촬영", { dialogInterface, i ->
                 deleteFile()
                 Toast.makeText(applicationContext, "다시 촬영", Toast.LENGTH_SHORT).show()
                 goCameraActivity()
             })
 
-            alertDilog.setButton(AlertDialog.BUTTON_NEGATIVE, "취소", { dialogInterface, j ->
+            alertDilog.setButton(AlertDialog.BUTTON_POSITIVE, "취소", { dialogInterface, j ->
             })//암것도 안함
-            alertDilog.setButton(AlertDialog.BUTTON_NEUTRAL, "삭제후 홈으로", { dialogInterface, k ->
+            alertDilog.setButton(AlertDialog.BUTTON_NEGATIVE, "삭제후 홈으로", { dialogInterface, k ->
                 deleteFile()
                 Toast.makeText(applicationContext, "삭제되었습니다", Toast.LENGTH_SHORT).show()
                 goHomeActivity()

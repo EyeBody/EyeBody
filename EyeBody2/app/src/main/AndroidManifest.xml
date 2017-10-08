@@ -25,7 +25,7 @@
             android:name=".MainActivity"
             android:label="메인"/>
         <activity
-            android:name=".CameraActivity"
+            android:name=".camera.CameraActivity"
             android:label="@string/category_camera" />
         <activity
             android:name=".gallery.GalleryActivity"
@@ -52,7 +52,7 @@
 
             </intent-filter>
         </activity>
-        <activity android:name=".ConfirmActivity"></activity>
+        <activity android:name=".camera.ConfirmActivity"></activity>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"

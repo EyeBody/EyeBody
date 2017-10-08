@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:layout_height="match_parent"
-    tools:context="com.example.android.eyebody.CameraActivity">
+    tools:context="com.example.android.eyebody.camera.CameraActivity">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -13,10 +13,13 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.example.android.eyebody.dialog.EnterGalleryDialog
+import com.example.android.eyebody.init.InitActivity
+import com.example.android.eyebody.camera.CameraActivity
+import com.example.android.eyebody.gallery.GalleryActivity
 import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
-import com.example.android.eyebody.init.InitActivity
-import com.example.android.eyebody.gallery.GalleryActivity
+
+
 import kotlinx.android.synthetic.main.activity_main.*
 
 

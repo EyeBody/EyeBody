@@ -1,4 +1,4 @@
-package com.example.android.eyebody
+package com.example.android.eyebody.camera
 
 import android.app.Activity
 import android.content.Intent
@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
 import android.widget.Toast
+import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.File
 import java.io.FileOutputStream
@@ -95,13 +96,12 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         makeFolder()
         setTextView()
         var timeStamp: String = java.text.SimpleDateFormat("yyyyMMddHHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
-        var fileName:String?=null
+
+        var fileName = String.format("body_$timeStamp.eyebody")
         if(count==0){
-            var fileName = String.format("body_$timeStamp.eyebody")
             frontImageName=rootPath+"/"+fileName
         }else{
             changeImage()
-            var fileName = String.format("body_$timeStamp.eyebody")
             sideImageName=rootPath+"/"+fileName
         }
         var path: String = rootPath + "/" + fileName
