@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="app_name">눈바디</string>
 
     <string name="category_camera">카메라</string>
@@ -23,4 +23,6 @@
     <string name="textview_target2">목표 날짜 : </string>
     <string name="button_cancel">취소</string>
     <string name="button_submit">확인</string>
+    <string name="editImage">이미지 편집하기</string>
+
 </resources>

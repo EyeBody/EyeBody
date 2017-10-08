@@ -1,13 +1,10 @@
 package com.example.android.eyebody.gallery
 
-import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.example.android.eyebody.R
-import kotlinx.android.synthetic.main.activity_collage.*
 
 class CollageActivity : AppCompatActivity() {
 
@@ -17,9 +14,16 @@ class CollageActivity : AppCompatActivity() {
 
         var photoList: ArrayList<Photo> = intent.getParcelableArrayListExtra("photoList")
 
-        //RecyclerView
-        collageView.hasFixedSize()
-        collageView.adapter = CollageAdapter(this, photoList)
+        //ImageSelectFragment
+        var imageSelectFragment = ImageSelectFragment()
+        var bundle = Bundle()
+        bundle.putParcelableArrayList("photoList", photoList)
+        imageSelectFragment.arguments = bundle
+
+        var fragmentTransaction  = fragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.fragment_container, imageSelectFragment).commit()
+
+        //TODO 선택한 이미지들로 콜라주 만들기
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
