@@ -7,7 +7,6 @@ import android.view.MenuItem
 import com.example.android.eyebody.R
 import com.kakao.kakaolink.KakaoLink
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder
-import kotlinx.android.synthetic.main.activity_collage.*
 
 class CollageActivity : AppCompatActivity() {
 
