@@ -17,9 +17,16 @@ class CollageActivity : AppCompatActivity() {
 
         var photoList: ArrayList<Photo> = intent.getParcelableArrayListExtra("photoList")
 
-        //RecyclerView
-        collageView.hasFixedSize()
-        collageView.adapter = CollageAdapter(this, photoList)
+        //ImageSelectFragment
+        var imageSelectFragment = ImageSelectFragment()
+        var bundle = Bundle()
+        bundle.putParcelableArrayList("photoList", photoList)
+        imageSelectFragment.arguments = bundle
+
+        var fragmentTransaction  = fragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.fragment_container, imageSelectFragment).commit()
+
+        //TODO 선택한 이미지들로 콜라주 만들기
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
