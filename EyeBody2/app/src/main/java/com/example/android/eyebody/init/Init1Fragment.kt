@@ -23,7 +23,7 @@ class Init1Fragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreate(savedInstanceState)
         val v = inflater!!.inflate(R.layout.fragment_init1, container, false)
-        Log.d("mydbg_init1","init1 진입")
+        Log.d("mydbg_init1","[ init1 진입 ]")
 
         val startButton = v.findViewById<ImageButton>(R.id.ImageButton_init1_start_to_init2)
 

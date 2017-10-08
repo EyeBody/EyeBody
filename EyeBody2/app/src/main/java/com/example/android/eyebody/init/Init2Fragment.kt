@@ -33,7 +33,7 @@ class Init2Fragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreate(savedInstanceState)
         val v = inflater!!.inflate(R.layout.fragment_init2, container, false)
-        Log.d("mydbg_init2", "init2 진입")
+        Log.d("mydbg_init2", "[ init2 진입 ]")
 
         val viewPassword = v.findViewById<EditText>(R.id.EditText_input_password)
         val viewPasswordSubmit = v.findViewById<Button>(R.id.Button_submit_password)
@@ -45,11 +45,11 @@ class Init2Fragment : Fragment() {
 
         viewPasswordSubmit.setOnClickListener { view ->
             val strPW = viewPassword.text
-            Log.d("mydbg_init", "password >>>> $strPW")
+            Log.d("mydbg_init2", "password >>> $strPW")
 
             if (strPW.isNotEmpty()) {
                 Toast.makeText(activity, "${strPW}를 입력하였습니다.", Toast.LENGTH_LONG).show()
-                Log.d("mydbg_init", "${strPW.length}")
+                Log.d("mydbg_init2", "  length >>> ${strPW.length}")
 
 
                 // TODO ----- MD5 에서 SHA-3 (KECCAK) or SHA128 로 알고리즘 개선
@@ -59,8 +59,8 @@ class Init2Fragment : Fragment() {
                 md5.update(pwByte)
                 val hashedPW = md5.digest().toString(charset("unicode"))
 
-                Log.d("mydbg_init", "평문 pw : ${pwByte.toString(charset("unicode"))}")
-                Log.d("mydbg_init", "MD5 pw : $hashedPW")
+                Log.d("mydbg_init2", " 평문 pw >>> ${pwByte.toString(charset("unicode"))}")
+                Log.d("mydbg_init2", "  MD5 pw >>> $hashedPW")
 
 
                 activity.getSharedPreferences(getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)

@@ -14,6 +14,8 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.android.eyebody.MainActivity
 import com.example.android.eyebody.R
+import com.example.android.eyebody.dialog.TargetDatePickDialog
+import com.example.android.eyebody.dialog.TargetWeightPickDialog
 
 /**
  * Created by YOON on 2017-09-24.
@@ -21,7 +23,6 @@ import com.example.android.eyebody.R
 
 // target 설정 (일단은 목표 몸무게, 날짜)
 // progress dot (3/3)
-// TODO(NOW!! : Init3 다 제대로 돌린 다음에 구글드라이브 연동 시작하기
 
 class Init3Fragment : Fragment() {
 
@@ -30,7 +31,7 @@ class Init3Fragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val v = inflater!!.inflate(R.layout.fragment_init3, container, false)
-        Log.d("mydbg_init3", "init3 진입")
+        Log.d("mydbg_init3", "[ init3 진입 ]")
 
         val textview_targetWeight = v.findViewById<TextView>(R.id.TextView_target_weight)
         val textview_targetDate = v.findViewById<TextView>(R.id.TextView_target_date)
@@ -41,16 +42,24 @@ class Init3Fragment : Fragment() {
         var statusSetWeight = false
         var statusSetDate = false
         var date  = "yyyymmdd"
-        var weight  = 0
+        var weight : Int?  = 0
 
 
         button_callWeightDialog.setOnClickListener {
+            val weightPicker = TargetWeightPickDialog()
+            weightPicker.show(activity.fragmentManager,"pick target weight")
+
             statusSetDate = true
             date = textview_targetDate.text.toString()
         }
         button_callDateDialog.setOnClickListener {
+            val datePicker = TargetDatePickDialog()
+            datePicker.show(fragmentManager.beginTransaction(), "pick target date")
+
             statusSetWeight = true
-            weight = textview_targetWeight.text.toString().toInt()
+            weight = textview_targetWeight.text.toString().toIntOrNull()
+            if(weight == null)
+                weight = 0
         }
         button_submit.setOnClickListener {
 
@@ -58,13 +67,14 @@ class Init3Fragment : Fragment() {
 
                 activity.getSharedPreferences(getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
                         .edit()
+                        .putInt(getString(R.string.sharedPreference_targetWeight),weight!!)
                         .putString(getString(R.string.sharedPreference_targetDate),date)
-                        .putInt(getString(R.string.sharedPreference_targetWeight),weight)
                         .commit()
 
                 val goMain = Intent(activity, MainActivity::class.java)
                 startActivity(goMain)
                 activity.finish()
+                Log.d("mydbg_init3", "설정 된 값은\ntargetWeight = $weight\ntargetDate = $date")
 
             } else {
                 Toast.makeText(activity,"두 개다 작성 해주셔야 돼요",Toast.LENGTH_LONG).show()

@@ -34,15 +34,17 @@ class InitActivity : AppCompatActivity() {
                 getString(R.string.sharedPreference_targetDate), getString(R.string.sharedPreference_default_targetDate))
 
 
-        if (sharedPref_hashedPW != "none" &&
-                sharedPref_targetDate != "none" &&
-                sharedPref_targetWeight != 0
+        if (sharedPref_hashedPW != getString(R.string.sharedPreference_default_hashedPW) &&
+                sharedPref_targetDate != getString(R.string.sharedPreference_default_targetDate) &&
+                sharedPref_targetWeight != resources.getInteger(R.integer.sharedPreference_default_targetWeight)
                 ) {
             Log.d("mydbg_init", "초기설정(비밀번호-init2, 목표-init3)이 완료되어있으므로 MainActivity로 넘어갑니다.")
 
             val goMain = Intent(this, MainActivity::class.java)
             startActivity(goMain)
             finish()
+        } else {
+            Log.d("mydbg_init", "현재 설정값은\nhashedPW = $sharedPref_hashedPW\ntargetWeight = $sharedPref_targetWeight\ntargetDate = $sharedPref_targetDate\n")
         }
 
 

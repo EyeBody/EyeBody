@@ -1,5 +1,6 @@
 ﻿package com.example.android.eyebody
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,6 +12,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.example.android.eyebody.dialog.EnterGalleryDialog
 import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
 import com.example.android.eyebody.init.InitActivity
@@ -27,6 +29,7 @@ class MainActivity : PermissionsActivity() {
             menuInflater.inflate(R.menu.menu_sel, menu)
             return true
         }
+
         fun onOptionsItemSelected(item: MenuItem): Boolean {
             val id = item.itemId
             if (id == R.id.btn_activity_func2) {
@@ -64,14 +67,14 @@ class MainActivity : PermissionsActivity() {
                             super.permissionGranted()
                             Log.v("Camera permissions", "Granted")
                         }
+
                         override fun permissionDenied() {
                             super.permissionDenied()
                             Log.v("Camera permissions", "Denied")
                         }
                     })
                 } else startActivity(cameraPage)
-            }
-            else startActivity(cameraPage)
+            } else startActivity(cameraPage)
         }
 
 
@@ -82,13 +85,12 @@ class MainActivity : PermissionsActivity() {
             val sharedPref_hashedPW = sharedPref.getString(
                     getString(R.string.sharedPreference_hashedPW), getString(R.string.sharedPreference_default_hashedPW))
 
-            if(sharedPref_hashedPW != getString(R.string.sharedPreference_default_hashedPW)) {
-                Log.d("mydbg_main","SharedPreferences.isSetting is false or null / hacked or 유저가 앱 실행 중 데이터를 지운 경우")
-                Toast.makeText(this,"에러 : 초기비밀번호가 설정되어있지 않습니다.",Toast.LENGTH_LONG).show()
-            }else{
-                // TODO(now2) fragment 를 이용하여 화면전환 - 패스워드입력창 : activity_main_enter_gallery
-                // 비밀번호 검증 프라그먼트 띄워야 함
-                startActivity(galleryPage)
+            if (sharedPref_hashedPW == getString(R.string.sharedPreference_default_hashedPW)) {
+                Log.d("mydbg_main", "SharedPreferences.isSetting is false or null / hacked or 유저가 앱 실행 중 데이터를 지운 경우")
+                Toast.makeText(this, "에러 : 초기비밀번호가 설정되어있지 않습니다.", Toast.LENGTH_LONG).show()
+            } else {
+                val enterGalleryDialog = EnterGalleryDialog()
+                enterGalleryDialog.show(fragmentManager, "enter_gallery")
                 //overridePendingTransition(0,0)
             }
         }
@@ -100,6 +102,7 @@ class MainActivity : PermissionsActivity() {
         }
 
     }
+
     /* onCreateOptionMenu
     액션바에 옵션메뉴를 띄우게 함. xml 긁어서
      */
@@ -108,22 +111,30 @@ class MainActivity : PermissionsActivity() {
         menuInflater.inflate(R.menu.menu_sel, menu)
         return true
     }
+
     /* onOptionItemSelected
     옵션메뉴에서 아이템이 선택됐을 때 발생하는 이벤트
      */
+    @SuppressLint("ApplySharedPref")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // TODO ----- 아예 싹 갈아 없고 네비게이션 뷰 구성하기" - fun onCreateOptionMenu 와 onOptionSelected 를 엎어야 함.
-        val id      by lazy {   item.itemId     }
-        val toast   by lazy {   Toast.makeText(this, "", Toast.LENGTH_SHORT)    }
+        val id by lazy { item.itemId }
+        val toast by lazy { Toast.makeText(this, "", Toast.LENGTH_SHORT) }
 
         when (id) {
             R.id.Actionbar_Backup -> {
-                // TODO ----- init 으로 가게 해놓았음
+                // TODO ----- 백업에 대하여 새로운 액티비티 구성
+                // TODO ----- intent 전환효과 바꾸기 :: overridePendingTransition(int, int) / xml 파일 같이 쓰면 더 예쁘게 가능.
+                // 사진찍기 같은 경우 드래그로 동그란거 샤악~ ????
+
+
+                // init 으로 가게 해놓았음 (sharedPreference가 채워져 있으면 init에서 저절로 main으로 오므로 clear작업을 해줌)
+                getSharedPreferences(getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+                        .edit()
+                        .clear()
+                        .commit()
                 val initActivityIntent = Intent(this, InitActivity::class.java)
                 startActivity(initActivityIntent)
-                // TODO ----- intent 전환효과 바꾸기 :: overridePendingTransition(int, int) / xml 파일 같이 쓰면 더 예쁘게 가능.
-                // (왜 startActivity 함수 다음에 쓰는 건지 알아봐야 할 거 같음)
-                // 사진찍기 같은 경우 드래그로 동그란거 샤악~ ????
                 finish()
             }
             R.id.Actionbar_PWmodify -> {

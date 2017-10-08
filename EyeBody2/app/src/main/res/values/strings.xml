@@ -11,7 +11,6 @@
     <string name="sharedPreference_targetWeight">targetWeight</string>
     <string name="sharedPreference_targetDate">targetDate</string>
     <string name="sharedPreference_default_hashedPW">none</string>
-    <integer name="sharedPreference_default_targetWeight">0</integer>
     <string name="sharedPreference_default_targetDate">none</string>
 
     <string name="collage">콜라주</string>

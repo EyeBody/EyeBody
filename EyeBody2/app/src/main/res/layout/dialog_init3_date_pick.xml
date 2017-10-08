@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="500dp"
+    android:layout_height="500dp"
     android:orientation="vertical"
     tools:layout_width="wrap_content">
 
@@ -11,12 +10,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <DatePicker
             android:id="@+id/datePicker_dialog_init3_date_pick"
             android:layout_width="300dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:headerBackground="@drawable/common_google_signin_btn_text_dark_normal_background" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,15 +27,21 @@
 
             <Button
                 android:id="@+id/button_dialog_init3_date_cancel"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="@string/button_cancel" />
+                android:background="@color/colorAccent"
+                android:text="@string/button_cancel"
+                android:textColor="#FFFFFF"/>
 
             <Button
                 android:id="@+id/button_dialog_init3_date_submit"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="@string/button_submit" />
+                android:background="@color/colorPrimary"
+                android:text="@string/button_submit"
+                android:textColor="#FFFFFF"/>
 
         </LinearLayout>
     </LinearLayout>
