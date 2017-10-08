@@ -29,9 +29,8 @@ class TargetDatePickDialog : DialogFragment() {
         val button_submit = view.findViewById<Button>(R.id.button_dialog_init3_date_submit)
 
         val currentDay = Calendar.getInstance().time
-        datePicker.updateDate(currentDay.year+1900,currentDay.month+1,currentDay.date)
-        Log.d("mydbg_datePicker","time is ${Calendar.getInstance().time}")
-
+        datePicker.updateDate(currentDay.year+1900,currentDay.month,currentDay.date)
+        Log.d("mydbg_datePicker","time is ${Calendar.getInstance().time}\n${currentDay.year+1900}\t${currentDay.month}\t${currentDay.date}")
 
         button_cancel.setOnClickListener{
             Log.d("mydbg_datePicker","cancel button click")
@@ -39,13 +38,14 @@ class TargetDatePickDialog : DialogFragment() {
         }
         button_submit.setOnClickListener {
             val textviewDate = activity.findViewById<View>(android.R.id.content).findViewById<TextView>(R.id.TextView_target_date)
-            textviewDate.text = "${datePicker.year}${(datePicker.month+1).toString().format("%02d")}${datePicker.dayOfMonth.toString().format("%02d")}"
+            textviewDate.text = "${datePicker.year}${String.format("%02d",datePicker.month+1)}${String.format("%02d",datePicker.dayOfMonth)}"
             Log.d("mydbg_datePicker","submit button click")
             dismiss()
         }
 
         return dialogbuilder.create()
     }
+
 
     override fun onStop() {
         super.onStop()

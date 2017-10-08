@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.widget.ImageButton
 import com.example.android.eyebody.MainActivity
 import com.example.android.eyebody.R
 
@@ -19,7 +20,7 @@ class InitActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_init)
-
+        setActionBar(null)
 
         /* SharedPreferences (앱 공유 데이터)
         MODE_PRIVATE : 다른 앱이 접근 불가(파일 권한 없이 불가를 뜻하는 것 같음) (mode_world_readable : 다른 앱이 공유 데이터에 접근 가능)
@@ -47,6 +48,15 @@ class InitActivity : AppCompatActivity() {
             Log.d("mydbg_init", "현재 설정값은\nhashedPW = $sharedPref_hashedPW\ntargetWeight = $sharedPref_targetWeight\ntargetDate = $sharedPref_targetDate\n")
         }
 
+    }
 
+    /** view가 만들어진 후 호출되어야 함.
+     */
+    fun setButtonVisibility(leftVisibility : Int, rightVisibility : Int){
+        val leftButton = findViewById<ImageButton>(R.id.button_init_prevButton)
+        val rightButton = findViewById<ImageButton>(R.id.button_init_nextButton)
+
+        leftButton.visibility = leftVisibility
+        rightButton.visibility = rightVisibility
     }
 }

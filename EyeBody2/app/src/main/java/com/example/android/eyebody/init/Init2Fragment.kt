@@ -73,6 +73,8 @@ class Init2Fragment : Fragment() {
                         .replace(R.id.fragment_init_content, init3)
                         .commit()
 
+                val initActivity : InitActivity = activity as InitActivity
+                initActivity.setButtonVisibility(View.VISIBLE, View.INVISIBLE)
             } else {
                 Toast.makeText(activity, "password를 입력해주세요 (1자 이상)", Toast.LENGTH_LONG).show()
             }

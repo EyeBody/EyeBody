@@ -32,6 +32,9 @@ class Init1Fragment : Fragment() {
             activity.fragmentManager.beginTransaction()
                     .replace(R.id.fragment_init_content, init2)
                     .commit()
+
+            val initActivity : InitActivity = activity as InitActivity
+            initActivity.setButtonVisibility(View.VISIBLE, View.VISIBLE)
         }
 
         return v

@@ -20,18 +20,20 @@
         android:layout_weight="1">
 
         <ImageButton
-            android:id="@+id/button_init_prevButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="left"
-            app:srcCompat="@drawable/imagebutton_setting"
-            tools:ignore="ContentDescription" />
-
-        <ImageButton
             android:id="@+id/button_init_nextButton"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="right"
+            android:visibility="visible"
+            app:srcCompat="@drawable/imagebutton_setting"
+            tools:ignore="ContentDescription" />
+
+        <ImageButton
+            android:id="@+id/button_init_prevButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="left"
+            android:visibility="invisible"
             app:srcCompat="@drawable/imagebutton_setting"
             tools:ignore="ContentDescription" />
 

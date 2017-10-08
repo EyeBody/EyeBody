@@ -39,36 +39,31 @@ class Init3Fragment : Fragment() {
         val button_callDateDialog = v.findViewById<Button>(R.id.Button_call_date_dialog)
         val button_submit = v.findViewById<Button>(R.id.Button_submit_target)
 
-        var statusSetWeight = false
-        var statusSetDate = false
-        var date  = "yyyymmdd"
-        var weight : Int?  = 0
+        var date: String
+        var weight: Int? = 0
 
 
         button_callWeightDialog.setOnClickListener {
             val weightPicker = TargetWeightPickDialog()
-            weightPicker.show(activity.fragmentManager,"pick target weight")
-
-            statusSetDate = true
-            date = textview_targetDate.text.toString()
+            weightPicker.show(activity.fragmentManager, "pick target weight")
         }
         button_callDateDialog.setOnClickListener {
             val datePicker = TargetDatePickDialog()
             datePicker.show(fragmentManager.beginTransaction(), "pick target date")
-
-            statusSetWeight = true
-            weight = textview_targetWeight.text.toString().toIntOrNull()
-            if(weight == null)
-                weight = 0
         }
         button_submit.setOnClickListener {
 
-            if (statusSetDate && statusSetWeight) {
+            weight = textview_targetWeight.text.toString().toIntOrNull()
+            if (weight == null) weight = resources.getInteger(R.integer.sharedPreference_default_targetWeight)
+            date = textview_targetDate.text.toString()
+
+            if (weight != resources.getInteger(R.integer.sharedPreference_default_targetWeight) &&
+                    date != getString(R.string.textview_target2)) {
 
                 activity.getSharedPreferences(getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
                         .edit()
-                        .putInt(getString(R.string.sharedPreference_targetWeight),weight!!)
-                        .putString(getString(R.string.sharedPreference_targetDate),date)
+                        .putInt(getString(R.string.sharedPreference_targetWeight), weight!!)
+                        .putString(getString(R.string.sharedPreference_targetDate), date)
                         .commit()
 
                 val goMain = Intent(activity, MainActivity::class.java)
@@ -77,7 +72,7 @@ class Init3Fragment : Fragment() {
                 Log.d("mydbg_init3", "설정 된 값은\ntargetWeight = $weight\ntargetDate = $date")
 
             } else {
-                Toast.makeText(activity,"두 개다 작성 해주셔야 돼요",Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, "두 개다 작성 해주셔야 돼요", Toast.LENGTH_LONG).show()
             }
 
         }

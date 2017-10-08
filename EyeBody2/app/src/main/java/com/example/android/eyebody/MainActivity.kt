@@ -122,13 +122,11 @@ class MainActivity : PermissionsActivity() {
         val toast by lazy { Toast.makeText(this, "", Toast.LENGTH_SHORT) }
 
         when (id) {
-            R.id.Actionbar_Backup -> {
-                // TODO ----- 백업에 대하여 새로운 액티비티 구성
-                // TODO ----- intent 전환효과 바꾸기 :: overridePendingTransition(int, int) / xml 파일 같이 쓰면 더 예쁘게 가능.
-                // 사진찍기 같은 경우 드래그로 동그란거 샤악~ ????
-
-
-                // init 으로 가게 해놓았음 (sharedPreference가 채워져 있으면 init에서 저절로 main으로 오므로 clear작업을 해줌)
+        // TODO ----- intent 전환효과 바꾸기 :: overridePendingTransition(int, int) / xml 파일 같이 쓰면 더 예쁘게 가능.
+        // 사진찍기 같은 경우 드래그로 동그란거 샤악~ ????
+            R.id.Actionbar_Reset -> {
+                // init 으로 감 (sharedPreference가 채워져 있으면 init에서 저절로 main으로 오므로 clear작업을 해줌)
+                // debug용임.
                 getSharedPreferences(getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
                         .edit()
                         .clear()
