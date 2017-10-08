@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.eyebody">
     <uses-sdk android:minSdkVersion="4" />
@@ -21,7 +21,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:label="메인"/>
         <activity
             android:name=".CameraActivity"
             android:label="@string/category_camera" />
@@ -33,10 +35,10 @@
             android:label="@string/category_exercise" />
         <activity
             android:name=".SettingActivity"
-            android:label="@string/category_setting"></activity>
+            android:label="@string/category_setting" />
+
         <activity
-            android:name=".InitActivity"
-            android:label="시작">
+            android:name=".init.InitActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,6 +57,10 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
+
+        <!--<meta-data
+            android:value="@integer/google_play_services_version"
+            anroid:name="com.google.android.gms.version" />-->
 
         <activity
             android:name=".gallery.CollageActivity"

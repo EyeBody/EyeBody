@@ -1,14 +1,16 @@
-package com.example.android.eyebody.gallery
+﻿package com.example.android.eyebody.gallery
 
 import android.content.Intent
 import android.content.res.AssetManager
 import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.example.android.eyebody.R
+import com.example.android.eyebody.googleDriveManage.GoogleDriveManager
 import kotlinx.android.synthetic.main.activity_gallery.*
 import java.io.File
 import java.io.FileOutputStream
@@ -21,10 +23,13 @@ import java.io.OutputStream
 
 class GalleryActivity : AppCompatActivity() {
     var photoList = ArrayList<Photo>()
+    var googleDriveManager : GoogleDriveManager? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
+        googleDriveManager = GoogleDriveManager(findViewById<View>(android.R.id.content))
 
         //이미지 불러오기
         var state: String = Environment.getExternalStorageState()   //외부저장소(SD카드)가 마운트되었는지 확인
@@ -57,11 +62,22 @@ class GalleryActivity : AppCompatActivity() {
         //RecyclerView
         galleryView.hasFixedSize()
         galleryView.adapter = GalleryAdapter(this, photoList)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu_gallery, menu)
+
+        when(googleDriveManager?.statusSignInOrOut){
+            GoogleDriveManager.SIGN_IN -> {
+                menu.findItem(R.id.action_googleDrive_signInOut_togle).title = "Google 로그아웃"
+            }
+            GoogleDriveManager.SIGN_OUT -> {
+                menu.findItem(R.id.action_googleDrive_signInOut_togle).title = "Google 로그인"
+            }
+        }
+
         return true
     }
 
@@ -71,6 +87,32 @@ class GalleryActivity : AppCompatActivity() {
                 var intent = Intent(this, CollageActivity::class.java)
                 intent.putExtra("photoList", photoList)
                 startActivity(intent)
+            }
+
+            R.id.action_googleDrive_signInOut_togle -> {//구글드라이브 로그인 토글
+                when(googleDriveManager?.statusSignInOrOut){
+                    GoogleDriveManager.SIGN_IN -> {
+                        googleDriveManager?.signOut()
+                        Log.d("mydbg_gallery","do sign out")
+                        item.title = getString(R.string.googleDrive_do_signIn)
+                    }
+                    GoogleDriveManager.SIGN_OUT -> {
+                        googleDriveManager?.signIn()
+                        Log.d("mydbg_gallery","do sign in")
+                        if (googleDriveManager?.statusSignInOrOut == GoogleDriveManager.SIGN_IN)
+                            item.title = getString(R.string.googleDrive_do_signOut)
+                    }
+                }
+            }
+
+            R.id.action_googleDrive_manualSave -> { //구글드라이브 수동 저장
+                googleDriveManager?.saveAllFile()
+                Log.d("mydbg_gallery","do save file")
+            }
+
+            R.id.action_googleDrive_manualLoad -> { //구글드라이브 수동 불러오기
+                googleDriveManager?.loadAllFile()
+                Log.d("mydbg_gallery","do load file")
             }
         }
         return super.onOptionsItemSelected(item)

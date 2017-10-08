@@ -1,5 +1,6 @@
-package com.example.android.eyebody
+﻿package com.example.android.eyebody
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,9 +12,10 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.example.android.eyebody.dialog.EnterGalleryDialog
 import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
-import com.example.android.eyebody.dialog.EnterGalleryDialog
+import com.example.android.eyebody.init.InitActivity
 import com.example.android.eyebody.gallery.GalleryActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -48,15 +50,10 @@ class MainActivity : PermissionsActivity() {
         이렇게하면 속도가 빨라지는 효과가 있는지는 모르겠다.***
          */
         val cameraPage by lazy { Intent(this, CameraActivity::class.java) }
-        val galleryPage by lazy { Intent(this, GalleryActivity::class.java) }
         val exercisePage by lazy { Intent(this, ExerciseActivity::class.java) }
+        val settingPage by lazy { Intent(this, SettingActivity::class.java) }
+        val galleryPage by lazy { Intent(this, GalleryActivity::class.java) }
 
-        /* SharedPreferences (앱 공유 데이터)
-        isUserTypeInitSetting : 유저가 처음 시작할 때 비밀번호, 몸매목표 등을 세팅했는지 확인하는 파일
-        MODE_PRIVATE : 다른 앱이 접근 불가(파일 권한 없이 불가를 뜻하는 것 같음) (mode_world_readable : 다른 앱이 공유 데이터에 접근 가능)
-         */
-        val shared: SharedPreferences = getSharedPreferences("isUserTypeInitSetting", Context.MODE_PRIVATE)
-        // TODO("공유데이터로 initActivity를 실행하게? 아니면 이닛에서 공유데이터를 판별할지 해야함")
         /* Listener (이벤트 리스너)
         클릭하면 반응
          */
@@ -82,24 +79,30 @@ class MainActivity : PermissionsActivity() {
             } else startActivity(cameraPage)
         }
 
+
+
         btn_activity_gallery.setOnClickListener {
-            val share: SharedPreferences = getSharedPreferences("hash-md5", Context.MODE_PRIVATE)
-            val isSetPassword = share.getBoolean("isSetting", false)
-            Log.d("mydbg_main", "유저가 gallery 접근을 요청함")
-            if (!isSetPassword) {
+            val sharedPref: SharedPreferences = getSharedPreferences(
+                    getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+            val sharedPref_hashedPW = sharedPref.getString(
+                    getString(R.string.sharedPreference_hashedPW), getString(R.string.sharedPreference_default_hashedPW))
+
+            if (sharedPref_hashedPW == getString(R.string.sharedPreference_default_hashedPW)) {
                 Log.d("mydbg_main", "SharedPreferences.isSetting is false or null / hacked or 유저가 앱 실행 중 데이터를 지운 경우")
                 Toast.makeText(this, "에러 : 초기비밀번호가 설정되어있지 않습니다.", Toast.LENGTH_LONG).show()
             } else {
-                // TODO(now2) fragment 를 이용하여 화면전환 - 패스워드입력창 : activity_main_enter_gallery
-                // 비밀번호 검증 프라그먼트 띄워야 함
-                startActivity(galleryPage)
+                val enterGalleryDialog = EnterGalleryDialog()
+                enterGalleryDialog.show(fragmentManager, "enter_gallery")
                 //overridePendingTransition(0,0)
             }
         }
         btn_activity_func1.setOnClickListener {
-
             startActivity(exercisePage)
         }
+        btn_activity_func2.setOnClickListener {
+            startActivity(settingPage)
+        }
+
     }
 
     /* onCreateOptionMenu
@@ -114,20 +117,24 @@ class MainActivity : PermissionsActivity() {
     /* onOptionItemSelected
     옵션메뉴에서 아이템이 선택됐을 때 발생하는 이벤트
      */
+    @SuppressLint("ApplySharedPref")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // TODO ----- 아예 싹 갈아 없고 네비게이션 뷰 구성하기" - fun onCreateOptionMenu 와 onOptionSelected 를 엎어야 함.
         val id by lazy { item.itemId }
         val toast by lazy { Toast.makeText(this, "", Toast.LENGTH_SHORT) }
 
         when (id) {
-            R.id.Actionbar_Backup -> {
-                // TODO ----- init 으로 가게 해놓았음
-
+        // TODO ----- intent 전환효과 바꾸기 :: overridePendingTransition(int, int) / xml 파일 같이 쓰면 더 예쁘게 가능.
+        // 사진찍기 같은 경우 드래그로 동그란거 샤악~ ????
+            R.id.Actionbar_Reset -> {
+                // init 으로 감 (sharedPreference가 채워져 있으면 init에서 저절로 main으로 오므로 clear작업을 해줌)
+                // debug용임.
+                getSharedPreferences(getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+                        .edit()
+                        .clear()
+                        .commit()
                 val initActivityIntent = Intent(this, InitActivity::class.java)
                 startActivity(initActivityIntent)
-                // TODO ----- intent 전환효과 바꾸기 :: overridePendingTransition(int, int) / xml 파일 같이 쓰면 더 예쁘게 가능.
-                // (왜 startActivity 함수 다음에 쓰는 건지 알아봐야 할 거 같음)
-                // 사진찍기 같은 경우 드래그로 동그란거 샤악~ ????
                 finish()
             }
             R.id.Actionbar_PWmodify -> {
