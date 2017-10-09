@@ -10,7 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.example.android.eyebody.R
-import com.example.android.eyebody.googleDriveManage.GoogleDriveManager
+import com.example.android.eyebody.googleDrive.GoogleDriveManager
 import kotlinx.android.synthetic.main.activity_gallery.*
 import java.io.File
 import java.io.FileOutputStream
@@ -29,7 +29,7 @@ class GalleryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
-        googleDriveManager = GoogleDriveManager(findViewById<View>(android.R.id.content))
+        googleDriveManager = GoogleDriveManager(applicationContext)
 
         //이미지 불러오기
         var state: String = Environment.getExternalStorageState()   //외부저장소(SD카드)가 마운트되었는지 확인
