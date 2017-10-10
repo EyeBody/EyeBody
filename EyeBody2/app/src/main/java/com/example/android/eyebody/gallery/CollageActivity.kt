@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.example.android.eyebody.R
 
 class CollageActivity : AppCompatActivity() {
@@ -13,11 +14,13 @@ class CollageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_collage)
 
         var photoList: ArrayList<Photo> = intent.getParcelableArrayListExtra("photoList")
+        var selectedPhotoList: ArrayList<Int> = ArrayList<Int>()
 
         //ImageSelectFragment
         var imageSelectFragment = ImageSelectFragment()
         var bundle = Bundle()
         bundle.putParcelableArrayList("photoList", photoList)
+        bundle.putIntegerArrayList("selectedPhotoList", selectedPhotoList)
         imageSelectFragment.arguments = bundle
 
         var fragmentTransaction  = fragmentManager.beginTransaction()
