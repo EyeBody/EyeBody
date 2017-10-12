@@ -5,7 +5,6 @@ import android.content.res.AssetManager
 import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,9 +15,6 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
 
-
-//TODO gallery UI 예쁘게 다듬기
-//TODO image metadata로 1주전 2주전 정보 표시
 
 class GalleryActivity : AppCompatActivity() {
     var photoList = ArrayList<Photo>()

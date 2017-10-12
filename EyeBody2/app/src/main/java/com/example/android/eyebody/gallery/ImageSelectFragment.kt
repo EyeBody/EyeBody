@@ -9,22 +9,28 @@ import com.example.android.eyebody.R
 
 class ImageSelectFragment : Fragment() {
     lateinit var menu: Menu
-    var selectedPhotoList: ArrayList<Int> = ArrayList<Int>()
+    lateinit var imageSelectView: RecyclerView
+    lateinit var collage: CollageActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        collage = activity as CollageActivity
+
+        //데이터는 onCreate에, view관련 코드는 onCreateView에 작성
+        //activity.photoList = arguments.getParcelableArrayList("photoList")
+        //activity.selectedPhotoList = arguments.getIntegerArrayList("selectedPhotoList")
+
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         var view = inflater.inflate(R.layout.fragment_image_select, container, false)
-        var photoList: ArrayList<Photo> = arguments.getParcelableArrayList("photoList")
-        selectedPhotoList = arguments.getIntegerArrayList("selectedPhotoList")
 
         //RecyclerView
-        var imageSelectView: RecyclerView = view.findViewById(R.id.imageSelectView)
+        imageSelectView = view.findViewById(R.id.imageSelectView)
         imageSelectView.hasFixedSize()
-        imageSelectView.adapter = CollageAdapter(activity, photoList, selectedPhotoList, this)
+        imageSelectView.adapter = CollageAdapter(activity, collage.photoList, collage.selectedPhotoList, this)
 
         return view
     }
@@ -43,7 +49,20 @@ class ImageSelectFragment : Fragment() {
         when (item.itemId) {
             R.id.action_editImage -> {
                 //TODO 프래그먼트 교체
-                Toast.makeText(activity, "이미지 꾸미기: " + selectedPhotoList.toString(), Toast.LENGTH_SHORT).show()
+                var fragmentTransaction = fragmentManager.beginTransaction()
+                var imageEditFragment = ImageEditFragment()
+                var bundle = Bundle()
+
+                bundle.putIntegerArrayList("selectedPhotoList", collage.selectedPhotoList)
+                imageEditFragment.arguments = bundle
+
+                //fragmentTransaction.hide(this)
+                fragmentTransaction
+                        .replace(R.id.fragment_container, imageEditFragment)
+                        .addToBackStack(null)
+                        .commit()
+
+                //Toast.makeText(activity, "test", Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)
