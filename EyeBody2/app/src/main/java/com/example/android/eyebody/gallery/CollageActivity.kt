@@ -2,10 +2,6 @@ package com.example.android.eyebody.gallery
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import com.example.android.eyebody.R
 
 class CollageActivity : AppCompatActivity() {
@@ -26,30 +22,5 @@ class CollageActivity : AppCompatActivity() {
 
         var fragmentTransaction  = fragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.fragment_container, imageSelectFragment).commit()
-
-        //TODO 선택한 이미지들로 콜라주 만들기
     }
-
-    /*
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.menu_collage, menu)
-
-        menu.findItem(R.id.action_editImage).setVisible(false)
-        menu.findItem(R.id.action_share).setVisible(false)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_editImage -> {
-                //TODO 프래그먼트 교체
-            }
-            R.id.action_share -> {
-                //TODO 카카오톡 공유하기
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-    */
 }
