@@ -34,18 +34,18 @@ class ConfirmActivity : AppCompatActivity() {
         var sideImage = Uri.parse(sideImageUri)
         var frontImage = Uri.parse(frontImageUri)
         image_front.setImageURI(frontImage)
-        image_side.setImageURI(sideImage)
+        image_side.setImageURI(sideImage) //이미지 두개 imageview에 맵핑함
     }
 
     private fun goHomeActivity() {
         var intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-    }
+    }//홈으로 돌아감
 
     private fun goCameraActivity() {
         var intent = Intent(this, CameraActivity::class.java)
         startActivity(intent)
-    }
+    }//카메라 엑티비티로 돌아감
 
     //버튼을 두개로 할 예정 삭제. 저장
     //저장버튼이 클릭되면 저장하였습니다 toast창 뜨고 홈으로 돌아감
