@@ -1,8 +1,7 @@
 package com.example.android.eyebody.camera
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -14,9 +13,6 @@ import java.io.File
 
 class ConfirmActivity : AppCompatActivity() {
 
-
-    private var bitmapFront: Bitmap? = null
-    private var bitmapSide: Bitmap? = null
     var frontFileName: String? = null
     var sideFileName: String? = null
 
@@ -31,15 +27,16 @@ class ConfirmActivity : AppCompatActivity() {
     //찍은 이미지를 화면에 뿌려주는 역할
     private fun showImage() {
         var intent = intent
-        var frontImage = intent.extras.getByteArray("front")//이미지 배열 읽어옴
-        var sideImage = intent.extras.getByteArray("side")
-        frontFileName = intent.extras.getString("frontName")
-        sideFileName = intent.extras.getString("sideName")
-        bitmapFront = BitmapFactory.decodeByteArray(frontImage, 0, frontImage.size)
-        bitmapSide = BitmapFactory.decodeByteArray(sideImage, 0, sideImage.size)
-        image_front.setImageBitmap(bitmapFront)
-        image_side.setImageBitmap(bitmapSide)
+        var frontImageUri = intent.getStringExtra("frontUri")//front 이미지 uri 받아옴
+        var sideImageUri = intent.getStringExtra("sideUri")//side 이미지 uri
+        frontFileName = intent.extras.getString("frontName")//front 이미지 파일명
+        sideFileName = intent.extras.getString("sideName")//side 이미지 파일명
+        var sideImage = Uri.parse(sideImageUri)
+        var frontImage = Uri.parse(frontImageUri)
+        image_front.setImageURI(frontImage)
+        image_side.setImageURI(sideImage)
     }
+
     private fun goHomeActivity() {
         var intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

@@ -23,6 +23,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
         <activity
+            android:configChanges="orientation|screenSize"
             android:name=".camera.CameraActivity"
             android:label="@string/category_camera" />
         <activity

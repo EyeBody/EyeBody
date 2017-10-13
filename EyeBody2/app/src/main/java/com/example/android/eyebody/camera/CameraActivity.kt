@@ -32,6 +32,8 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     private var camera: Camera? = null
     private var previewing: Boolean = false
     private var count: Int = 0
+    private var frontImageUri:Uri?= null
+    private var sideImageUri:Uri?=null
     private var frontImage: ByteArray? = null
     private var sideImage: ByteArray? = null
     private var frontImageName:String?=null
@@ -81,8 +83,8 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
 
     private fun goConfirmActivity() {
         var confirmIntent = Intent(this, ConfirmActivity::class.java)
-        confirmIntent.putExtra("front",frontImage)
-        confirmIntent.putExtra("side",sideImage)
+        confirmIntent.putExtra("frontUri",frontImageUri.toString())
+        confirmIntent.putExtra("sideUri",sideImageUri.toString())
         confirmIntent.putExtra("frontName",frontImageName)
         confirmIntent.putExtra("sideName",sideImageName)
         startActivity(confirmIntent)
@@ -109,17 +111,22 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     //TODO : 사진 저장시 용량이 터질 경우 예외처리.
     private var jpegCallback = PictureCallback { bytes: ByteArray?, camera: Camera? ->
         makeFolder()
+        Toast.makeText(baseContext,"make file success",Toast.LENGTH_SHORT)
         setTextView()
         var timeStamp: String = java.text.SimpleDateFormat("yyyyMMddHHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
 
-        var fileName = String.format("body_$timeStamp.eyebody")
+        var fileName = String.format("body_$timeStamp.jpg")
         if(count==0){
             frontImageName=rootPath+"/"+fileName
-        }else{
+            frontImageUri=Uri.fromFile(File(rootPath,fileName))
+        }
+        else{
             changeImage()
             sideImageName=rootPath+"/"+fileName
+            sideImageUri=Uri.fromFile(File(rootPath,fileName))
         }
         var path: String = rootPath + "/" + fileName
+
 
         var file = File(path)
         try {
@@ -127,9 +134,8 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
             fos.write(bytes)
             fos.flush()
             fos.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        } catch (e: Exception) { e.printStackTrace() }
+
         var intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         var uri = Uri.parse("file://" + path)
         intent.data = uri
