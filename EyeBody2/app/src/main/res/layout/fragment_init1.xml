@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <pl.droidsonroids.gif.GifTextView
+        android:id="@+id/ImageView_init1_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_init_gif_image"
+        android:alpha="0.75"
+        />
+
+    <ImageButton
+        android:id="@+id/ImageButton_init1_start_to_init2"
+        android:layout_width="240dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:adjustViewBounds="false"
+        android:cropToPadding="false"
+        android:scaleType="fitXY"
+        android:background="@null"
+        app:srcCompat="@drawable/button_get_started" />
+</FrameLayout>
+
+

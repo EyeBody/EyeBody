@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/Actionbar_Backup"
-        android:title="백업하기"
+        android:id="@+id/Actionbar_Reset"
+        android:title="앱설정값초기화"
         tools:ignore="HardcodedText" />
 
     <item
