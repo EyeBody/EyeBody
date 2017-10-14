@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:layout_height="match_parent"
-    tools:context="com.example.android.eyebody.CameraActivity">
-    <android.support.constraint.ConstraintLayout
+    tools:context="com.example.android.eyebody.camera.CameraActivity">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
@@ -14,7 +14,19 @@
             android:id="@+id/cameraScreen"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </android.support.constraint.ConstraintLayout>
+
+        <TextView
+            android:text="앞면을 찍어주세요"
+            android:id="@+id/textView_setOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="171dp"
+            tools:layout_editor_absoluteY="7dp" />
+    </RelativeLayout>
     <RelativeLayout
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"

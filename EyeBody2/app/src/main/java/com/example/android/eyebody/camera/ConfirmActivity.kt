@@ -1,20 +1,18 @@
-package com.example.android.eyebody
+package com.example.android.eyebody.camera
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.example.android.eyebody.MainActivity
+import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.activity_confirm.*
 import java.io.File
 
 class ConfirmActivity : AppCompatActivity() {
 
-
-    private var bitmapFront: Bitmap? = null
-    private var bitmapSide: Bitmap? = null
     var frontFileName: String? = null
     var sideFileName: String? = null
 
@@ -29,15 +27,16 @@ class ConfirmActivity : AppCompatActivity() {
     //찍은 이미지를 화면에 뿌려주는 역할
     private fun showImage() {
         var intent = intent
-        var frontImage = intent.extras.getByteArray("front")//이미지 배열 읽어옴
-        var sideImage = intent.extras.getByteArray("side")
-        frontFileName = intent.extras.getString("frontName")
-        sideFileName = intent.extras.getString("sideName")
-        bitmapFront = BitmapFactory.decodeByteArray(frontImage, 0, frontImage.size)
-        bitmapSide = BitmapFactory.decodeByteArray(sideImage, 0, sideImage.size)
-        image_front.setImageBitmap(bitmapFront)
-        image_side.setImageBitmap(bitmapSide)
+        var frontImageUri = intent.getStringExtra("frontUri")//front 이미지 uri 받아옴
+        var sideImageUri = intent.getStringExtra("sideUri")//side 이미지 uri
+        frontFileName = intent.extras.getString("frontName")//front 이미지 파일명
+        sideFileName = intent.extras.getString("sideName")//side 이미지 파일명
+        var sideImage = Uri.parse(sideImageUri)
+        var frontImage = Uri.parse(frontImageUri)
+        image_front.setImageURI(frontImage)
+        image_side.setImageURI(sideImage)
     }
+
     private fun goHomeActivity() {
         var intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
@@ -70,15 +69,15 @@ class ConfirmActivity : AppCompatActivity() {
             val alertDilog = AlertDialog.Builder(this@ConfirmActivity).create()
             alertDilog.setTitle("삭제")
             alertDilog.setMessage("삭제 하시겠습니까?")
-            alertDilog.setButton(AlertDialog.BUTTON_POSITIVE, "삭제후 다시촬영", { dialogInterface, i ->
+            alertDilog.setButton(AlertDialog.BUTTON_NEUTRAL, "삭제후 다시촬영", { dialogInterface, i ->
                 deleteFile()
                 Toast.makeText(applicationContext, "다시 촬영", Toast.LENGTH_SHORT).show()
                 goCameraActivity()
             })
 
-            alertDilog.setButton(AlertDialog.BUTTON_NEGATIVE, "취소", { dialogInterface, j ->
+            alertDilog.setButton(AlertDialog.BUTTON_POSITIVE, "취소", { dialogInterface, j ->
             })//암것도 안함
-            alertDilog.setButton(AlertDialog.BUTTON_NEUTRAL, "삭제후 홈으로", { dialogInterface, k ->
+            alertDilog.setButton(AlertDialog.BUTTON_NEGATIVE, "삭제후 홈으로", { dialogInterface, k ->
                 deleteFile()
                 Toast.makeText(applicationContext, "삭제되었습니다", Toast.LENGTH_SHORT).show()
                 goHomeActivity()

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import android.widget.Toast
 import com.example.android.eyebody.R
 
 class ImageSelectFragment : Fragment() {

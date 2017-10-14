@@ -1,9 +1,9 @@
-<menu xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/Actionbar_Backup"
-        android:title="백업하기"
+        android:id="@+id/Actionbar_Reset"
+        android:title="앱설정값초기화"
         tools:ignore="HardcodedText" />
 
     <item
@@ -25,5 +25,7 @@
         android:id="@+id/Actionbar_AlarmSetting"
         android:title="알람설정"
         tools:ignore="HardcodedText" />
-
+    <item
+        android:id="@+id/Actionbar_kakaoTalk"
+        android:title="함께 다이어트하기" />
 </menu>

@@ -1,4 +1,4 @@
-package com.example.android.eyebody
+package com.example.android.eyebody.camera
 
 import android.app.Activity
 import android.content.Intent
@@ -9,8 +9,13 @@ import android.hardware.Camera.ShutterCallback
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.SurfaceHolder
+import android.view.View
+import android.view.ViewGroup.LayoutParams
+import android.view.ViewManager
 import android.widget.Toast
+import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.File
 import java.io.FileOutputStream
@@ -24,21 +29,56 @@ import java.util.*
  */
 class CameraActivity : Activity(), SurfaceHolder.Callback {
     var TAG: String = "CameraActivity"
-    var rootPath: String? = null
+    private var rootPath: String? = null
     private var surfaceHolder: SurfaceHolder? = null
     private var camera: Camera? = null
     private var previewing: Boolean = false
-    var count: Int = 0
+    private var count: Int = 0
+    private var frontImageUri: Uri? = null
+    private var sideImageUri: Uri? = null
     private var frontImage: ByteArray? = null
     private var sideImage: ByteArray? = null
-    private var frontImageName:String?=null
-    private var sideImageName:String?=null
+    private var frontImageName: String? = null
+    private var sideImageName: String? = null
+    private var controlInflater: LayoutInflater? = null
+    private var viewControl: View ?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
         init()
+        shutterButtonClicked()
+        setLayout()
+    }
 
+    private fun init() {
+        window.setFormat(PixelFormat.UNKNOWN)
+        surfaceHolder = cameraScreen.holder
+        surfaceHolder?.addCallback(this)
+        surfaceHolder?.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
+    }//초기화함수
+
+    private fun setLayout() {
+        controlInflater = LayoutInflater.from(baseContext)
+        viewControl = controlInflater?.inflate(R.layout.front_guide_pic, null)
+        var layoutParamsControl = LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT)
+        this.addContentView(viewControl, layoutParamsControl)
+    }
+    //이미지 가이드 표시 함수
+
+    private fun setTextView() {
+        textView_setOrder.text = "옆면을 찍어주세요"
+    }//앞을 찍을지 옆을 찍을지 말해주는 함수
+
+    private fun changeImage() {
+        (viewControl?.parent as ViewManager).removeView(viewControl)
+        controlInflater = LayoutInflater.from(baseContext)
+        viewControl = controlInflater?.inflate(R.layout.side_guide_pic, null)
+        var layoutParamsControl = LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT)
+        this.addContentView(viewControl, layoutParamsControl)
+    }//이미지 가이드 변경 함수
+
+    private fun shutterButtonClicked() {
         btn_shutter.setOnClickListener {
             try {
                 camera?.takePicture(shutterCallback, rawCallback, jpegCallback)
@@ -46,16 +86,16 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
                 Log.d(TAG, "take picture failed")
             }
         }
-    }
+    }//셔터 버튼 눌리면 실행되는 함수
 
     private fun goConfirmActivity() {
         var confirmIntent = Intent(this, ConfirmActivity::class.java)
-        confirmIntent.putExtra("front",frontImage)
-        confirmIntent.putExtra("side",sideImage)
-        confirmIntent.putExtra("frontName",frontImageName)
-        confirmIntent.putExtra("sideName",sideImageName)
+        confirmIntent.putExtra("frontUri", frontImageUri.toString())
+        confirmIntent.putExtra("sideUri", sideImageUri.toString())
+        confirmIntent.putExtra("frontName", frontImageName)
+        confirmIntent.putExtra("sideName", sideImageName)
         startActivity(confirmIntent)
-    }
+    }//확인창으로 넘어가는 함수
 
     //이미 앱을 실행시킨 전적이 있으면 그냥 패스, 아니면 폴더를 생성한다.
     private fun makeFolder() {
@@ -64,8 +104,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         file.mkdirs()
     }
 
-    //TODO : 카메라 전후면 변경 토글키를 넣을까 말까고민중
-    //Called as near as possible to the moment when a photo is captured from the sensor.
+    //TODO : 카메라 전후면 변경 토글키를 넣어야함
     private var shutterCallback = ShutterCallback {
         Log.d(TAG, "onShutter'd")
         Toast.makeText(baseContext, "shutter Clicked", Toast.LENGTH_SHORT)
@@ -78,17 +117,24 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     //TODO : 사진 저장시 용량이 터질 경우 예외처리.
     private var jpegCallback = PictureCallback { bytes: ByteArray?, camera: Camera? ->
         makeFolder()
-        //TODO : 옆을 찍을때랑 앞을 찍을때랑 이름이 바뀐다.이부분은 처음찍을때랑 두번째 찍을때 플래그를 바꿔가면서 처리하는걸로 한다.
+        Toast.makeText(baseContext, "make file success", Toast.LENGTH_SHORT)
+        changeImage()//가이드 이미지 변경
+        setTextView()//위 문구 변경
         var timeStamp: String = java.text.SimpleDateFormat("yyyyMMddHHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
-        var fileName:String?=null
-        if(count==0){
-            var fileName = String.format("body_$timeStamp.eyebody")
-            frontImageName=rootPath+"/"+fileName
-        }else{
-            var fileName = String.format("body_$timeStamp.eyebody")
-            sideImageName=rootPath+"/"+fileName
+
+        var fileName: String? = null//파일 이름 설정
+
+        if (count == 0) {
+            fileName = String.format("front_$timeStamp.jpg")
+            frontImageName = rootPath + "/" + fileName//front 이미지 파일 경로 + 이름
+            frontImageUri = Uri.fromFile(File(rootPath, fileName))
+        } else {
+            fileName = String.format("side_$timeStamp.jpg")
+            sideImageName = rootPath + "/" + fileName//side 이미지 파일 경로 + 이름
+            sideImageUri = Uri.fromFile(File(rootPath, fileName))
         }
         var path: String = rootPath + "/" + fileName
+
 
         var file = File(path)
         try {
@@ -99,6 +145,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
         var intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         var uri = Uri.parse("file://" + path)
         intent.data = uri
@@ -114,12 +161,6 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         }
     }
 
-    private fun init() {
-        window.setFormat(PixelFormat.UNKNOWN)
-        surfaceHolder = cameraScreen.holder
-        surfaceHolder?.addCallback(this)
-        surfaceHolder?.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
-    }
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
         if (previewing) {
