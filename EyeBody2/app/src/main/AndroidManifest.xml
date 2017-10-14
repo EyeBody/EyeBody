@@ -38,7 +38,8 @@
             android:label="@string/category_setting" />
 
         <activity
-            android:name=".init.InitActivity">
+            android:name=".init.InitActivity"
+            android:label="@string/category_init" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

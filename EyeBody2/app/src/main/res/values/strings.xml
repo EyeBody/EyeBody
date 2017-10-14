@@ -24,5 +24,6 @@
     <string name="button_cancel">취소</string>
     <string name="button_submit">확인</string>
     <string name="editImage">이미지 편집하기</string>
+    <string name="category_init">눈바디 시작하기</string>
 
 </resources>
