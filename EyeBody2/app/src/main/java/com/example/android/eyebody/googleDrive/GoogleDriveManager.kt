@@ -1,69 +1,97 @@
 package com.example.android.eyebody.googleDrive
 
+import android.app.Activity
 import android.content.Context
-import android.view.View
-import android.widget.TextView
+import android.content.IntentSender
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Bundle
+import android.util.Log
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.drive.Drive
+import com.google.android.gms.drive.MetadataChangeSet
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
 
 /**
- * Created by Yoon on 2017-10-07.
+ * @param context 권한을 얻기 위해.
+ * @param activity 전송실패 등의 에러가 날 경우 해당 Activity에 Dialog를 띄움.
  */
+open class GoogleDriveManager(val context: Context, val activity: Activity) : GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    private val TAG = "mydbg_googleDrive"
 
-class GoogleDriveManager(context: Context) {
-
-    init {
-        //TODO checking permission
-        context.checkPermission("???", 1, 1)
-
-        val mGoogleApiClient = GoogleApiClient.Builder(context)
-                .addApi(Drive.API)
-                .addScope(Drive.SCOPE_FILE)
-                .addConnectionCallbacks(GoogleDriveConnection())
-                .addOnConnectionFailedListener(GoogleDriveConnection())
-                .build()
-    }
-
+    data class FileTransferData(val fileName: String, val fileLocale: Int)
 
     companion object {
         val PLAY_SERVICES_RESOLUTION_REQUEST = 9000
         val REQUEST_CODE_RESOLUTION = 3
-        val WIFI_MODE = 1
-        val DATA_MODE = 2
-        val SIGN_IN = 1
-        val SIGN_OUT = 2
+        val NETWORK_MODE_WIFI = 1
+        val NETWORK_MODE_DATA = 2
+        val FILE_LOCATION_SERVER = 1
+        val FILE_LOCATION_LOCAL = -1
     }
 
-
-    var view: View? = null
     var mGoogleApiClient: GoogleApiClient? = null
-    var statusText: TextView? = null
-    var statusWifiOrData = WIFI_MODE
-    var statusSignInOrOut = SIGN_OUT
+    var mIntentSender : IntentSender? = null
+    var networkStatus = NETWORK_MODE_WIFI
 
 
-    data class FileTransferData(val fileName: String, val fileLocale: Int)
-
-    val SERVER_FILE = 1
-    val LOCAL_FILE = -1
-
+    init {
+        // TODO if needed, check permission
+        // context.checkPermission("???", 1, 1)
+    }
 
     /**
-     * 구글 로그인을 요청합니다.
+     * 로그인을 요청합니다.
      * 로그인이 되어 있는 경우 : 무시
      * 설정된 계정이 없는 경우 : 계정 선택 후 로그인 요청
-     * @return Boolean = {로그인 성공(true) or 실패(false)}
+     * @see checkConnection
      */
-    fun signIn(): Boolean {
-        // TODO 구글 로그인 하게 하기
-        statusSignInOrOut = SIGN_IN
-        return true
+    fun signIn() {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = GoogleApiClient.Builder(context)
+                    .addApi(Drive.API)
+                    .addScope(Drive.SCOPE_FILE)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build()
+        }
+        if (mGoogleApiClient!!.isConnected || mGoogleApiClient!!.isConnecting)
+        else
+            mGoogleApiClient?.connect() ?: Log.e(TAG, "mGoogleApiClient build null error")
     }
 
+    /**
+     * 로그아웃을 요청합니다.
+     * @see checkConnection
+     */
     fun signOut() {
-        // TODO 구글 로그아웃 하게 하기
-        statusSignInOrOut = SIGN_OUT
+        mGoogleApiClient?.disconnect()
+        onConnectionStatusChanged()
+    }
+
+    /**
+     * authorized 된 계정을 dis authorize 시키고
+     * 새로운 계정으로 로그인하게 합니다.
+     */
+    fun changeAccount() {
+        mGoogleApiClient?.clearDefaultAccountAndReconnect()
+    }
+
+    /**
+     * 연결이 되었는지 반환합니다.
+     * @return false : 연결 중이거나 연결이 되어있지 않은경우
+     */
+    fun checkConnection(): Boolean {
+        val connection = mGoogleApiClient?.isConnected ?: false
+        Log.i(TAG, "현재 연결상태 : $connection")
+        return connection
     }
 
     /**
@@ -77,25 +105,25 @@ class GoogleDriveManager(context: Context) {
     fun saveAllFile(): Boolean {
 
         // 싱크 안 맞는 것 중 serverfile 만 골라서 싱크 강제로 맞춤.
-        val fileTransferDataArray = getSyncData().filter{it.fileLocale==SERVER_FILE}.toTypedArray()
+        val fileTransferDataArray = getSyncData().filter { it.fileLocale == FILE_LOCATION_SERVER }.toTypedArray()
         enforceFileSync(fileTransferDataArray)
 
         // 싱크 중 serverfile 싱크미스가 있다면 실패
-        if (getSyncData().filter{it.fileLocale==SERVER_FILE}.isNotEmpty())
-            // TODO 이 부분 제대로 짠 지 모르겠음
+        if (getSyncData().filter { it.fileLocale == FILE_LOCATION_SERVER }.isNotEmpty())
+        // 이 부분 제대로 짠 지 모르겠음
             return false
         return true
     }
 
-    fun loadAllFile() : Boolean {
+    fun loadAllFile(): Boolean {
 
         // 싱크 안 맞는 것 중 localfile 만 골라서 싱크 강제로 맞춤.
-        val fileTransferDataArray = getSyncData().filter{it.fileLocale==SERVER_FILE}.toTypedArray()
+        val fileTransferDataArray = getSyncData().filter { it.fileLocale == FILE_LOCATION_SERVER }.toTypedArray()
         enforceFileSync(fileTransferDataArray)
 
         // 싱크 중 localfile 싱크미스가 있다면 실패
-        if (getSyncData().filter{it.fileLocale==LOCAL_FILE}.isNotEmpty())
-        // TODO 이 부분 제대로 짠 지 모르겠음
+        if (getSyncData().filter { it.fileLocale == FILE_LOCATION_LOCAL }.isNotEmpty())
+        // 이 부분 제대로 짠 지 모르겠음
             return false
         return true
     }
@@ -107,8 +135,8 @@ class GoogleDriveManager(context: Context) {
                 "171010~~.eyebody"
                 /* ...... */)
         val fileLocales = intArrayOf(
-                SERVER_FILE,
-                LOCAL_FILE
+                FILE_LOCATION_SERVER,
+                FILE_LOCATION_LOCAL
                 /* ...... */)
         /*
         TODO 구글드라이브 싱크 구현
@@ -135,17 +163,86 @@ class GoogleDriveManager(context: Context) {
         return true //성공하면 true 실패하면 false
     }
 
+    fun upload(photoURI: String) : IntentSender? {
+        mIntentSender = null
+        if (!checkConnection())
+            return mIntentSender
+        Drive.DriveApi.newDriveContents(mGoogleApiClient)
+                .setResultCallback(ResultCallback{ result->
+                    /*if (result.status.isSuccess) {
+                        Log.d(TAG, "create newDriveContents 실패")
+                        return@ResultCallback
+                    }*/
+                    Log.i(TAG, "driveContents를 만들었기 때문에 데이터를 구글에 쓸 수 있습니다.")
+                    val outputStream = result.driveContents.outputStream
+                    val bitmapStream = ByteArrayOutputStream()
+                    BitmapFactory
+                            .decodeStream(FileInputStream(File(photoURI)))
+                            .compress(Bitmap.CompressFormat.PNG, 100, bitmapStream)
+                    try {
+                        outputStream.write(bitmapStream.toByteArray())
+                    } catch (exception: IOException) {
+                        Log.d(TAG, "IOException : bitmapStream -> driveContents.outputStream")
+                        exception.printStackTrace()
+                    }
+
+                    val metadataChangeSet = MetadataChangeSet.Builder()
+                            .setMimeType("image/jpeg").setTitle(photoURI).build()
+                    val intentSender = Drive.DriveApi
+                            .newCreateFileActivityBuilder()
+                            .setInitialMetadata(metadataChangeSet)
+                            .setInitialDriveContents(result.driveContents)
+                            .build(mGoogleApiClient)
+                    mIntentSender = intentSender
+                })
+        return mIntentSender
+    }
+
+    fun download(photoURI: String) {
+        if (!checkConnection())
+            return
+        //Drive.DriveApi.query(mGoogleApiClient, )
+    }
 
 
+    open fun onConnectionStatusChanged(){
 
-    /*fun status(){
-        if(mGoogleApiClient?.isConnected ?: false){
-            statusText?.text = "연결 된 상태"
-        } else if (mGoogleApiClient?.isConnecting ?: false) {
-            statusText?.text = "연결 중"
-        } else {
-            statusText?.text = "연결 안 됨"
+    }
+
+    override fun onConnected(connectionHint: Bundle?) {
+        onConnectionStatusChanged()
+        Log.d(TAG, "구글드라이브 연결 콜백 (정상접속)")
+    }
+
+    override fun onConnectionSuspended(cause: Int) {
+        onConnectionStatusChanged()
+        Log.d(TAG, "구글드라이브 연결 콜백 (정상종료) : $cause")
+    }
+
+    override fun onConnectionFailed(result: ConnectionResult) {
+        onConnectionStatusChanged()
+        // 비정상적 종료에 대해 다시 시도할지, 또는 어떻게 할 지에 대해 작성하는 지역
+        // 일반적으로는 에러 로그를 찍고, 해결가능한 실패에 대해서는 다시 시도한다.
+        // 해당 연결이 중첩되서 발생할 수 있는가? 만약 그런다면 boolean 하나 만들어서 hasResoulution이 아니더라도 건너뛰는 걸 만들어야 할 것 같다.
+        Log.d(TAG, "connectionFailed\n구글드라이브 에러종료 : $result")
+
+        // 해결되지 않은 오류에 대한 후 처리
+        if (!result.hasResolution()) {
+            // 해결되지 않는 에러에 대해 다이얼로그를 띄워 사용자에게 보여준다.
+            //GoogleApiAvailability.getInstance().getErrorDialog(activity, result.errorCode, 0).show()
+
+            // 다이얼로그 대신 로그 띄움.
+            Log.d("TAG", GoogleApiAvailability.getInstance().getErrorString(result.errorCode))
+            return
         }
-    }*/
 
+        // 해결된 오류에 대한 후 처리
+        //   -> 보통 authorization을 다시 시도하면서 알아서 해결함.
+        // 안되면 try catch로 에러 호출하고 앱 사망 방지
+        try {
+            result.startResolutionForResult(activity /*해결된 오류에 대해 다시 시도할 액티비티*/, REQUEST_CODE_RESOLUTION /*onActivityResult 로 보내는 request code*/)
+        } catch (e: IntentSender.SendIntentException) {
+            Log.e(TAG, "start resolution for result exception", e)
+        }
+    }
 }

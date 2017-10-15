@@ -22,11 +22,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.drive.Drive
 
 
-/**
- * Created by YOON on 2017-10-14.
- *
- *
- * noted by YOON
+/*
  * manifests specified with down here for act it
 uses-sdk
 android:minSdkVersion="8"
@@ -35,9 +31,16 @@ meta-data
 android:name="com.google.android.gms.version"
 android:value="@integer/google_play_services_version"
  * and it is copyrighted 2013 google inc. all right reserved.
+ * onResume -> (driveConnect) -> (connectionCallback) ->
+ *      if image  null : startActivity - mediastore.camera
+ *      if image !null : upload
  */
 @SuppressLint("Registered")
 class ImageTransferDriveManager : Activity(), ConnectionCallbacks, OnConnectionFailedListener {
+
+    init {
+        val g = GoogleDriveManager(this.baseContext, this)
+    }
 
     companion object {
         val REQ_CAPTURE_IMAGE = 1
@@ -53,11 +56,11 @@ class ImageTransferDriveManager : Activity(), ConnectionCallbacks, OnConnectionF
     private fun saveFileToDrive() {
         Log.i("GDManagerNew", "Drive 에서 new DriveContents 만들기 시도")
         val image = myBitmapToSave
+
         Drive.DriveApi.newDriveContents(myGoogleApiClient)
                 .setResultCallback(ResultCallback { result ->
-                    // If the operation was not successful, we cannot do anything
-                    // and must
-                    // fail.
+                    // DriveContents를 만든다.
+                    // 만약 실패하면 failed listener 를 호출하게 됨.
                     if (!result.status.isSuccess) {
                         Log.i("GDManagerNew", "DriveContents 실패")
                         return@ResultCallback
@@ -140,6 +143,7 @@ class ImageTransferDriveManager : Activity(), ConnectionCallbacks, OnConnectionF
 
     //Connection Failed 이벤트에 대한 리스너
     override fun onConnectionFailed(result: ConnectionResult) {
+
         // Called whenever the API client fails to connect.
         Log.d("GDManagerNew", "연결실패: " + result.toString())
         if (!result.hasResolution()) {
@@ -160,7 +164,6 @@ class ImageTransferDriveManager : Activity(), ConnectionCallbacks, OnConnectionF
     }
 
 
-
     // 연결됐을때 콜백되는 함수
     override fun onConnected(connectionHint: Bundle?) {
         Log.i("GDManagerNew", "연결됨")
@@ -177,6 +180,6 @@ class ImageTransferDriveManager : Activity(), ConnectionCallbacks, OnConnectionF
     override fun onConnectionSuspended(cause: Int) {
         Log.i("GDManagerNew", "connectionSuspend")
     }
-    
+
 
 }
