@@ -42,6 +42,7 @@ class Photo(): AppCompatActivity(), Parcelable {
     }
 
     fun getImage(): Bitmap{
+        //TODO 이미지 리사이징
         var img = BitmapFactory.decodeStream(FileInputStream(File(imageURL)))    //File->InputStream->Bitmap
         return img
     }

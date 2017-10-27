@@ -8,11 +8,15 @@
     <item
         android:id="@+id/action_editImage"
         android:icon="@drawable/icon_magic"
-        android:title="@string/editImage"/>
+        android:title="@string/editImage"
+        app:showAsAction="always"
+        android:visible="false" />
 
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/icon_share"
-        android:title="@string/share"/>
+        android:title="@string/share"
+        app:showAsAction="always"
+        android:visible="false" />
 
 </menu>

@@ -16,11 +16,6 @@ class ImageSelectFragment : Fragment() {
         setHasOptionsMenu(true)
 
         collage = activity as CollageActivity
-
-        //데이터는 onCreate에, view관련 코드는 onCreateView에 작성
-        //activity.photoList = arguments.getParcelableArrayList("photoList")
-        //activity.selectedPhotoList = arguments.getIntegerArrayList("selectedPhotoList")
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -37,31 +32,24 @@ class ImageSelectFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_collage, menu)
-
         this.menu = menu
-
-        menu.findItem(R.id.action_editImage).setVisible(false)
-        menu.findItem(R.id.action_share).setVisible(false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_editImage -> {
-                //TODO 프래그먼트 교체
-                var fragmentTransaction = fragmentManager.beginTransaction()
+                //이미지 편집 fragment로 교체
                 var imageEditFragment = ImageEditFragment()
                 var bundle = Bundle()
 
                 bundle.putIntegerArrayList("selectedPhotoList", collage.selectedPhotoList)
                 imageEditFragment.arguments = bundle
 
-                //fragmentTransaction.hide(this)
-                fragmentTransaction
+                fragmentManager
+                        .beginTransaction()
                         .replace(R.id.fragment_container, imageEditFragment)
                         .addToBackStack(null)
                         .commit()
-
-                //Toast.makeText(activity, "test", Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)
