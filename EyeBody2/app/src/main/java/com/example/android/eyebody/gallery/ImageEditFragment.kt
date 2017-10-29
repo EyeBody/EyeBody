@@ -2,9 +2,7 @@ package com.example.android.eyebody.gallery
 
 import android.app.Fragment
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.fragment_image_edit.*
 
@@ -12,6 +10,13 @@ import kotlinx.android.synthetic.main.fragment_image_edit.*
 class ImageEditFragment : Fragment() {
     lateinit var photoList: ArrayList<Photo>
     lateinit var selected: ArrayList<Int>
+    lateinit var collage: CollageActivity
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+        collage = activity as CollageActivity
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         var view = inflater.inflate(R.layout.fragment_image_edit, container, false)
@@ -59,5 +64,30 @@ class ImageEditFragment : Fragment() {
 
             imageIndexTextView.text = (nextPosition + 1).toString() + "/" + selected.size
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_image_edit, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_image_collage -> {
+                //ImageEditFragment로 교체
+                var imageEditFragment = ImageCollageFragment()
+                var bundle = Bundle()
+
+                bundle.putIntegerArrayList("selectedPhotoList", collage.selectedPhotoList)
+                imageEditFragment.arguments = bundle
+
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, imageEditFragment)
+                        .addToBackStack(null)
+                        .commit()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

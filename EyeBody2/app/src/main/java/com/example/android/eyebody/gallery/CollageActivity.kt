@@ -39,7 +39,7 @@ class CollageActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.menu_collage, menu)
+        menuInflater.inflate(R.menu.menu_image_select, menu)
         return true
     }
 

@@ -2,11 +2,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".gallery.GalleryActivity"
-    android:id="@+id/actions_collage" >
+    tools:context=".gallery.CollageActivity" >
+    <!-- android:id="@+id/actions_collage" -->
 
     <item
-        android:id="@+id/action_editImage"
+        android:id="@+id/action_image_edit"
         android:icon="@drawable/icon_magic"
         android:title="@string/editImage"
         app:showAsAction="always"

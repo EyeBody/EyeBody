@@ -14,7 +14,6 @@ class ImageSelectFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
         collage = activity as CollageActivity
     }
 
@@ -31,14 +30,14 @@ class ImageSelectFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_collage, menu)
+        inflater.inflate(R.menu.menu_image_select, menu)
         this.menu = menu
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_editImage -> {
-                //이미지 편집 fragment로 교체
+            R.id.action_image_edit -> {
+                //ImageEditFragment로 교체
                 var imageEditFragment = ImageEditFragment()
                 var bundle = Bundle()
 
@@ -56,6 +55,6 @@ class ImageSelectFragment : Fragment() {
     }
 
     fun actionEditImage_setVisible(bool: Boolean){
-        menu.findItem(R.id.action_editImage).setVisible(bool)
+        menu.findItem(R.id.action_image_edit).setVisible(bool)
     }
 }
