@@ -37,7 +37,7 @@ class CollageAdapter (var context: Context, var photoList: ArrayList<Photo>, var
 
                 if(itemView.isSelected){
                     itemView.setBackgroundColor(Color.BLUE) //selectedPhotoList의 size로 순서 알 수 있음
-                    selectedPhotoList.add(pos)  //선택한 순서를 유지할지 말지 고민중
+                    selectedPhotoList.add(pos)  //TODO 선택한 순서를 유지할지 말지 고민중
 
                     if(selectedPhotoList.size == 1){    //선택한 이미지가 하나 이상일 때 이미지편집 메뉴 아이콘 보여주기
                         fragment.actionEditImage_setVisible(true)

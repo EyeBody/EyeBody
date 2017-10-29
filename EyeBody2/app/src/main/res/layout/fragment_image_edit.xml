@@ -1,5 +1,5 @@
-<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,27 +13,29 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button13"
+            android:id="@+id/leftButton_edit"
             android:layout_width="50dp"
             android:layout_height="match_parent"
+            android:visibility="invisible"
             android:text="◀" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/selectedImage_edit"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:src="@drawable/frontimage" />
 
         <Button
-            android:id="@+id/button14"
+            android:id="@+id/rightButton_edit"
             android:layout_width="50dp"
             android:layout_height="match_parent"
+            android:visibility="invisible"
             android:text="▶" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/imageIndexTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="1/10"
@@ -46,21 +48,21 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/cropButton"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:src="@android:drawable/ic_menu_crop" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/rotationButton"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:src="@android:drawable/ic_menu_rotate" />
 
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/stickerButton"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="1"

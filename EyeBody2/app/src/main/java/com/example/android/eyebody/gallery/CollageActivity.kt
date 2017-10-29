@@ -47,7 +47,6 @@ class CollageActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.action_share -> {
                 shareKakao()
-                //TODO 카카오톡 공유하기
             }
         }
         return super.onOptionsItemSelected(item)
