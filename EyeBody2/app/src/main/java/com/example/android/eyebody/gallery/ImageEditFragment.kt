@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_image_edit.view.*
 class ImageEditFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         var view = inflater.inflate(R.layout.fragment_image_edit, container, false)
-        view.asdf.text = (activity as CollageActivity).selectedPhotoList.toString()
+        //view.asdf.text = (activity as CollageActivity).selectedPhotoList.toString()
         return view
     }
 }
