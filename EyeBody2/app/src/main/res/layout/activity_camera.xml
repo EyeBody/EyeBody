@@ -42,5 +42,13 @@
             android:layout_centerHorizontal="true"
             android:text="O"
             android:textSize="30dp" />
+
+        <ImageView
+            android:id="@+id/image_preview"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
+
     </RelativeLayout>
 </RelativeLayout>
