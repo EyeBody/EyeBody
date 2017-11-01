@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.eyebody">
+
     <uses-sdk android:minSdkVersion="4" />
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
@@ -37,13 +37,14 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="메인"/>
+            android:label="메인" />
         <activity
-            android:configChanges="orientation|screenSize"
             android:name=".camera.CameraActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/category_camera" />
         <activity
             android:name=".gallery.GalleryActivity"
+            android:hardwareAccelerated="false"
             android:label="@string/category_gallery" />
         <activity
             android:name=".ExerciseActivity"
@@ -51,36 +52,37 @@
         <activity
             android:name=".SettingActivity"
             android:label="@string/category_setting" />
-
-        <activity
-            android:name=".init.InitActivity">
+        <activity android:name=".init.InitActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.LAUNCHER" />
-
+            </intent-filter>
+            <intent-filter>
                 <data
                     android:host="@string/kakaolink_host"
                     android:scheme="@string/kakao_scheme" />
-
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".camera.ConfirmActivity"></activity>
+        <activity android:name=".camera.ConfirmActivity" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <!--<meta-data
+        <!--
+            <meta-data
             android:value="@integer/google_play_services_version"
-            anroid:name="com.google.android.gms.version" />-->
+            anroid:name="com.google.android.gms.version" />
+        -->
 
         <activity
             android:name=".gallery.CollageActivity"
             android:label="@string/collage" />
+        <activity android:name=".camera.StickerActivity"></activity>
     </application>
 
 </manifest>

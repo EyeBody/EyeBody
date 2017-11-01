@@ -118,7 +118,9 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     private var jpegCallback = PictureCallback { bytes: ByteArray?, camera: Camera? ->
         makeFolder()
         Toast.makeText(baseContext, "make file success", Toast.LENGTH_SHORT)
+        showPreview()//이미지 프리뷰실행
         changeImage()//가이드 이미지 변경
+        //TODO : 여기에 preview 들어가야함
         setTextView()//위 문구 변경
         var timeStamp: String = java.text.SimpleDateFormat("yyyyMMddHHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
 
@@ -160,7 +162,9 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
             camera?.startPreview()
         }
     }
-
+    private fun showPreview(){
+        image_preview.setImageURI(frontImageUri)
+    }
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
         if (previewing) {
