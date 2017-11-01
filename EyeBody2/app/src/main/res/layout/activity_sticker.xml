@@ -5,9 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.eyebody.camera.StickerActivity">
-    <ListView
+    <Button
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="저장"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    </ListView>
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="fill_parent"
+        android:layout_height="400dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/com_kakao_button_text_press" />
 </android.support.constraint.ConstraintLayout>
