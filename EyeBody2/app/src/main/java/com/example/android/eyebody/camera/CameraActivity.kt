@@ -2,6 +2,9 @@ package com.example.android.eyebody.camera
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.graphics.PixelFormat
 import android.hardware.Camera
 import android.hardware.Camera.PictureCallback
@@ -127,16 +130,15 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         var fileName: String? = null//파일 이름 설정
 
         if (count == 0) {
-            fileName = String.format("front_$timeStamp.jpg")
+            fileName = String.format("front_$timeStamp.jpeg")
             frontImageName = rootPath + "/" + fileName//front 이미지 파일 경로 + 이름
             frontImageUri = Uri.fromFile(File(rootPath, fileName))
         } else {
-            fileName = String.format("side_$timeStamp.jpg")
+            fileName = String.format("side_$timeStamp.jpeg")
             sideImageName = rootPath + "/" + fileName//side 이미지 파일 경로 + 이름
             sideImageUri = Uri.fromFile(File(rootPath, fileName))
         }
         var path: String = rootPath + "/" + fileName
-
 
         var file = File(path)
         try {
@@ -163,7 +165,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         }
     }
     private fun showPreview(){
-        image_preview.setImageURI(frontImageUri)
+        image_preview.setImageURI(sideImageUri)
     }
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
@@ -181,11 +183,11 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
             }
         }
     }
-
     override fun surfaceCreated(holder: SurfaceHolder) {
         camera = Camera.open()
+        camera!!.parameters!!.setRotation(90)
+        camera!!.parameters!!.setPictureSize(640, 480)
     }
-
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         camera?.stopPreview()
         camera?.release()

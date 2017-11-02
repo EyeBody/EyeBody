@@ -38,12 +38,11 @@ class CollageActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.action_share -> {
                 shareKakao()
-                //TODO 카카오톡 공유하기
             }
         }
         return super.onOptionsItemSelected(item)
     }
-    fun shareKakao()
+    private fun shareKakao()
     {
         try{
             val kakaoLink:KakaoLink = KakaoLink.getKakaoLink(this)
@@ -67,5 +66,6 @@ class CollageActivity : AppCompatActivity() {
             e.printStackTrace()
         }
     }
+
 
 }

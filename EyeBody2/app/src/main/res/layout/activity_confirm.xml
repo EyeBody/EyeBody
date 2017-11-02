@@ -25,14 +25,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="64dp"
         android:layout_marginStart="8dp"
         android:text="전면"
         android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/image_front"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.97"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        tools:layout_editor_absoluteY="80dp" />
+        app:layout_constraintStart_toEndOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/textView2"
@@ -41,11 +42,12 @@
         android:layout_alignBaseline="@+id/textView"
         android:layout_alignBottom="@+id/textView"
         android:layout_alignParentStart="true"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="64dp"
         android:text="측면"
         android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="80dp" />
+        app:layout_constraintBottom_toTopOf="@+id/image_side"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_delete"

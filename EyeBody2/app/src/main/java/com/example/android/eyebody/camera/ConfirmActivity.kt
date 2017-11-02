@@ -92,5 +92,10 @@ class ConfirmActivity : AppCompatActivity() {
             startActivity(stickerIntent)
         }
     }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        var intent=Intent(this,CameraActivity::class.java)
+        startActivity(intent)
+    }//백버튼 눌리면 다시 진행
 }
 

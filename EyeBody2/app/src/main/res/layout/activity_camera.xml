@@ -4,13 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     tools:context="com.example.android.eyebody.camera.CameraActivity">
 
     <SurfaceView
         android:id="@+id/cameraScreen"
         android:layout_width="match_parent"
-        android:layout_height="450dp" />
+        android:layout_height="450dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_shutter"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35000002" />
 
     <TextView
         android:id="@+id/textView_setOrder"
@@ -39,5 +43,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/image_preview"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@color/com_kakao_button_text_press"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
