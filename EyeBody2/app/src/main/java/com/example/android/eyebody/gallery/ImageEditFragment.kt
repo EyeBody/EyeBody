@@ -75,7 +75,7 @@ class ImageEditFragment : Fragment() {
         when (item.itemId) {
             R.id.action_image_collage -> {
                 //ImageEditFragment로 교체
-                var imageEditFragment = ImageCollageFragment()
+/*                var imageEditFragment = ImageCollageFragment()
                 var bundle = Bundle()
 
                 bundle.putIntegerArrayList("selectedPhotoList", collage.selectedPhotoList)
@@ -85,7 +85,7 @@ class ImageEditFragment : Fragment() {
                         .beginTransaction()
                         .replace(R.id.fragment_container, imageEditFragment)
                         .addToBackStack(null)
-                        .commit()
+                        .commit()*/
             }
         }
         return super.onOptionsItemSelected(item)
