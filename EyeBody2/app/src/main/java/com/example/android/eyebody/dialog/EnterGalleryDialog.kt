@@ -44,11 +44,9 @@ class EnterGalleryDialog : DialogFragment() {
             bt_pwSubmit.callOnClick()
         }
 
-
         dialogbuilder.setView(view)
                 .setTitle("Input Password")
                 .setMessage("Please type your private password")
-
 
         // button Listener
         bt_pwSubmit.setOnClickListener {
@@ -68,7 +66,6 @@ class EnterGalleryDialog : DialogFragment() {
             } else {
                 Toast.makeText(activity, "관계자 외 출입금지~", Toast.LENGTH_LONG).show()
             }
-
         }
 
         return dialogbuilder.create()

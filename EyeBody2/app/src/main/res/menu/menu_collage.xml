@@ -2,18 +2,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".gallery.GalleryActivity">
+    tools:context=".gallery.GalleryActivity"
+    android:id="@+id/actions_collage" >
 
     <item
         android:id="@+id/action_editImage"
         android:icon="@drawable/icon_magic"
-        app:showAsAction="always"
         android:title="@string/editImage"/>
 
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/icon_share"
-        app:showAsAction="always"
         android:title="@string/share"/>
 
 </menu>

@@ -32,14 +32,15 @@
             android:text="전면" />
 
         <TextView
-            android:textSize="20dp"
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/textView"
             android:layout_alignBottom="@+id/textView"
             android:layout_alignParentStart="true"
             android:layout_marginStart="80dp"
-            android:text="옆면" />
+            android:text="측면"
+            android:textSize="20dp" />
 
         <Button
             android:id="@+id/button_delete"
@@ -49,6 +50,14 @@
             android:layout_alignParentTop="true"
             android:layout_marginEnd="15dp"
             android:text="다시찍기" />
+
+        <Button
+            android:id="@+id/button_sticker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/textView2"
+            android:text="스티커" />
     </RelativeLayout>
     <ImageView
         android:id="@+id/image_front"

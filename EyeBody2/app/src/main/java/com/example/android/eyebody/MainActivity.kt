@@ -18,16 +18,16 @@ import com.example.android.eyebody.camera.CameraActivity
 import com.example.android.eyebody.gallery.GalleryActivity
 import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
-
-
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 class MainActivity : PermissionsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //TODO : 문자내역을 가져오기 위한 통화내역 읽어오기 read_SMS 퍼미션.
+
+        //TODO : 문자내역을 가져오기 위한 통화내역 읽어오기 read_SMS 퍼미션.
 
         fun onCreateOptionsMenu(menu: Menu): Boolean {
             super.onCreateOptionsMenu(menu)
@@ -70,6 +70,8 @@ class MainActivity : PermissionsActivity() {
                     requestPermissions(arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE), object : PermissionCallBack {
                         override fun permissionGranted() {
                             super.permissionGranted()
+
+                            startActivity(cameraPage)
                             Log.v("Camera permissions", "Granted")
                         }
 
@@ -100,8 +102,10 @@ class MainActivity : PermissionsActivity() {
             }
         }
         btn_activity_func1.setOnClickListener {
+
             startActivity(exercisePage)
         }
+
         btn_activity_func2.setOnClickListener {
             startActivity(settingPage)
         }

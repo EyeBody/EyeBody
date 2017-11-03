@@ -6,15 +6,15 @@
     <uses-sdk android:minSdkVersion="4" />
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
 
     <application
         android:allowBackup="true"
@@ -23,14 +23,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="메인" />
         <activity
             android:name=".camera.CameraActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/category_camera" />
         <activity
             android:name=".gallery.GalleryActivity"
+            android:hardwareAccelerated="false"
             android:label="@string/category_gallery" />
         <activity
             android:name=".ExerciseActivity"
@@ -44,10 +47,8 @@
             android:label="@string/category_init">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
                 <data
                     android:host="@string/kakaolink_host"
@@ -56,7 +57,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-        <activity android:name=".camera.ConfirmActivity"></activity>
+
+        <activity android:name=".camera.ConfirmActivity" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -65,9 +67,12 @@
         <activity
             android:name=".gallery.CollageActivity"
             android:label="@string/collage" />
+        <activity android:name=".camera.StickerActivity"></activity>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
     </application>
 
 </manifest>
