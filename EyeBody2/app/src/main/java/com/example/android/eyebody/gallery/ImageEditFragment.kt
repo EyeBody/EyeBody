@@ -20,8 +20,8 @@ class ImageEditFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         var view = inflater.inflate(R.layout.fragment_image_edit, container, false)
-        photoList = (activity as CollageActivity).photoList
-        selected = (activity as CollageActivity).selectedPhotoList
+        photoList = collage.photoList
+        selected = collage.selectedPhotoList
 
         return view
     }
@@ -75,17 +75,17 @@ class ImageEditFragment : Fragment() {
         when (item.itemId) {
             R.id.action_image_collage -> {
                 //ImageEditFragment로 교체
-/*                var imageEditFragment = ImageCollageFragment()
+                var imageCollageFragment = ImageCollageFragment()
                 var bundle = Bundle()
 
                 bundle.putIntegerArrayList("selectedPhotoList", collage.selectedPhotoList)
-                imageEditFragment.arguments = bundle
+                imageCollageFragment.arguments = bundle
 
                 fragmentManager
                         .beginTransaction()
-                        .replace(R.id.fragment_container, imageEditFragment)
+                        .replace(R.id.fragment_container, imageCollageFragment)
                         .addToBackStack(null)
-                        .commit()*/
+                        .commit()
             }
         }
         return super.onOptionsItemSelected(item)

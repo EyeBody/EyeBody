@@ -2,6 +2,7 @@ package com.example.android.eyebody.gallery
 
 import android.os.Bundle
 import android.app.Fragment
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.example.android.eyebody.R
@@ -54,7 +55,26 @@ class ImageSelectFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun actionEditImage_setVisible(bool: Boolean){
-        menu.findItem(R.id.action_image_edit).setVisible(bool)
+    fun setSelected(itemView: View, pos: Int, isSelected: Boolean){
+        if(isSelected){
+            itemView.setBackgroundColor(Color.BLUE)
+            //TODO 선택한 순서를 유지할지 말지 고민중
+            if(!collage.selectedPhotoList.contains(pos)) collage.selectedPhotoList.add(pos)  //없으면 추가
+
+            if(collage.selectedPhotoList.size > 0){    //선택한 이미지가 하나 이상일 때 이미지편집 메뉴 아이콘 보여주기
+                menu.findItem(R.id.action_image_edit).setVisible(true)  //TODO bugfix 다시 돌아왔을 때 아이콘 표시가 안됨
+            }
+        } else {
+            itemView.setBackgroundColor(Color.RED)
+            collage.selectedPhotoList.remove(pos)
+
+            if(collage.selectedPhotoList.size == 0){    //선택한 이미지가 하나도 없을 때 이미지편집 메뉴 아이콘 숨기기
+                try{
+                    menu.findItem(R.id.action_image_edit).setVisible(false)
+                } catch (e: Exception) {
+                    //메뉴가 초기화 되기 전 리스트를 먼저 초기화 해서 kotlin.UninitializedPropertyAccessException: lateinit property menu has not been initialized 오류 발생
+                }
+            }
+        }
     }
 }

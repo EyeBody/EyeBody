@@ -11,6 +11,7 @@ import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder
 class CollageActivity : AppCompatActivity() {
     var photoList: ArrayList<Photo> = ArrayList<Photo>()
     var selectedPhotoList: ArrayList<Int> = ArrayList<Int>()
+    lateinit var menu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +33,8 @@ class CollageActivity : AppCompatActivity() {
             super.onBackPressed()
         } else {    //이전 프래그먼트 불러오기
             //TODO 뒤로가기 해도 선택한 이미지 보존
-            selectedPhotoList.clear()
+            //selectedPhotoList.clear()
+            menu.clear();
             fragmentManager.popBackStack()
         }
     }
@@ -40,6 +42,7 @@ class CollageActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu_image_select, menu)
+        this.menu = menu
         return true
     }
 
