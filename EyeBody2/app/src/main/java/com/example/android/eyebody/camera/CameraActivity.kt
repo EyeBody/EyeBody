@@ -2,9 +2,6 @@ package com.example.android.eyebody.camera
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.graphics.PixelFormat
 import android.hardware.Camera
 import android.hardware.Camera.PictureCallback
@@ -107,7 +104,6 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         file.mkdirs()
     }
 
-    //TODO : 카메라 전후면 변경 토글키를 넣어야함
     private var shutterCallback = ShutterCallback {
         Log.d(TAG, "onShutter'd")
         Toast.makeText(baseContext, "shutter Clicked", Toast.LENGTH_SHORT)
@@ -123,7 +119,6 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         Toast.makeText(baseContext, "make file success", Toast.LENGTH_SHORT)
         showPreview()//이미지 프리뷰실행
         changeImage()//가이드 이미지 변경
-        //TODO : 여기에 preview 들어가야함
         setTextView()//위 문구 변경
         var timeStamp: String = java.text.SimpleDateFormat("yyyyMMddHHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
 

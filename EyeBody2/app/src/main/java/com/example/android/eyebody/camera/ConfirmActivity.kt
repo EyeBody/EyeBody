@@ -96,6 +96,6 @@ class ConfirmActivity : AppCompatActivity() {
         super.onBackPressed()
         var intent=Intent(this,CameraActivity::class.java)
         startActivity(intent)
-    }//백버튼 눌리면 다시 진행
+    }//백버튼 눌리면 사진찍기 처음부터 다시 실행
 }
 
