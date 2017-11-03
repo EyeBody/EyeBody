@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:anroid="http://schemas.android.com/apk/res-auto"
     package="com.example.android.eyebody">
+
     <uses-sdk android:minSdkVersion="4" />
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -23,7 +25,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="메인"/>
+            android:label="메인" />
         <activity
             android:name=".camera.CameraActivity"
             android:label="@string/category_camera" />
@@ -39,18 +41,19 @@
 
         <activity
             android:name=".init.InitActivity"
-            android:label="@string/category_init" >
+            android:label="@string/category_init">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
+            <intent-filter>
                 <data
                     android:host="@string/kakaolink_host"
                     android:scheme="@string/kakao_scheme" />
-
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
         <activity android:name=".camera.ConfirmActivity"></activity>
@@ -59,13 +62,12 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <!--<meta-data
-            android:value="@integer/google_play_services_version"
-            anroid:name="com.google.android.gms.version" />-->
-
         <activity
             android:name=".gallery.CollageActivity"
             android:label="@string/collage" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

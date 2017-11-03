@@ -1,6 +1,7 @@
 ﻿package com.example.android.eyebody.gallery
 
 import android.content.Intent
+import android.content.IntentSender
 import android.content.res.AssetManager
 import android.os.Bundle
 import android.os.Environment
@@ -12,6 +13,8 @@ import android.view.View
 import android.widget.Toast
 import com.example.android.eyebody.R
 import com.example.android.eyebody.googleDrive.GoogleDriveManager
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.drive.Drive
 import kotlinx.android.synthetic.main.activity_gallery.*
 import java.io.File
 import java.io.FileOutputStream
@@ -32,9 +35,9 @@ class GalleryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
         googleDriveManager = object : GoogleDriveManager(baseContext, this@GalleryActivity) {
+
             override fun onConnectionStatusChanged() {
                 super.onConnectionStatusChanged()
-
                 if(togleItem != null) {
                     if (googleDriveManager?.checkConnection() == true) {
                         togleItem?.title = getString(R.string.googleDrive_do_signOut)
@@ -45,6 +48,7 @@ class GalleryActivity : AppCompatActivity() {
                     }
                 }
             }
+
         }
 
         //이미지 불러오기
@@ -121,10 +125,24 @@ class GalleryActivity : AppCompatActivity() {
 
             R.id.action_googleDrive_manualSave -> { //구글드라이브 수동 저장
                 //googleDriveManager?.saveAllFile()
+                googleDriveManager?.upload("${getExternalFilesDir(null)}/gallery_body/front_week4.jpg")
+                /*
+                intentsender 방식
+
                 val intentsender = googleDriveManager?.upload("${getExternalFilesDir(null)}/gallery_body/front_week4.jpg")
-                if (intentsender != null)
-                    startIntentSenderForResult(intentsender, 0, null, 0, 0, 0)
-                Log.d("mydbg_gallery", "do save file")
+                Log.i("mydbg_gallery","${getExternalFilesDir(null)}/gallery_body/front_week4.jpg upload request")
+                if (intentsender != null) {
+                    Log.d("mydbg_gallery","$intentsender")
+                    try {
+                        startIntentSenderForResult(intentsender, 123, null, 0, 0, 0)
+                    } catch(e : IntentSender.SendIntentException){
+                        e.printStackTrace()
+                    }
+                    Log.d("mydbg_gallery","upload request failed")
+                } else {
+                    Log.d("mydbg_gallery", "save file ok")
+                }
+                */
             }
 
             R.id.action_googleDrive_manualLoad -> { //구글드라이브 수동 불러오기

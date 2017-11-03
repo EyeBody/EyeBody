@@ -13,10 +13,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.drive.Drive
 import com.google.android.gms.drive.MetadataChangeSet
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileInputStream
-import java.io.IOException
+import java.io.*
 
 /**
  * @param context 권한을 얻기 위해.
@@ -38,7 +35,7 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
     }
 
     var mGoogleApiClient: GoogleApiClient? = null
-    var mIntentSender : IntentSender? = null
+    var mIntentSender: IntentSender? = null
     var networkStatus = NETWORK_MODE_WIFI
 
 
@@ -163,39 +160,58 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
         return true //성공하면 true 실패하면 false
     }
 
-    fun upload(photoURI: String) : IntentSender? {
-        mIntentSender = null
-        if (!checkConnection())
-            return mIntentSender
-        Drive.DriveApi.newDriveContents(mGoogleApiClient)
-                .setResultCallback(ResultCallback{ result->
-                    /*if (result.status.isSuccess) {
-                        Log.d(TAG, "create newDriveContents 실패")
-                        return@ResultCallback
-                    }*/
-                    Log.i(TAG, "driveContents를 만들었기 때문에 데이터를 구글에 쓸 수 있습니다.")
-                    val outputStream = result.driveContents.outputStream
-                    val bitmapStream = ByteArrayOutputStream()
-                    BitmapFactory
-                            .decodeStream(FileInputStream(File(photoURI)))
-                            .compress(Bitmap.CompressFormat.PNG, 100, bitmapStream)
-                    try {
-                        outputStream.write(bitmapStream.toByteArray())
-                    } catch (exception: IOException) {
-                        Log.d(TAG, "IOException : bitmapStream -> driveContents.outputStream")
-                        exception.printStackTrace()
-                    }
+    fun upload(photoURI: String) {
 
-                    val metadataChangeSet = MetadataChangeSet.Builder()
-                            .setMimeType("image/jpeg").setTitle(photoURI).build()
-                    val intentSender = Drive.DriveApi
-                            .newCreateFileActivityBuilder()
-                            .setInitialMetadata(metadataChangeSet)
-                            .setInitialDriveContents(result.driveContents)
-                            .build(mGoogleApiClient)
-                    mIntentSender = intentSender
-                })
-        return mIntentSender
+        if (!checkConnection())
+            return
+
+
+        Drive.DriveApi.newDriveContents(mGoogleApiClient)
+                .setResultCallback(
+                        ResultCallback { result ->
+
+                            if (!result.status.isSuccess) {
+                                Log.d(TAG, "create newDriveContents 실패")
+                                return@ResultCallback
+                            }
+                            Log.i(TAG, "driveContents를 만들었기 때문에 데이터를 구글에 쓸 수 있습니다. status : ${result.status}")
+
+                            val outputStream = result.driveContents.outputStream
+                            val bitmapStream = ByteArrayOutputStream()
+                            BitmapFactory
+                                    .decodeStream(FileInputStream(File(photoURI)))
+                                    .compress(Bitmap.CompressFormat.PNG, 100, bitmapStream)
+                            try {
+                                outputStream.write(bitmapStream.toByteArray())
+                            } catch (exception: IOException) {
+                                Log.d(TAG, "IOException : bitmapStream -> driveContents.outputStream")
+                                exception.printStackTrace()
+                            }
+
+                            object : Thread() {
+                                override fun run() {
+                                    val metadataChangeSet = MetadataChangeSet.Builder()
+                                            .setMimeType("application/eyebody")
+                                            .setTitle(photoURI.split("/").last())
+                                            .setDescription("Encrypted eyebody backup file")
+                                            .build()
+
+                                    // create a file on root folder
+                                    Drive.DriveApi.getRootFolder(mGoogleApiClient)
+                                            .createFile(mGoogleApiClient, metadataChangeSet, result.driveContents)
+                                            .setResultCallback(
+                                                    ResultCallback { result ->
+                                                        if (!result.status.isSuccess) {
+                                                            Log.d(TAG, "create newDriveContents 실패 - createfile에서")
+                                                            return@ResultCallback
+                                                        }
+                                                        Log.d(TAG, "Created a file with content: ${result.driveFile.driveId}")
+                                                    }
+                                            )
+                                }
+                            }.start()
+                        }
+                )
     }
 
     fun download(photoURI: String) {
@@ -205,7 +221,7 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
     }
 
 
-    open fun onConnectionStatusChanged(){
+    open fun onConnectionStatusChanged() {
 
     }
 
