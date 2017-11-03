@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 package com.example.android.eyebody.gallery
 
 import android.content.Intent
+=======
+﻿package com.example.android.eyebody.gallery
+
+import android.content.Intent
+import android.content.IntentSender
+>>>>>>> origin/develop
 import android.content.res.AssetManager
 import android.os.Bundle
 import android.os.Environment
@@ -9,8 +16,16 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+<<<<<<< HEAD
 import com.example.android.eyebody.R
 import com.example.android.eyebody.googleDriveManage.GoogleDriveManager
+=======
+import android.widget.Toast
+import com.example.android.eyebody.R
+import com.example.android.eyebody.googleDrive.GoogleDriveManager
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.drive.Drive
+>>>>>>> origin/develop
 import kotlinx.android.synthetic.main.activity_gallery.*
 import java.io.File
 import java.io.FileOutputStream
@@ -19,22 +34,38 @@ import java.io.OutputStream
 
 class GalleryActivity : AppCompatActivity() {
     var photoList = ArrayList<Photo>()
-    var googleDriveManager : GoogleDriveManager? = null
+    var googleDriveManager: GoogleDriveManager? = null
+    var togleItem : MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
 
-        googleDriveManager = GoogleDriveManager(findViewById<View>(android.R.id.content))
+        googleDriveManager = object : GoogleDriveManager(baseContext, this@GalleryActivity) {
+
+            override fun onConnectionStatusChanged() {
+                super.onConnectionStatusChanged()
+                if(togleItem != null) {
+                    if (googleDriveManager?.checkConnection() == true) {
+                        togleItem?.title = getString(R.string.googleDrive_do_signOut)
+                        Toast.makeText(activity, "connect",Toast.LENGTH_LONG).show()
+                    } else {
+                        togleItem?.title = getString(R.string.googleDrive_do_signIn)
+                        Toast.makeText(activity, "connect xxx", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+        }
 
         //이미지 불러오기
         var state: String = Environment.getExternalStorageState()   //외부저장소(SD카드)가 마운트되었는지 확인
-        if(Environment.MEDIA_MOUNTED.equals(state)){
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
             //디렉토리 생성
             var filedir: String = getExternalFilesDir(null).toString() + "/gallery_body"  //Android/data/com.example.android.eyebody/files/gallery_body
             var file: File = File(filedir)
-            if(!file.exists()){
-                if(!file.mkdirs()){
+            if (!file.exists()) {
+                if (!file.mkdirs()) {
                     //EXCEPTION 디렉토리가 만들어지지 않음
                 }
             }
@@ -92,12 +123,12 @@ class GalleryActivity : AppCompatActivity() {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu_gallery, menu)
 
-        when(googleDriveManager?.statusSignInOrOut){
-            GoogleDriveManager.SIGN_IN -> {
-                menu.findItem(R.id.action_googleDrive_signInOut_togle).title = "Google 로그아웃"
+        when (googleDriveManager?.checkConnection()) {
+            true -> {
+                menu.findItem(R.id.action_googleDrive_signInOut_togle).title = getString(R.string.googleDrive_do_signOut)
             }
-            GoogleDriveManager.SIGN_OUT -> {
-                menu.findItem(R.id.action_googleDrive_signInOut_togle).title = "Google 로그인"
+            false -> {
+                menu.findItem(R.id.action_googleDrive_signInOut_togle).title = getString(R.string.googleDrive_do_signIn)
             }
         }
         return true
@@ -112,53 +143,87 @@ class GalleryActivity : AppCompatActivity() {
             }
 
             R.id.action_googleDrive_signInOut_togle -> {//구글드라이브 로그인 토글
-                when(googleDriveManager?.statusSignInOrOut){
-                    GoogleDriveManager.SIGN_IN -> {
+                togleItem = item
+                when (googleDriveManager?.checkConnection()) {
+                    true -> {
                         googleDriveManager?.signOut()
-                        Log.d("mydbg_gallery","do sign out")
-                        item.title = getString(R.string.googleDrive_do_signIn)
+                        Log.d("mydbg_gallery", "do sign out")
                     }
-                    GoogleDriveManager.SIGN_OUT -> {
+                    false -> {
                         googleDriveManager?.signIn()
-                        Log.d("mydbg_gallery","do sign in")
-                        if (googleDriveManager?.statusSignInOrOut == GoogleDriveManager.SIGN_IN)
-                            item.title = getString(R.string.googleDrive_do_signOut)
+                        Log.d("mydbg_gallery", "do sign in")
                     }
                 }
             }
 
             R.id.action_googleDrive_manualSave -> { //구글드라이브 수동 저장
-                googleDriveManager?.saveAllFile()
-                Log.d("mydbg_gallery","do save file")
+                //googleDriveManager?.saveAllFile()
+                googleDriveManager?.upload("${getExternalFilesDir(null)}/gallery_body/front_week4.jpg")
+                /*
+                intentsender 방식
+
+                val intentsender = googleDriveManager?.upload("${getExternalFilesDir(null)}/gallery_body/front_week4.jpg")
+                Log.i("mydbg_gallery","${getExternalFilesDir(null)}/gallery_body/front_week4.jpg upload request")
+                if (intentsender != null) {
+                    Log.d("mydbg_gallery","$intentsender")
+                    try {
+                        startIntentSenderForResult(intentsender, 123, null, 0, 0, 0)
+                    } catch(e : IntentSender.SendIntentException){
+                        e.printStackTrace()
+                    }
+                    Log.d("mydbg_gallery","upload request failed")
+                } else {
+                    Log.d("mydbg_gallery", "save file ok")
+                }
+                */
             }
 
             R.id.action_googleDrive_manualLoad -> { //구글드라이브 수동 불러오기
                 googleDriveManager?.loadAllFile()
-                Log.d("mydbg_gallery","do load file")
+                Log.d("mydbg_gallery", "do load file")
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun assetsToExternalStorage(){
+    fun showPreviousImage(v: View) {
+        try {
+            var prePosition: Int = (selectedImage.getTag() as Int) - 1
+            selectedImage.setImageBitmap(photoList[prePosition].getImage())
+            selectedImage.setTag(prePosition)
+        } catch (e: Exception) {
+            //Toast.makeText(this, "앞이 없음", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun showNextImage(v: View) {
+        try {
+            var nextPosition: Int = (selectedImage.getTag() as Int) + 1
+            selectedImage.setImageBitmap(photoList[nextPosition].getImage())
+            selectedImage.setTag(nextPosition)
+        } catch (e: Exception) {
+            //Toast.makeText(this, "뒤가 없음", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun assetsToExternalStorage() {
         //assets에 있는 파일을 외부저장소로 복사(테스트용)
-        for(i in 1..4){
+        for (i in 1..4) {
             var filename: String = "front_week" + i + ".jpg"
 
             var assetManager: AssetManager = getAssets()
             var input: InputStream = assetManager.open("gallery_body/" + filename)
-
-            var outputfile:String = getExternalFilesDir(null).toString() + "/gallery_body/" + filename
+            var outputfile: String = getExternalFilesDir(null).toString() + "/gallery_body/" + filename
             var output: OutputStream = FileOutputStream(outputfile)
 
             var buffer: ByteArray = ByteArray(1024)
             var length: Int
 
-            do{
+            do {
                 length = input.read(buffer)
-                if(length <= 0) break;
+                if (length <= 0) break;
                 output.write(buffer, 0, length)
-            }while(true)
+            } while (true)
 
             output.flush();
             output.close();

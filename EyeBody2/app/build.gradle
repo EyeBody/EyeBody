@@ -25,14 +25,14 @@ android {
     sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/gallery_body'] } }
 }
 dependencies {
-    implementation 'com.android.support:support-v4:26.1.0'
-    compile 'com.google.android.gms:play-services-drive:11.4.0'
+    compile 'com.google.android.gms:play-services-drive:11.4.2'
     compile 'io.vrinda.kotlinpermissions:kotlinpermissions:1.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
 
     compile group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
     compile group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION
 
+    implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'

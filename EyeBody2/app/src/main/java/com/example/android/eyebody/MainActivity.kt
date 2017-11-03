@@ -25,6 +25,7 @@ class MainActivity : PermissionsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //TODO : 문자내역을 가져오기 위한 통화내역 읽어오기 read_SMS 퍼미션.
 
         //TODO : 문자내역을 가져오기 위한 통화내역 읽어오기 read_SMS 퍼미션.
 
