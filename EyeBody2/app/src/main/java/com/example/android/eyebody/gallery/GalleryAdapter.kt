@@ -1,13 +1,12 @@
 package com.example.android.eyebody.gallery
 
-import android.app.Activity
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import com.example.android.eyebody.R
+import kotlinx.android.synthetic.main.activity_gallery.*
 import kotlinx.android.synthetic.main.list_gallery.view.*
 
 
@@ -35,9 +34,19 @@ class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
             itemView.date.text = photo.getMemo()
 
             itemView.setOnClickListener{
-                var imgView: ImageView = (itemView.context as Activity).findViewById(R.id.selectedImage)
+                var imgView = (itemView.context as GalleryActivity).selectedImage_gallery
                 imgView.setImageBitmap(photo.getImage())
                 imgView.setTag(pos)
+
+                //좌우 넘기기 버튼 visibility
+                (itemView.context as GalleryActivity).leftButton_gallery.visibility = View.VISIBLE
+                (itemView.context as GalleryActivity).rightButton_gallery.visibility = View.VISIBLE
+                if(pos == 0){
+                    (itemView.context as GalleryActivity).leftButton_gallery.visibility = View.INVISIBLE
+                }
+                if(pos == (itemView.context as GalleryActivity).photoList.size - 1){
+                    (itemView.context as GalleryActivity).rightButton_gallery.visibility = View.INVISIBLE
+                }
             }
         }
     }

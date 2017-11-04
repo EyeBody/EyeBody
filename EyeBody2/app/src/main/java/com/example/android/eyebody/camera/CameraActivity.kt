@@ -162,6 +162,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
             camera?.startPreview()
         }
     }
+
     private fun showPreview(){
         image_preview.setImageURI(frontImageUri)
     }

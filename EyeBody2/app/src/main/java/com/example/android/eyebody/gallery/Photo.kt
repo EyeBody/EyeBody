@@ -42,6 +42,8 @@ class Photo(): AppCompatActivity(), Parcelable {
     }
 
     fun getImage(): Bitmap{
+        //TODO 이미지 리사이징
+        //https://medium.com/marojuns-android/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C%EC%97%90%EC%84%9C%EC%9D%98-%EB%B9%84%ED%8A%B8%EB%A7%B5%EA%B3%BC-%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%9D%98-%EC%83%81%EA%B4%80%EA%B4%80%EA%B3%84-125308c293b9
         var img = BitmapFactory.decodeStream(FileInputStream(File(imageURL)))    //File->InputStream->Bitmap
         return img
     }

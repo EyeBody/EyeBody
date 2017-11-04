@@ -1,0 +1,13 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".gallery.CollageActivity" >
+
+    <item
+        android:id="@+id/action_image_collage"
+        android:icon="@drawable/icon_collage"
+        android:title="@string/collage"
+        app:showAsAction="always" />
+
+</menu>
