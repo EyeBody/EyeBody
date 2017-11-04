@@ -32,9 +32,6 @@ class CollageActivity : AppCompatActivity() {
         if(count == 0){ //스택에 프래그먼트가 없으면 액티비티 뒤로가기
             super.onBackPressed()
         } else {    //이전 프래그먼트 불러오기
-            //TODO 뒤로가기 해도 선택한 이미지 보존
-            //selectedPhotoList.clear()
-            menu.clear();
             fragmentManager.popBackStack()
         }
     }
@@ -43,6 +40,7 @@ class CollageActivity : AppCompatActivity() {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu_image_select, menu)
         this.menu = menu
+
         return true
     }
 
@@ -54,6 +52,7 @@ class CollageActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+    
     fun shareKakao()
     {
         try{

@@ -74,7 +74,7 @@ class ImageEditFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_image_collage -> {
-                //ImageEditFragment로 교체
+                //ImageCollageFragment로 교체
                 var imageCollageFragment = ImageCollageFragment()
                 var bundle = Bundle()
 

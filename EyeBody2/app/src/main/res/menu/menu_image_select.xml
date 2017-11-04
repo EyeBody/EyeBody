@@ -6,7 +6,7 @@
     <!-- android:id="@+id/actions_collage" -->
 
     <item
-        android:id="@+id/action_image_edit"
+        android:id="@+id/action_edit_image"
         android:icon="@drawable/icon_magic"
         android:title="@string/editImage"
         app:showAsAction="always"

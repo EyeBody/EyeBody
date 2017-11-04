@@ -1,13 +1,6 @@
-<<<<<<< HEAD
 package com.example.android.eyebody.gallery
 
 import android.content.Intent
-=======
-﻿package com.example.android.eyebody.gallery
-
-import android.content.Intent
-import android.content.IntentSender
->>>>>>> origin/develop
 import android.content.res.AssetManager
 import android.os.Bundle
 import android.os.Environment
@@ -16,16 +9,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-<<<<<<< HEAD
 import com.example.android.eyebody.R
-import com.example.android.eyebody.googleDriveManage.GoogleDriveManager
-=======
 import android.widget.Toast
-import com.example.android.eyebody.R
 import com.example.android.eyebody.googleDrive.GoogleDriveManager
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.drive.Drive
->>>>>>> origin/develop
 import kotlinx.android.synthetic.main.activity_gallery.*
 import java.io.File
 import java.io.FileOutputStream
@@ -40,7 +26,6 @@ class GalleryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
-
         googleDriveManager = object : GoogleDriveManager(baseContext, this@GalleryActivity) {
 
             override fun onConnectionStatusChanged() {
@@ -72,7 +57,7 @@ class GalleryActivity : AppCompatActivity() {
 
             assetsToExternalStorage()   //assets에 있는 테스트용 이미지를 외부저장소에 복사
 
-            for(f in file.listFiles()){
+            for (f in file.listFiles()) {
                 //TODO 이미지 파일이 아닌경우 예외처리
                 //TODO 이미지를 암호화해서 저장해놓고 불러올 때만 복호화 하기
                 photoList.add(Photo(f))
@@ -186,26 +171,6 @@ class GalleryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun showPreviousImage(v: View) {
-        try {
-            var prePosition: Int = (selectedImage.getTag() as Int) - 1
-            selectedImage.setImageBitmap(photoList[prePosition].getImage())
-            selectedImage.setTag(prePosition)
-        } catch (e: Exception) {
-            //Toast.makeText(this, "앞이 없음", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    fun showNextImage(v: View) {
-        try {
-            var nextPosition: Int = (selectedImage.getTag() as Int) + 1
-            selectedImage.setImageBitmap(photoList[nextPosition].getImage())
-            selectedImage.setTag(nextPosition)
-        } catch (e: Exception) {
-            //Toast.makeText(this, "뒤가 없음", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     fun assetsToExternalStorage() {
         //assets에 있는 파일을 외부저장소로 복사(테스트용)
         for (i in 1..4) {
@@ -213,6 +178,7 @@ class GalleryActivity : AppCompatActivity() {
 
             var assetManager: AssetManager = getAssets()
             var input: InputStream = assetManager.open("gallery_body/" + filename)
+
             var outputfile: String = getExternalFilesDir(null).toString() + "/gallery_body/" + filename
             var output: OutputStream = FileOutputStream(outputfile)
 
