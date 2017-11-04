@@ -54,7 +54,7 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
         if (mGoogleApiClient == null) {
             mGoogleApiClient = GoogleApiClient.Builder(context)
                     .addApi(Drive.API)
-                    .addScope(Drive.SCOPE_FILE)
+                    .addScope(Drive.SCOPE_FILE).addScope(Drive.SCOPE_APPFOLDER)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .build()
@@ -196,7 +196,13 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
                                             .setDescription("Encrypted eyebody backup file")
                                             .build()
 
-                                    // create a file on root folder
+
+                                    // 앱폴더 / 위에서 scope 를 appfolder로 해야함. : user나 타 앱이 액세스 불가능
+                                    // Drive.DriveApi.getAppFolder(mGoogleApiClient)
+                                    // Drive id 가 매번 같은데 이게 같은 앱폴더라 같은 세션같은 개념인지 먼지 잘 모르겠음.
+                                    // TODO : 루트폴더로 일단 다 해보고 잘되면 앱폴더로 해서 테스트하면 될 듯.
+
+                                    // 루트폴더 / 구글 드라이브 : user가 액세스 가능함.
                                     Drive.DriveApi.getRootFolder(mGoogleApiClient)
                                             .createFile(mGoogleApiClient, metadataChangeSet, result.driveContents)
                                             .setResultCallback(

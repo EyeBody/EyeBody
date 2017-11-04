@@ -119,7 +119,7 @@ class GalleryActivity : AppCompatActivity() {
 
             R.id.action_googleDrive_manualSave -> { //구글드라이브 수동 저장
                 //googleDriveManager?.saveAllFile()
-                googleDriveManager?.upload("${getExternalFilesDir(null)}/gallery_body/front_week4.jpg")
+                googleDriveManager?.upload("${getExternalFilesDir(null)}/gallery_body/front_week3.jpg")
                 /*
                 intentsender 방식
 
