@@ -22,10 +22,11 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class GalleryActivity : AppCompatActivity() {
+    private val TAG = "mydbg_gallery"
     var photoList = ArrayList<Photo>()
     var googleDriveManager: GoogleDriveManager? = null
 
-    var togleItem : MenuItem? = null
+    var togleItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,10 +35,10 @@ class GalleryActivity : AppCompatActivity() {
 
             override fun onConnectionStatusChanged() {
                 super.onConnectionStatusChanged()
-                if(togleItem != null) {
+                if (togleItem != null) {
                     if (googleDriveManager?.checkConnection() == true) {
                         togleItem?.title = getString(R.string.googleDrive_do_signOut)
-                        Toast.makeText(activity, "connect",Toast.LENGTH_LONG).show()
+                        Toast.makeText(activity, "connect", Toast.LENGTH_LONG).show()
                     } else {
                         togleItem?.title = getString(R.string.googleDrive_do_signIn)
                         Toast.makeText(activity, "connect xxx", Toast.LENGTH_LONG).show()
@@ -108,40 +109,55 @@ class GalleryActivity : AppCompatActivity() {
                 when (googleDriveManager?.checkConnection()) {
                     true -> {
                         googleDriveManager?.signOut()
-                        Log.d("mydbg_gallery", "do sign out")
+                        Log.d(TAG, "do sign out")
                     }
                     false -> {
                         googleDriveManager?.signIn()
-                        Log.d("mydbg_gallery", "do sign in")
+                        Log.d(TAG, "do sign in")
                     }
                 }
             }
 
             R.id.action_googleDrive_manualSave -> { //구글드라이브 수동 저장
-                //googleDriveManager?.saveAllFile()
-                googleDriveManager?.upload("${getExternalFilesDir(null)}/gallery_body/front_week3.jpg")
+                object : Thread() {
+                    override fun run() {
+                        googleDriveManager?.saveAllFile(arrayOf(
+                                "${getExternalFilesDir(null)}/gallery_body/front_week3.jpg", // will success and
+                                "${getExternalFilesDir(null)}/gallery_body/front_week3.jp" // will failed
+                        ))
+                        Log.d(TAG, "do save file")
+                    }
+                }.start()
+
                 /*
-                intentsender 방식
+                intentsender 방식으로 업로드
 
                 val intentsender = googleDriveManager?.upload("${getExternalFilesDir(null)}/gallery_body/front_week4.jpg")
-                Log.i("mydbg_gallery","${getExternalFilesDir(null)}/gallery_body/front_week4.jpg upload request")
+                Log.i(TAG,"${getExternalFilesDir(null)}/gallery_body/front_week4.jpg upload request")
                 if (intentsender != null) {
-                    Log.d("mydbg_gallery","$intentsender")
+                    Log.d(TAG,"$intentsender")
                     try {
                         startIntentSenderForResult(intentsender, 123, null, 0, 0, 0)
                     } catch(e : IntentSender.SendIntentException){
                         e.printStackTrace()
                     }
-                    Log.d("mydbg_gallery","upload request failed")
+                    Log.d(TAG,"upload request failed")
                 } else {
-                    Log.d("mydbg_gallery", "save file ok")
+                    Log.d(TAG, "save file ok")
                 }
                 */
             }
 
             R.id.action_googleDrive_manualLoad -> { //구글드라이브 수동 불러오기
-                googleDriveManager?.loadAllFile()
-                Log.d("mydbg_gallery", "do load file")
+                object : Thread() {
+                    override fun run() {
+                        googleDriveManager?.loadAllFile(arrayOf(
+                                "${getExternalFilesDir(null)}/gallery_body/front_week3.jpg", // will success and
+                                "${getExternalFilesDir(null)}/gallery_body/front_week3.jp" // will failed
+                        ))
+                        Log.d(TAG, "do load file")
+                    }
+                }.start()
             }
         }
         return super.onOptionsItemSelected(item)
