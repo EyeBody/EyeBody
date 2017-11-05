@@ -55,7 +55,7 @@ class MainActivity : PermissionsActivity() {
         val cameraPage by lazy { Intent(this, CameraActivity::class.java) }
         val exercisePage by lazy { Intent(this, ExerciseActivity::class.java) }
         val settingPage by lazy { Intent(this, SettingActivity::class.java) }
-        //val galleryPage by lazy { Intent(this, GalleryActivity::class.java) }
+        val galleryPage by lazy { Intent(this, GalleryActivity::class.java) }
 
         /* Listener (이벤트 리스너)
         클릭하면 반응
@@ -83,6 +83,7 @@ class MainActivity : PermissionsActivity() {
                 } else startActivity(cameraPage)
             } else startActivity(cameraPage)
         }
+
 
 
         btn_activity_gallery.setOnClickListener {
