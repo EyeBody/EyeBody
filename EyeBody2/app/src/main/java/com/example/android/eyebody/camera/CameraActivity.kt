@@ -81,7 +81,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     private fun shutterButtonClicked() {
         btn_shutter.setOnClickListener {
             try {
-                camera?.takePicture(shutterCallback, rawCallback, jpegCallback)
+                camera?.takePicture(null, null, jpegCallback)
             } catch (e: RuntimeException) {
                 Log.d(TAG, "take picture failed")
             }
@@ -104,36 +104,29 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         file.mkdirs()
     }
 
-    private var shutterCallback = ShutterCallback {
-        Log.d(TAG, "onShutter'd")
-        Toast.makeText(baseContext, "shutter Clicked", Toast.LENGTH_SHORT)
-    }
-
-    private var rawCallback = PictureCallback { bytes: ByteArray?, camera: Camera? ->
-        Log.d(TAG, "onPictureTaken-raw")
-    }
-
     //TODO : 사진 저장시 용량이 터질 경우 예외처리.
     private var jpegCallback = PictureCallback { bytes: ByteArray?, camera: Camera? ->
         makeFolder()
         Toast.makeText(baseContext, "make file success", Toast.LENGTH_SHORT)
         showPreview()//이미지 프리뷰실행
         changeImage()//가이드 이미지 변경
+        //TODO : 여기에 preview 들어가야함
         setTextView()//위 문구 변경
         var timeStamp: String = java.text.SimpleDateFormat("yyyyMMddHHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
 
         var fileName: String? = null//파일 이름 설정
 
         if (count == 0) {
-            fileName = String.format("front_$timeStamp.jpeg")
+            fileName = String.format("front_$timeStamp.jpg")
             frontImageName = rootPath + "/" + fileName//front 이미지 파일 경로 + 이름
             frontImageUri = Uri.fromFile(File(rootPath, fileName))
         } else {
-            fileName = String.format("side_$timeStamp.jpeg")
+            fileName = String.format("side_$timeStamp.jpg")
             sideImageName = rootPath + "/" + fileName//side 이미지 파일 경로 + 이름
             sideImageUri = Uri.fromFile(File(rootPath, fileName))
         }
         var path: String = rootPath + "/" + fileName
+
 
         var file = File(path)
         try {
@@ -144,11 +137,11 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
+/*
         var intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         var uri = Uri.parse("file://" + path)
         intent.data = uri
-        sendBroadcast(intent)
+        sendBroadcast(intent)*/
         count++
         if (count == 2) {
             sideImage = bytes
@@ -160,7 +153,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         }
     }
     private fun showPreview(){
-        image_preview.setImageURI(sideImageUri)
+        image_preview.setImageURI(frontImageUri)
     }
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
@@ -178,15 +171,39 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
             }
         }
     }
+
     override fun surfaceCreated(holder: SurfaceHolder) {
         camera = Camera.open()
-        camera!!.parameters!!.setRotation(90)
-        camera!!.parameters!!.setPictureSize(640, 480)
+        camera!!.setDisplayOrientation(90)
+        try{
+            var width:Int?=0
+            var height:Int?=0
+            var rotation:Int=0
+            width=camera?.parameters?.pictureSize?.width
+            height=camera?.parameters?.pictureSize?.height
+            val parameters=camera?.parameters
+
+            width=640
+            height=480
+
+            parameters?.setPictureSize(width,height)
+            parameters?.setRotation(rotation)
+            camera?.parameters=parameters
+        }catch (e:IOException){
+            camera?.release()
+            camera=null
+        }
     }
+
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         camera?.stopPreview()
         camera?.release()
         camera = null
         previewing = false
+    }
+
+    override fun onDestroy() {
+
+        super.onDestroy()
     }
 }
