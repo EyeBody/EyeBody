@@ -28,7 +28,11 @@ class ImageEditFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        selectedImage_edit.setImageBitmap(photoList[selected[0]].getImage())
+        selectedImage_edit.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        var measuredWidth = selectedImage_edit.getMeasuredWidth();
+        var measuredHeight = selectedImage_edit.getMeasuredHeight();
+
+        selectedImage_edit.setImageBitmap(photoList[selected[0]].getImage(measuredWidth, measuredHeight))
         selectedImage_edit.setTag(0)
 
         if(selected.size > 1){    //사진이 하나 이상인 경우
@@ -45,7 +49,7 @@ class ImageEditFragment : Fragment() {
                 leftButton_edit.visibility = View.INVISIBLE
             }
 
-            selectedImage_edit.setImageBitmap(photoList[selected[prePosition]].getImage())
+            selectedImage_edit.setImageBitmap(photoList[selected[prePosition]].getImage(measuredWidth, measuredHeight))
             selectedImage_edit.setTag(prePosition)
 
             imageIndexTextView.text = (prePosition + 1).toString() + "/" + selected.size
@@ -59,7 +63,7 @@ class ImageEditFragment : Fragment() {
                 rightButton_edit.visibility = View.INVISIBLE
             }
 
-            selectedImage_edit.setImageBitmap(photoList[selected[nextPosition]].getImage())
+            selectedImage_edit.setImageBitmap(photoList[selected[nextPosition]].getImage(measuredWidth, measuredHeight))
             selectedImage_edit.setTag(nextPosition)
 
             imageIndexTextView.text = (nextPosition + 1).toString() + "/" + selected.size

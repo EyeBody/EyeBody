@@ -30,12 +30,20 @@ class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
 
     class Item(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindData(photo: Photo, pos: Int) {
-            itemView.imageView.setImageBitmap(photo.getImage())
+            itemView.imageView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            var measuredWidth = itemView.imageView.getMeasuredWidth();
+            var measuredHeight = itemView.imageView.getMeasuredHeight();
+
+            itemView.imageView.setImageBitmap(photo.getImage(measuredWidth, measuredHeight))
             itemView.date.text = photo.getMemo()
 
             itemView.setOnClickListener{
                 var imgView = (itemView.context as GalleryActivity).selectedImage_gallery
-                imgView.setImageBitmap(photo.getImage())
+                itemView.imageView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                var measuredWidth = itemView.imageView.getMeasuredWidth();
+                var measuredHeight = itemView.imageView.getMeasuredHeight();
+
+                imgView.setImageBitmap(photo.getImage(measuredWidth, measuredHeight))
                 imgView.setTag(pos)
 
                 //좌우 넘기기 버튼 visibility

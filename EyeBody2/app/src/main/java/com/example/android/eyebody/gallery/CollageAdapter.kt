@@ -29,7 +29,11 @@ class CollageAdapter (var context: Context, var photoList: ArrayList<Photo>, var
     class Item(itemView: View) : RecyclerView.ViewHolder(itemView) {
         //ImageSelectFragment에서 데이터 바인딩
         fun bindData(photo: Photo, pos: Int, selectedPhotoList: ArrayList<Int>, fragment: ImageSelectFragment) {
-            itemView.imageView.setImageBitmap(photo.getImage())
+            itemView.imageView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            var measuredWidth = itemView.imageView.getMeasuredWidth();
+            var measuredHeight = itemView.imageView.getMeasuredHeight();
+
+            itemView.imageView.setImageBitmap(photo.getImage(measuredWidth, measuredHeight))
             itemView.date.text = photo.getDate()
             fragment.setSelected(itemView, pos, selectedPhotoList.contains(pos))
 
