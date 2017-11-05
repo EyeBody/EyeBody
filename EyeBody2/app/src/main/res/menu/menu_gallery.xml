@@ -7,17 +7,16 @@
     <item
         android:id="@+id/action_collage"
         android:icon="@drawable/icon_collage"
-        android:title="@string/collage"
-        app:showAsAction="always" />
-
+        android:title="@string/collage" />
     <item
         android:id="@+id/action_googleDrive_signInOut_togle"
-        android:title="@string/googleDrive_do_signIn" />
+        android:title="@string/googleDrive_do_signIn"/>
+
     <item
         android:id="@+id/action_googleDrive_manualSave"
-        android:title="@string/googleDrive_manualSave" />
+        android:title="@string/googleDrive_manualSave"/>
+
     <item
         android:id="@+id/action_googleDrive_manualLoad"
-        android:title="@string/googleDrive_manualLoad" />
-
+        android:title="@string/googleDrive_manualLoad"/>
 </menu>

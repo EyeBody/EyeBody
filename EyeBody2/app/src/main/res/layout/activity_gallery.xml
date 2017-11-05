@@ -15,24 +15,26 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/leftButton_gallery"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:visibility="invisible"
-            android:text="◀" />
-
-        <ImageView
-            android:id="@+id/selectedImage_gallery"
+            android:id="@+id/btnLeft"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:onClick="showPreviousImage"
+            android:text="◀" />
+
+        <ImageView
+            android:id="@+id/selectedImage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
             app:srcCompat="@mipmap/ic_launcher" />
 
         <Button
-            android:id="@+id/rightButton_gallery"
-            android:layout_width="50dp"
+            android:id="@+id/btnRight"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:visibility="invisible"
+            android:layout_weight="1"
+            android:onClick="showNextImage"
             android:text="▶" />
     </LinearLayout>
 

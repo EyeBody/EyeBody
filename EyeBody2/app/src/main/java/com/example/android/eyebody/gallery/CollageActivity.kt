@@ -11,7 +11,6 @@ import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder
 class CollageActivity : AppCompatActivity() {
     var photoList: ArrayList<Photo> = ArrayList<Photo>()
     var selectedPhotoList: ArrayList<Int> = ArrayList<Int>()
-    lateinit var menu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,15 +31,15 @@ class CollageActivity : AppCompatActivity() {
         if(count == 0){ //스택에 프래그먼트가 없으면 액티비티 뒤로가기
             super.onBackPressed()
         } else {    //이전 프래그먼트 불러오기
+            //TODO 뒤로가기 해도 선택한 이미지 보존
+            selectedPhotoList.clear()
             fragmentManager.popBackStack()
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.menu_image_select, menu)
-        this.menu = menu
-
+        menuInflater.inflate(R.menu.menu_collage, menu)
         return true
     }
 
@@ -48,11 +47,11 @@ class CollageActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.action_share -> {
                 shareKakao()
+                //TODO 카카오톡 공유하기
             }
         }
         return super.onOptionsItemSelected(item)
     }
-    
     fun shareKakao()
     {
         try{

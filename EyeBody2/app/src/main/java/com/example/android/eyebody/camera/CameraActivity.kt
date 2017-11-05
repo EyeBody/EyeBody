@@ -194,13 +194,6 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
             camera?.startPreview()
         }
     }
-<<<<<<< HEAD
-=======
-
-    private fun showPreview(){
-        image_preview.setImageURI(frontImageUri)
-    }
->>>>>>> 9271ae3ce3e907a4a78639d3d79134a5f4acdbd8
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
         if (previewing) {

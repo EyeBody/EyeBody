@@ -1,71 +1,15 @@
-<android.support.v7.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.example.android.eyebody.gallery.ImageEditFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/leftButton_edit"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:visibility="invisible"
-            android:text="◀" />
-
-        <ImageView
-            android:id="@+id/selectedImage_edit"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/frontimage" />
-
-        <Button
-            android:id="@+id/rightButton_edit"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:visibility="invisible"
-            android:text="▶" />
-    </LinearLayout>
-
+    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/imageIndexTextView"
+        android:id="@+id/asdf"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="1/10"
-        android:textSize="15sp"
-        android:textAlignment="center" />
+        android:layout_height="match_parent"
+        android:text="이미지 편집 뿌엥"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/cropButton"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_menu_crop" />
-
-        <ImageButton
-            android:id="@+id/rotationButton"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_menu_rotate" />
-
-        <ImageButton
-            android:id="@+id/stickerButton"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_menu_edit" />
-    </LinearLayout>
-</android.support.v7.widget.LinearLayoutCompat>
+</FrameLayout>
