@@ -121,11 +121,15 @@ class GalleryActivity : AppCompatActivity() {
             R.id.action_googleDrive_manualSave -> { //구글드라이브 수동 저장
                 object : Thread() {
                     override fun run() {
-                        googleDriveManager?.saveAllFile(arrayOf(
-                                "${getExternalFilesDir(null)}/gallery_body/front_week3.jpg", // will success and
-                                "${getExternalFilesDir(null)}/gallery_body/front_week3.jp" // will failed
-                        ))
-                        Log.d(TAG, "do save file")
+                        //TODO 전체 경로를 savelocation 과 savefile 로 나눠서 하는 것이 좋을 듯.
+                        val successPair = googleDriveManager?.saveAllFile(
+                                arrayOf(/* 내부저장소에 있는 모든 .eyebody (백업대상) 파일이름을 array로 구성해야 함. */
+                                        "${getExternalFilesDir(null)}/gallery_body/front_week1.jpg",
+                                        "${getExternalFilesDir(null)}/gallery_body/front_week2.jpg",
+                                        "${getExternalFilesDir(null)}/gallery_body/front_week3.jpg",
+                                        "${getExternalFilesDir(null)}/gallery_body/front_week4.jpg")
+                        )
+                        Log.d(TAG, "saving file : (${successPair?.first} / ${successPair?.second})")
                     }
                 }.start()
 
@@ -151,11 +155,12 @@ class GalleryActivity : AppCompatActivity() {
             R.id.action_googleDrive_manualLoad -> { //구글드라이브 수동 불러오기
                 object : Thread() {
                     override fun run() {
-                        googleDriveManager?.loadAllFile(arrayOf(
-                                "${getExternalFilesDir(null)}/gallery_body/front_week3.jpg", // will success and
-                                "${getExternalFilesDir(null)}/gallery_body/front_week3.jp" // will failed
-                        ))
-                        Log.d(TAG, "do load file")
+                        val successPair = googleDriveManager?.loadAllFile(
+                                arrayOf(/* 내부저장소에 있는 모든 .eyebody (백업대상) 파일이름을 array로 구성해야 함. */
+                                        "${getExternalFilesDir(null)}/gallery_body/front_week1.jpg",
+                                        "${getExternalFilesDir(null)}/gallery_body/front_week2.jpg")
+                        )
+                        Log.d(TAG, "loading file : (${successPair?.first} / ${successPair?.second})")
                     }
                 }.start()
             }

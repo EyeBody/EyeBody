@@ -6,15 +6,22 @@ import android.content.IntentSender
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
+import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.drive.Drive
+import com.google.android.gms.drive.DriveFile
 import com.google.android.gms.drive.MetadataChangeSet
+import com.google.android.gms.drive.metadata.SearchableMetadataField
+import com.google.android.gms.drive.query.Filter
 import com.google.android.gms.drive.query.Filters
 import com.google.android.gms.drive.query.Query
+import com.google.android.gms.drive.query.SearchableField
 import java.io.*
 
 /**
@@ -108,15 +115,15 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
      */
     fun saveAllFile(localFiles: Array<String>): Pair<Int, Int> {
 
-        // 싱크 안 맞는 것 중 serverfile 만 골라서 싱크 강제로 맞춤.
+        // 싱크 안 맞는 것 중 localfile 만 골라서 싱크 강제로 맞춤.
         val fileTransferDataArray = getDataForSync(localFiles)
-                ?.filter { it.fileLocale == FILE_LOCATION_SERVER }
+                ?.filter { it.fileLocale == FILE_LOCATION_LOCAL }
                 ?.toTypedArray()
 
-        if (fileTransferDataArray == null)
+        if (fileTransferDataArray == null || fileTransferDataArray.isEmpty())
             return Pair(0, 0)
-        else
-            return multipleFileTransfer(fileTransferDataArray)
+
+        return multipleFileTransfer(fileTransferDataArray)
     }
 
     /**
@@ -129,21 +136,20 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
      */
     fun loadAllFile(localFiles: Array<String>): Pair<Int, Int> {
 
-        // 싱크 안 맞는 것 중 localfile 만 골라서 싱크 강제로 맞춤.
+        // 싱크 안 맞는 것 중 serverFile 만 골라서 싱크 강제로 맞춤.
         val fileTransferDataArray = getDataForSync(localFiles)
-                ?.filter { it.fileLocale == FILE_LOCATION_LOCAL }
+                ?.filter { it.fileLocale == FILE_LOCATION_SERVER }
                 ?.toTypedArray()
 
-        if (fileTransferDataArray == null || fileTransferDataArray.size == 0)
+        if (fileTransferDataArray == null || fileTransferDataArray.isEmpty())
             return Pair(0, 0)
-        else
-            return multipleFileTransfer(fileTransferDataArray)
+        return multipleFileTransfer(fileTransferDataArray)
     }
 
     fun getDataForSync(localFiles: Array<String>): Array<FileTransferData>? {
         // TODO ----- array of filetransferData 를 모두 mutableMap 으로 바꾸는 것이 효율적일 것 같다.
 
-        val avoidSame: MutableMap<String, Int> = mutableMapOf<String, Int>()
+        val avoidSame = mutableMapOf<String, Int>()
 
         // 서버 데이터 수신에 실패할 경우 null반환
         val serverFileTransferDataArray = getServerFileList()
@@ -162,60 +168,59 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
                 avoidSame.put(f, FILE_LOCATION_LOCAL)
         }
         // map을 array로 변환
-        val fileTransferDataArray = arrayOf<FileTransferData>()
-        var i = 0
+        var fileTransferDataArray = arrayOf<FileTransferData>()
         for (f in avoidSame) {
-            fileTransferDataArray[i++] = FileTransferData(f.key, f.value)
-            Log.d(TAG, "map to array : $i : ${f.key}")
+            fileTransferDataArray = fileTransferDataArray.plus(FileTransferData(f.key, f.value))
         }
 
-        Log.d(TAG, "localfiles size : ${localFiles.size}")
-        Log.d(TAG, "getDataForSync return size : ${fileTransferDataArray.size}")
+        Log.d(TAG, "getDataForSync (serverFile + requestFile) size : ${fileTransferDataArray.size}")
 
         return fileTransferDataArray
     }
 
     private fun getServerFileList(): Array<FileTransferData>? {
 
+        // Drive 접근
         val newDriveResult = Drive.DriveApi.newDriveContents(mGoogleApiClient).await()
         if (!newDriveResult.status.isSuccess) {
-            Log.d(TAG, "실패 : newDriveResult / getServerFileList")
+            Log.d(TAG, "실패 : newDriveResult / getServerFileList : ${newDriveResult.status.statusMessage}")
             return null
         }
 
-        // TODO Drive Api 로 쿼리 요청 (진행중)
-        val fetchDriveFolderResult = Drive.DriveApi.fetchDriveId(mGoogleApiClient, "0BxidKsDFmklwUWdiZzZxOHpZS3M").await()
-        //val listOfRootFolder = Drive.DriveApi.getRootFolder(mGoogleApiClient).listChildren(mGoogleApiClient).await()
-        if (!fetchDriveFolderResult.status.isSuccess) {
-            Log.d(TAG, "실패 : fetchDriveFolderResult / getServerFileList")
-            return null
-        }
+        var fileTransferDataArray = arrayOf<FileTransferData>()
 
-        val listChildrenResult = fetchDriveFolderResult.driveId.asDriveFolder().listChildren(mGoogleApiClient).await()
-        if (!listChildrenResult.status.isSuccess) {
-            Log.d(TAG, "실패 : listChildrenResult / getServerFileList")
-            return null
-        }
+        // Drive 를 online에서만 하게 강제하고 싱크를 맞춤.
+        // TODO 1분에 1번만 가능.. 엄밀히 5분에 5번..
+        val sync = Drive.DriveApi.requestSync(mGoogleApiClient).await()
+        if (sync.status.isSuccess) {
+            Log.d(TAG, "success to sync")
 
-        /*val query = Query.Builder().setPageToken("sdf").build()
-        Drive.DriveApi.fetchDriveId(mGoogleApiClient, "0B2EEtIjPUdX6MERsWlYxN3J6RU0") //EXISTING_FOLDER_ID something
-        d.setResultCallback { result ->
-            if (!result.getStatus().isSuccess()) {
-                Log.d(TAG, "Cannot find DriveId. Are you authorized to view this file?");
-                return@setResultCallback
+            // 모든 파일들을 요청.
+            // TODO 앱폴더 비우기
+            val query = Query.Builder().
+                    addFilter(Filters.and(
+                            Filters.eq(SearchableField.TRASHED, false))
+                    ).build()
+            val filesResult = Drive.DriveApi.query(mGoogleApiClient, query).await()
+            if (filesResult.status.isSuccess) {
+                Log.d(TAG, "파일 개수 : ${filesResult.metadataBuffer.count}")
+                for (i in filesResult.metadataBuffer) {
+                    Log.d(TAG, "\tmetadata : title[${i.title}]      date[${i.createdDate}]      isinAppfolder[${i.isInAppFolder}]")
+                    if (!i.isInAppFolder)
+                        fileTransferDataArray = (fileTransferDataArray).plus(FileTransferData(i.title, FILE_LOCATION_SERVER))
+                }
             }
-
-            val driveFolder = result.driveId.asDriveFolder()
-
-        }*/
-
-        var fileTransferDataArray: Array<FileTransferData> = arrayOf<FileTransferData>()
-
-        listChildrenResult.metadataBuffer.forEach {
-            Log.d(TAG, "${it.title} is title")
-            fileTransferDataArray.plus(FileTransferData(it.title, FILE_LOCATION_SERVER))
+            filesResult.metadataBuffer.release()
+        } else {
+            if (sync.statusCode == CommonStatusCodes.NETWORK_ERROR) // 7
+                Toast.makeText(activity, "인터넷이 연결되어있지 않습니다.", Toast.LENGTH_LONG).show()
+            else {
+                Log.d(TAG, "failure : ${sync.statusMessage}\n" +
+                        "and status code is ${sync.statusCode}.\n" +
+                        "see > https://developers.google.com/android/reference/com/google/android/gms/common/api/CommonStatusCodes.html#NETWORK_ERROR")
+            }
+            return null
         }
-        Log.d(TAG, "fileTransfer done, metadata count : ${listChildrenResult.metadataBuffer.count}")
 
         return fileTransferDataArray
     }
@@ -229,26 +234,27 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
      */
     fun multipleFileTransfer(fileTransferDataArray: Array<FileTransferData>): Pair<Int, Int> {
 
-        var successCount = Pair(0, 0)
+        var successCount = 0
+        var totalCount = 0
 
-        // upload와 download는 내부에서 쓰레드를 생성함.
-        // 그러므로 파일은 병렬적으로 전송됨.
+        // upload와 download는 내부에서 전송용 스택이 쌓임.
         for (goods in fileTransferDataArray)
             when (goods.fileLocale) {
                 FILE_LOCATION_LOCAL -> {
-                    successCount.first.plus(upload(goods.fileName))  //fileName 은 절대경로 + 파일 이름
-                    successCount.second.plus(1)
+                    successCount += upload(goods.fileName)  //fileName 은 절대경로 + 파일 이름
+                    totalCount++
                 }
                 FILE_LOCATION_SERVER -> {
-                    successCount.first.plus(download(goods.fileName)) //fileName 은 단일 파일 이름
-                    successCount.second.plus(1)
+                    successCount += download(goods.fileName)  //fileName 은 파일 이름
+                    totalCount++
                 }
             }
 
-        return successCount //성공하면 true 실패하면 false
+        return Pair(successCount, totalCount) //성공하면 true 실패하면 false
     }
 
     private fun upload(photoURI: String): Int {
+
 
         if (!checkConnection())
             return 0
@@ -256,20 +262,22 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
         //sync 방법
         val newDriveResult = Drive.DriveApi.newDriveContents(mGoogleApiClient).await()
         if (!newDriveResult.status.isSuccess) {
-            Log.d(TAG, "실패 : newDriveResult / upload")
+            Log.d(TAG, "실패 : newDriveResult / upload : ${newDriveResult.status.statusMessage}")
             return 0
         }
 
+        // TODO 파일이름이 올바르지 않을 경우 (없는 파일을 전송하고자 할 때 등등) 에러에 대한 예외처리 in outputstream
         val outputStream = newDriveResult.driveContents.outputStream
         val bitmapStream = ByteArrayOutputStream()
-        BitmapFactory
-                .decodeStream(FileInputStream(File(photoURI)))
-                .compress(Bitmap.CompressFormat.PNG, 100, bitmapStream)
         try {
+            BitmapFactory
+                    .decodeStream(FileInputStream(File(photoURI)))
+                    .compress(Bitmap.CompressFormat.PNG, 100, bitmapStream)
             outputStream.write(bitmapStream.toByteArray())
         } catch (exception: IOException) {
-            Log.d(TAG, "IOException : bitmapStream -> driveContents.outputStream")
-            exception.printStackTrace()
+            Log.d(TAG, "IOException : bitmapStream -> driveContents.outputStream\n" +
+                    "              ${exception.localizedMessage}")
+            return 0
         }
 
         val metadataChangeSet = MetadataChangeSet.Builder()
@@ -288,10 +296,10 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
                 .createFile(mGoogleApiClient, metadataChangeSet, newDriveResult.driveContents)
                 .await()
         if (!createFileAtRootResult.status.isSuccess) {
-            Log.d(TAG, "create newDriveContents 실패 - createfile에서")
+            Log.d(TAG, "실패 : createFileAtRootResult / upload : ${createFileAtRootResult.status.statusMessage}")
             return 0
         }
-        Log.d(TAG, "Created a file with content: ${createFileAtRootResult.driveFile.driveId}")
+        Log.d(TAG, "Created a file with content : id = ${createFileAtRootResult.driveFile.driveId}")
 
         /*//async 방법
         Drive.DriveApi.newDriveContents(mGoogleApiClient)
@@ -356,17 +364,65 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
 
         val newDriveResult = Drive.DriveApi.newDriveContents(mGoogleApiClient).await()
         if (!newDriveResult.status.isSuccess) {
-            Log.d(TAG, "실패 : newDriveResult / download")
+            Log.d(TAG, "실패 : newDriveResult / download : ${newDriveResult.status.statusMessage}")
             return 0
         }
 
         // TODO : Drive Api 로 단일파일 다운로드
-        val query = Query.Builder().build()
+        val query = Query.Builder().
+                addFilter(Filters.and(
+                        Filters.eq(SearchableField.TRASHED, false))
+                ).build()
         val queryResult = Drive.DriveApi.query(mGoogleApiClient, query).await()
         if (!queryResult.status.isSuccess) {
-            Log.d(TAG, "실패 : queryResult / download")
+            Log.d(TAG, "실패 : queryResult / download : ${queryResult.status.statusMessage}")
+            return 0
         }
-        Log.d(TAG, "goods' count : ${queryResult.metadataBuffer.count}")
+        for (metadata in queryResult.metadataBuffer) {
+            if (metadata.title == photoURI && !metadata.isInAppFolder) {
+                val data = metadata.driveId.asDriveFile().open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null/*download progress listner~~ */).await()
+                if (!data.status.isSuccess) {
+                    Log.d(TAG, "실패 : driveFile().open / download : ${data.status.statusMessage}")
+                    return 0
+                }
+
+                val imageByte = data.driveContents.inputStream.readBytes()
+                Log.d(TAG, "read Contents Byte Size : ${imageByte.size}\n" +
+                        "and save to [${activity.getExternalFilesDir(null)}/gallery_body/$photoURI]")
+
+                context.openFileOutput(photoURI, Context.MODE_APPEND)
+                for (f in context.fileList()) {
+                    Log.d(TAG,f)
+                }
+                /*try {
+
+                    val file = File("${activity.getExternalFilesDir(null)}/gallery_body/$photoURI")
+                    val fos = FileOutputStream(file)
+                    fos.write(imageByte)
+                    fos.flush()
+                    fos.close()
+                    Log.d(TAG,"save success")
+                }catch(ioe : IOException){
+                    ioe.printStackTrace()
+                }*/
+                /*val root = Environment.getExternalStorageState().toString()
+                val myDir = File(root+"/gallery_body/$photoURI")
+                myDir.mkdirs()
+                val file = File(myDir,photoURI)
+                if (file.exists())
+                    file.delete()
+                try {
+                    val out = FileOutputStream(file)
+                    out.write(imageByte)
+                    out.flush()
+                    out.close()
+                } catch (e : Exception) {
+                    e.printStackTrace()
+                }*/
+
+
+            }
+        }
 
         return 1
     }
@@ -391,15 +447,16 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
 
     override fun onConnectionFailed(result: ConnectionResult) {
         onConnectionStatusChanged()
-        // 비정상적 종료에 대해 다시 시도할지, 또는 어떻게 할 지에 대해 작성하는 지역
-        // 일반적으로는 에러 로그를 찍고, 해결가능한 실패에 대해서는 다시 시도한다.
-        // 해당 연결이 중첩되서 발생할 수 있는가? 만약 그런다면 boolean 하나 만들어서 hasResoulution이 아니더라도 건너뛰는 걸 만들어야 할 것 같다.
-        Log.d(TAG, "connectionFailed\n구글드라이브 에러종료 : $result")
+        /*비정상적 종료에 대해 다시 시도할지, 또는 어떻게 할 지에 대해 작성하는 지역
+        일반적으로는 에러 로그를 찍고, 해결가능한 실패에 대해서는 다시 시도한다.
+        해당 연결이 중첩되서 발생할 수 있는가? 만약 그런다면 boolean 하나 만들어서 hasResoulution이 아니더라도 건너뛰는 걸 만들어야 할 것 같다.*/
+        Log.d(TAG, "connectionFailed\n구글드라이브 에러종료 : $result\n" +
+                "${result.errorCode} : ${result.errorMessage}")
 
         // 해결되지 않은 오류에 대한 후 처리
         if (!result.hasResolution()) {
             // 해결되지 않는 에러에 대해 다이얼로그를 띄워 사용자에게 보여준다.
-            //GoogleApiAvailability.getInstance().getErrorDialog(activity, result.errorCode, 0).show()
+            // GoogleApiAvailability.getInstance().getErrorDialog(activity, result.errorCode, 0).show()
 
             // 다이얼로그 대신 로그 띄움.
             Log.d("TAG", GoogleApiAvailability.getInstance().getErrorString(result.errorCode))
