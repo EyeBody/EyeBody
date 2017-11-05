@@ -2,30 +2,39 @@ package com.example.android.eyebody.gallery
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.example.android.eyebody.R
 import android.view.Menu
 import android.view.MenuItem
-import com.example.android.eyebody.R
 import com.kakao.kakaolink.KakaoLink
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder
 
 class CollageActivity : AppCompatActivity() {
+    var photoList: ArrayList<Photo> = ArrayList<Photo>()
+    var selectedPhotoList: ArrayList<Int> = ArrayList<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_collage)
 
-        var photoList: ArrayList<Photo> = intent.getParcelableArrayListExtra("photoList")
+        photoList = intent.getParcelableArrayListExtra("photoList")
 
-        //ImageSelectFragment
-        var imageSelectFragment = ImageSelectFragment()
-        var bundle = Bundle()
-        bundle.putParcelableArrayList("photoList", photoList)
-        imageSelectFragment.arguments = bundle
+        //ImageSelectFragment 생성
+        fragmentManager
+                .beginTransaction()
+                .add(R.id.fragment_container, ImageSelectFragment())
+                .commit()
+    }
 
-        var fragmentTransaction  = fragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.fragment_container, imageSelectFragment).commit()
+    override fun onBackPressed() {
+        var count: Int = fragmentManager.backStackEntryCount
 
-        //TODO 선택한 이미지들로 콜라주 만들기
+        if(count == 0){ //스택에 프래그먼트가 없으면 액티비티 뒤로가기
+            super.onBackPressed()
+        } else {    //이전 프래그먼트 불러오기
+            //TODO 뒤로가기 해도 선택한 이미지 보존
+            selectedPhotoList.clear()
+            fragmentManager.popBackStack()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -66,6 +75,5 @@ class CollageActivity : AppCompatActivity() {
             e.printStackTrace()
         }
     }
-
 
 }

@@ -1,83 +1,81 @@
-/*
+package com.example.android.eyebody.googleDrive
 
-/** Test용도
- * Copyright 2013 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the
- * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.example.android.eyebody
-
+import android.annotation.SuppressLint
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.io.OutputStream
 
 import android.app.Activity
 import android.content.Intent
-import android.content.IntentSender
 import android.content.IntentSender.SendIntentException
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener
 import com.google.android.gms.common.api.ResultCallback
-import com.google.android.gms.drive.Drive
-import com.google.android.gms.drive.DriveApi.DriveContentsResult
 import com.google.android.gms.drive.MetadataChangeSet
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.drive.Drive
 
-/**
- * Android Drive Quickstart activity. This activity takes a photo and saves it
- * in Google Drive. The user is prompted with a pre-made dialog which allows
- * them to choose the file location.
+
+/*
+ * manifests specified with down here for act it
+uses-sdk
+android:minSdkVersion="8"
+android:targetSdkVersion="18"
+meta-data
+android:name="com.google.android.gms.version"
+android:value="@integer/google_play_services_version"
+ * and it is copyrighted 2013 google inc. all right reserved.
+ * onResume -> (driveConnect) -> (connectionCallback) ->
+ *      if image  null : startActivity - mediastore.camera
+ *      if image !null : upload
  */
+@SuppressLint("Registered")
+class ImageTransferDriveManager : Activity(), ConnectionCallbacks, OnConnectionFailedListener {
 
-class ExerciseActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionFailedListener {
+    init {
+        val g = GoogleDriveManager(this.baseContext, this)
+    }
 
-    private var mGoogleApiClient: GoogleApiClient? = null
-    private var mBitmapToSave: Bitmap? = null
+    companion object {
+        val REQ_CAPTURE_IMAGE = 1
+        val REQ_CREATOR = 2
+        val REQ_RESOLUTION = 3
+    }
 
-    /**
-     * Create a new file and save it to Drive.
-     */
+    var myGoogleApiClient: GoogleApiClient? = null
+    var myBitmapToSave: Bitmap? = null
+
+    // 파일 저장
+    // Local -> Drive
     private fun saveFileToDrive() {
-        // Start by creating a new contents, and setting a callback.
-        Log.i(TAG, "Creating new contents.")
-        val image = mBitmapToSave
-        Drive.DriveApi.newDriveContents(mGoogleApiClient)
+        Log.i("GDManagerNew", "Drive 에서 new DriveContents 만들기 시도")
+        val image = myBitmapToSave
+
+        Drive.DriveApi.newDriveContents(myGoogleApiClient)
                 .setResultCallback(ResultCallback { result ->
-                    // If the operation was not successful, we cannot do anything
-                    // and must
-                    // fail.
+                    // DriveContents를 만든다.
+                    // 만약 실패하면 failed listener 를 호출하게 됨.
                     if (!result.status.isSuccess) {
-                        Log.i(TAG, "Failed to create new contents.")
+                        Log.i("GDManagerNew", "DriveContents 실패")
                         return@ResultCallback
                     }
                     // Otherwise, we can write our data to the new contents.
-                    Log.i(TAG, "New contents created.")
+                    Log.i("GDManagerNew", "DriveContents 만들어짐")
                     // Get an output stream for the contents.
                     val outputStream = result.driveContents.outputStream
                     // Write the bitmap data from it.
                     val bitmapStream = ByteArrayOutputStream()
-                    image!!.compress(Bitmap.CompressFormat.PNG, 100, bitmapStream)
+                    image?.compress(Bitmap.CompressFormat.PNG, 100, bitmapStream)
                     try {
                         outputStream.write(bitmapStream.toByteArray())
                     } catch (e1: IOException) {
-                        Log.i(TAG, "Unable to write file contents.")
+                        Log.i("GDManagerNew", "쓸 수 없음 write exception")
                     }
 
                     // Create the initial metadata - MIME type and title.
@@ -89,26 +87,24 @@ class ExerciseActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionF
                             .newCreateFileActivityBuilder()
                             .setInitialMetadata(metadataChangeSet)
                             .setInitialDriveContents(result.driveContents)
-                            .build(mGoogleApiClient)
+                            .build(myGoogleApiClient)
                     try {
-                        Log.d(TAG, "before start intent sender")
                         startIntentSenderForResult(
-                                intentSender, REQUEST_CODE_CREATOR, null, 0, 0, 0)
-                        Log.d(TAG, "after intent sender $REQUEST_CODE_CREATOR")
+                                intentSender, REQ_CREATOR, null, 0, 0, 0)
                     } catch (e: SendIntentException) {
-                        Log.i(TAG, "Failed to launch file chooser.")
+                        Log.i("GDManagerNew", "file chooser 예외")
                     }
                 })
     }
 
     override fun onResume() {
         super.onResume()
-        if (mGoogleApiClient == null) {
+        if (myGoogleApiClient == null) {
             // Create the API client and bind it to an instance variable.
             // We use this instance as the callback for connection and connection
             // failures.
             // Since no account name is passed, the user is prompted to choose.
-            mGoogleApiClient = GoogleApiClient.Builder(this)
+            myGoogleApiClient = GoogleApiClient.Builder(this)
                     .addApi(Drive.API)
                     .addScope(Drive.SCOPE_FILE)
                     .addConnectionCallbacks(this)
@@ -116,40 +112,40 @@ class ExerciseActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionF
                     .build()
         }
         // Connect the client. Once connected, the camera is launched.
-        mGoogleApiClient!!.connect()
+        myGoogleApiClient?.connect()
     }
 
     override fun onPause() {
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient!!.disconnect()
-            Log.d(TAG,"onPause")
-        }
+        myGoogleApiClient?.disconnect()
         super.onPause()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         when (requestCode) {
-            REQUEST_CODE_CAPTURE_IMAGE ->
+            REQ_CAPTURE_IMAGE ->
                 // Called after a photo has been taken.
                 if (resultCode == Activity.RESULT_OK) {
                     // Store the image data as a bitmap for writing later.
-                    mBitmapToSave = data.extras!!.get("data") as Bitmap
+                    myBitmapToSave = data.extras!!.get("data") as Bitmap
                 }
-            REQUEST_CODE_CREATOR ->
+            REQ_CREATOR ->
                 // Called after a file is saved to Drive.
                 if (resultCode == Activity.RESULT_OK) {
-                    Log.i(TAG, "Image successfully saved.")
-                    mBitmapToSave = null
+                    Log.i("GDManagerNew", "Image saved")
+                    myBitmapToSave = null
                     // Just start the camera again for another photo.
                     startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE),
-                            REQUEST_CODE_CAPTURE_IMAGE)
+                            REQ_CAPTURE_IMAGE)
                 }
         }
     }
 
+
+    //Connection Failed 이벤트에 대한 리스너
     override fun onConnectionFailed(result: ConnectionResult) {
+
         // Called whenever the API client fails to connect.
-        Log.i(TAG, "GoogleApiClient connection failed: " + result.toString())
+        Log.d("GDManagerNew", "연결실패: " + result.toString())
         if (!result.hasResolution()) {
             // show the localized error dialog.
             GoogleApiAvailability.getInstance().getErrorDialog(this, result.errorCode, 0).show()
@@ -160,57 +156,30 @@ class ExerciseActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionF
         // authorization
         // dialog is displayed to the user.
         try {
-            result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION)
+            result.startResolutionForResult(this, REQ_RESOLUTION)
         } catch (e: SendIntentException) {
-            Log.e(TAG, "Exception while starting resolution activity", e)
+            Log.e("GDManagerNew", "start resolution for result exception", e)
         }
 
     }
 
+
+    // 연결됐을때 콜백되는 함수
     override fun onConnected(connectionHint: Bundle?) {
-        Log.i(TAG, "API client connected.")
-        if (mBitmapToSave == null) {
+        Log.i("GDManagerNew", "연결됨")
+        if (myBitmapToSave == null) {
             // This activity has no UI of its own. Just start the camera.
             startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE),
-                    REQUEST_CODE_CAPTURE_IMAGE)
+                    REQ_CAPTURE_IMAGE)
             return
         }
         saveFileToDrive()
     }
 
+    // 연결 suspend 됐을 때 콜백되는 함수
     override fun onConnectionSuspended(cause: Int) {
-        Log.i(TAG, "GoogleApiClient connection suspended")
+        Log.i("GDManagerNew", "connectionSuspend")
     }
 
-    companion object {
 
-        private val TAG = "drive-quickstart"
-        private val REQUEST_CODE_CAPTURE_IMAGE = 1
-        private val REQUEST_CODE_CREATOR = 2
-        private val REQUEST_CODE_RESOLUTION = 3
-    }
 }
-*/
-
-package com.example.android.eyebody
-
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-
-
-/*
-도장 찍는 캘린더(운동기록)
-custom calendar로 UI 재구성
-캘린더는 주요 기능이 아닌데, 커스텀 캘린더 만들기는 쉽지 않아보임
-
-꼭 캘린더를 구현할 필요는 없고, 적당히 운동기록 기능을 만들면 됨
- */
-
-class ExerciseActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_exercise)
-    }
-}
-

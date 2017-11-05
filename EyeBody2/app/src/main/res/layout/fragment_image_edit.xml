@@ -6,7 +6,10 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/asdf"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:text="이미지 편집 뿌엥"/>
+
 
 </FrameLayout>
