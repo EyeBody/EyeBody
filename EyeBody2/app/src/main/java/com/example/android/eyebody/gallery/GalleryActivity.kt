@@ -43,6 +43,11 @@ class GalleryActivity : AppCompatActivity() {
 
         }
 
+        //뷰가 그려지기 전이라서 width, height를 추정해서 가져옴
+        selectedImage_gallery.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        var measuredWidth = selectedImage_gallery.getMeasuredWidth();
+        var measuredHeight = selectedImage_gallery.getMeasuredHeight();
+
         //이미지 불러오기
         var state: String = Environment.getExternalStorageState()   //외부저장소(SD카드)가 마운트되었는지 확인
         if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -64,7 +69,7 @@ class GalleryActivity : AppCompatActivity() {
             }
 
             if(photoList.size != 0){    //이미지가 하나도 없는 경우에는 selectedImage를 세팅하지 않음
-                selectedImage_gallery.setImageBitmap(photoList[0].getImage())
+                selectedImage_gallery.setImageBitmap(photoList[0].getImage(measuredWidth, measuredHeight))
                 selectedImage_gallery.setTag(0)
             }
             if(photoList.size > 1){ //이미지가 2개 이상일 때 오른쪽 버튼 보이기
@@ -87,7 +92,7 @@ class GalleryActivity : AppCompatActivity() {
                 leftButton_gallery.visibility = View.INVISIBLE
             }
 
-            selectedImage_gallery.setImageBitmap(photoList[prePosition].getImage())
+            selectedImage_gallery.setImageBitmap(photoList[prePosition].getImage(measuredWidth, measuredHeight))
             selectedImage_gallery.setTag(prePosition)
         }
 
@@ -99,7 +104,7 @@ class GalleryActivity : AppCompatActivity() {
                 rightButton_gallery.visibility = View.INVISIBLE
             }
 
-            selectedImage_gallery.setImageBitmap(photoList[nextPosition].getImage())
+            selectedImage_gallery.setImageBitmap(photoList[nextPosition].getImage(measuredWidth, measuredHeight))
             selectedImage_gallery.setTag(nextPosition)
         }
     }
@@ -171,6 +176,14 @@ class GalleryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onStart() {
+        super.onStart()
+        //TODO 비트맵 메모리 반환: 이미지 다시 불러오기
+    }
+    override fun onStop() {
+        super.onStop()
+        //TODO 비트맵 메모리 반환: 하드웨어 가속 끄고 비트맵 반환
+    }
     fun assetsToExternalStorage() {
         //assets에 있는 파일을 외부저장소로 복사(테스트용)
         for (i in 1..4) {
