@@ -41,6 +41,7 @@ class ImageEditFragment : Fragment() {
 
         imageIndexTextView.text = "1/" + selected.size
 
+        //TODO 버튼 빠르게 누르면 OutOfIndex 에러 발생
         leftButton_edit.setOnClickListener {
             rightButton_edit.visibility = View.VISIBLE
 

@@ -43,7 +43,7 @@ class GalleryActivity : AppCompatActivity() {
 
         }
 
-        //뷰가 그려지기 전이라서 width, height를 추정해서 가져옴
+        //(이미지 리사이징)뷰가 그려지기 전이라서 width, height를 측정해서 가져옴
         selectedImage_gallery.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         var measuredWidth = selectedImage_gallery.getMeasuredWidth();
         var measuredHeight = selectedImage_gallery.getMeasuredHeight();
