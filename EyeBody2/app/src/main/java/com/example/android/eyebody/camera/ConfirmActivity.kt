@@ -1,10 +1,14 @@
 package com.example.android.eyebody.camera
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.widget.ImageView
 import android.widget.Toast
 import com.example.android.eyebody.MainActivity
 import com.example.android.eyebody.R
@@ -27,13 +31,15 @@ class ConfirmActivity : AppCompatActivity() {
 
     //찍은 이미지를 화면에 뿌려주는 역할
     private fun showImage() {
-        var intent = intent
+        var intent=intent
         var frontImageUri = intent.getStringExtra("frontUri")//front 이미지 uri 받아옴
         var sideImageUri = intent.getStringExtra("sideUri")//side 이미지 uri
         frontFileName = intent.extras.getString("frontName")//front 이미지 파일명
         sideFileName = intent.extras.getString("sideName")//side 이미지 파일명
         var sideImage = Uri.parse(sideImageUri)
         var frontImage = Uri.parse(frontImageUri)
+
+
         image_front.setImageURI(frontImage)
         image_side.setImageURI(sideImage) //이미지 두개 imageview에 맵핑함
     }
@@ -91,6 +97,32 @@ class ConfirmActivity : AppCompatActivity() {
             var stickerIntent=Intent(this,StickerActivity::class.java)
             startActivity(stickerIntent)
         }
+    }
+    /*
+    override fun onStop()
+    {
+        image_front.setImageDrawable(null)
+        image_side.setImageDrawable(null)
+        super.onStop()
+    }*/
+   override fun onDestroy() {
+        recycleBitmap(image_front)
+        recycleBitmap(image_side)
+
+        super.onDestroy()
+    }
+    private fun recycleBitmap(iv: ImageView){
+        val d: Drawable =iv.drawable
+        if(d is BitmapDrawable){
+            var b: Bitmap = d.bitmap
+            b?.recycle()
+        }
+        d.callback=null
+    }//oom 해결
+
+    override fun onBackPressed() {
+        goCameraActivity()
+        super.onBackPressed()
     }
 }
 

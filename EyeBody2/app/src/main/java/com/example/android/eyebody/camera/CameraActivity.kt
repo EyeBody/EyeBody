@@ -1,11 +1,15 @@
 package com.example.android.eyebody.camera
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.graphics.PixelFormat
 import android.hardware.Camera
 import android.hardware.Camera.PictureCallback
-import android.hardware.Camera.ShutterCallback
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +21,7 @@ import android.view.ViewManager
 import android.widget.Toast
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.activity_camera.*
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -29,7 +34,7 @@ import java.util.*
  */
 class CameraActivity : Activity(), SurfaceHolder.Callback {
     var TAG: String = "CameraActivity"
-    private var rootPath: String? = null
+    private var rootPath: String =""
     private var surfaceHolder: SurfaceHolder? = null
     private var camera: Camera? = null
     private var previewing: Boolean = false
@@ -41,7 +46,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     private var frontImageName: String? = null
     private var sideImageName: String? = null
     private var controlInflater: LayoutInflater? = null
-    private var viewControl: View ?=null
+    private var viewControl: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,10 +83,16 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         this.addContentView(viewControl, layoutParamsControl)
     }//이미지 가이드 변경 함수
 
+    private fun mute() {
+        val mgr: AudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true)
+    }//테스트용 소리 없애기 기능
+
     private fun shutterButtonClicked() {
         btn_shutter.setOnClickListener {
             try {
-                camera?.takePicture(shutterCallback, rawCallback, jpegCallback)
+                mute()
+                camera?.takePicture(null, null, jpegCallback)
             } catch (e: RuntimeException) {
                 Log.d(TAG, "take picture failed")
             }
@@ -104,27 +115,49 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         file.mkdirs()
     }
 
-    //TODO : 카메라 전후면 변경 토글키를 넣어야함
-    private var shutterCallback = ShutterCallback {
-        Log.d(TAG, "onShutter'd")
-        Toast.makeText(baseContext, "shutter Clicked", Toast.LENGTH_SHORT)
+    /*
+        //TODO : 카메라 전후면 변경 토글키를 넣어야함
+        private var shutterCallback = ShutterCallback {
+            Log.d(TAG, "onShutter'd")
+            Toast.makeText(baseContext, "shutter Clicked", Toast.LENGTH_SHORT)
+        }
+
+        private var rawCallback = PictureCallback { bytes: ByteArray?, camera: Camera? ->
+            //mute()
+            Log.d(TAG, "onPictureTaken-raw")
+        }*/
+    private fun byteArrayToBitmap(bytes: ByteArray?): Bitmap {
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes!!.size)
     }
 
-    private var rawCallback = PictureCallback { bytes: ByteArray?, camera: Camera? ->
-        Log.d(TAG, "onPictureTaken-raw")
+    private fun BitmapToByteArray(bitmap: Bitmap): ByteArray? {
+        rotateBitmap(bitmap)
+        var stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+        return stream?.toByteArray()
+    }
+
+    private fun rotateBitmap(bitmap: Bitmap): Bitmap {
+        val width = bitmap.width
+        val height = bitmap.height
+
+        var matrix = Matrix()
+        matrix.postRotate(90.toFloat())
+
+        return Bitmap.createBitmap(bitmap,0,0,width,height,matrix,true)
     }
 
     //TODO : 사진 저장시 용량이 터질 경우 예외처리.
     private var jpegCallback = PictureCallback { bytes: ByteArray?, camera: Camera? ->
         makeFolder()
         Toast.makeText(baseContext, "make file success", Toast.LENGTH_SHORT)
-        showPreview()//이미지 프리뷰실행
+        //showPreview()//이미지 프리뷰실행
         changeImage()//가이드 이미지 변경
         //TODO : 여기에 preview 들어가야함
         setTextView()//위 문구 변경
         var timeStamp: String = java.text.SimpleDateFormat("yyyyMMddHHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
-
-        var fileName: String? = null//파일 이름 설정
+        val photo = BitmapToByteArray(byteArrayToBitmap(bytes))
+        var fileName: String//파일 이름 설정
 
         if (count == 0) {
             fileName = String.format("front_$timeStamp.jpg")
@@ -137,11 +170,10 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         }
         var path: String = rootPath + "/" + fileName
 
-
         var file = File(path)
         try {
             var fos = FileOutputStream(file)
-            fos.write(bytes)
+            fos.write(photo)
             fos.flush()
             fos.close()
         } catch (e: Exception) {
@@ -154,16 +186,13 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         sendBroadcast(intent)
         count++
         if (count == 2) {
-            sideImage = bytes
+            sideImage = photo
             count = 0
             goConfirmActivity()
         } else {
-            frontImage = bytes
+            frontImage = photo
             camera?.startPreview()
         }
-    }
-    private fun showPreview(){
-        image_preview.setImageURI(frontImageUri)
     }
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
@@ -184,6 +213,8 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         camera = Camera.open()
+        camera?.setDisplayOrientation(90)
+        camera?.parameters?.setPictureSize(320, 480)
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {

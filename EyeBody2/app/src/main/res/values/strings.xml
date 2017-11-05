@@ -13,8 +13,11 @@
     <string name="sharedPreference_default_hashedPW">none</string>
     <string name="sharedPreference_default_targetDate">none</string>
 
+
     <string name="collage">콜라주</string>
+    <string name="saveImage">사진 저장</string>
     <string name="share">공유하기</string>
+    <string name="sticker">스티커 붙이기</string>
     <string name="googleDrive_manualSave">Google 수동 저장</string>
     <string name="googleDrive_manualLoad">Google 수동 불러오기</string>
     <string name="googleDrive_do_signIn">Google 로그인</string>
