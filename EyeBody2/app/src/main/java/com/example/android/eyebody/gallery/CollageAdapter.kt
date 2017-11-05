@@ -29,27 +29,16 @@ class CollageAdapter (var context: Context, var photoList: ArrayList<Photo>, var
     class Item(itemView: View) : RecyclerView.ViewHolder(itemView) {
         //ImageSelectFragment에서 데이터 바인딩
         fun bindData(photo: Photo, pos: Int, selectedPhotoList: ArrayList<Int>, fragment: ImageSelectFragment) {
-            itemView.imageView.setImageBitmap(photo.getImage())
+            itemView.imageView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            var measuredWidth = itemView.imageView.getMeasuredWidth();
+            var measuredHeight = itemView.imageView.getMeasuredHeight();
+
+            itemView.imageView.setImageBitmap(photo.getImage(measuredWidth, measuredHeight))
             itemView.date.text = photo.getDate()
+            fragment.setSelected(itemView, pos, selectedPhotoList.contains(pos))
 
             itemView.setOnClickListener{
-                itemView.isSelected = !itemView.isSelected
-
-                if(itemView.isSelected){
-                    itemView.setBackgroundColor(Color.BLUE) //selectedPhotoList의 size로 순서 알 수 있음
-                    selectedPhotoList.add(pos)
-
-                    if(selectedPhotoList.size == 1){    //선택한 이미지가 하나 이상일 때 이미지편집 메뉴 아이콘 보여주기
-                        fragment.actionEditImage_setVisible(true)
-                    }
-                }else{
-                    itemView.setBackgroundColor(Color.TRANSPARENT)
-                    selectedPhotoList.remove(pos)
-
-                    if(selectedPhotoList.size == 0){    //선택한 이미지가 하나도 없을 때 이미지편집 메뉴 아이콘 숨기기
-                        fragment.actionEditImage_setVisible(false)
-                    }
-                }
+                fragment.setSelected(itemView, pos, !selectedPhotoList.contains(pos))   //없으면(false) 추가해줌(true)
             }
         }
     }

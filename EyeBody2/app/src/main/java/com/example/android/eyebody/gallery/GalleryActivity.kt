@@ -1,7 +1,6 @@
-﻿package com.example.android.eyebody.gallery
+package com.example.android.eyebody.gallery
 
 import android.content.Intent
-import android.content.IntentSender
 import android.content.res.AssetManager
 import android.os.Bundle
 import android.os.Environment
@@ -10,11 +9,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import com.example.android.eyebody.R
+import android.widget.Toast
 import com.example.android.eyebody.googleDrive.GoogleDriveManager
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.drive.Drive
 import kotlinx.android.synthetic.main.activity_gallery.*
 import java.io.File
 import java.io.FileOutputStream
@@ -24,7 +21,6 @@ import java.io.OutputStream
 class GalleryActivity : AppCompatActivity() {
     var photoList = ArrayList<Photo>()
     var googleDriveManager: GoogleDriveManager? = null
-
     var togleItem : MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +43,11 @@ class GalleryActivity : AppCompatActivity() {
 
         }
 
+        //뷰가 그려지기 전이라서 width, height를 추정해서 가져옴
+        selectedImage_gallery.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        var measuredWidth = selectedImage_gallery.getMeasuredWidth();
+        var measuredHeight = selectedImage_gallery.getMeasuredHeight();
+
         //이미지 불러오기
         var state: String = Environment.getExternalStorageState()   //외부저장소(SD카드)가 마운트되었는지 확인
         if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -67,17 +68,45 @@ class GalleryActivity : AppCompatActivity() {
                 photoList.add(Photo(f))
             }
 
-            if (photoList.size != 0) {    //이미지가 하나도 없는 경우에는 selectedImage를 세팅하지 않음
-                selectedImage.setImageBitmap(photoList[0].getImage())
-                selectedImage.setTag(0)
+            if(photoList.size != 0){    //이미지가 하나도 없는 경우에는 selectedImage를 세팅하지 않음
+                selectedImage_gallery.setImageBitmap(photoList[0].getImage(measuredWidth, measuredHeight))
+                selectedImage_gallery.setTag(0)
             }
-        } else {
+            if(photoList.size > 1){ //이미지가 2개 이상일 때 오른쪽 버튼 보이기
+                rightButton_gallery.visibility = View.VISIBLE
+            }
+        } else{
             //EXCEPTION 외부저장소가 마운트되지 않아서 파일을 읽고 쓸 수 없음
         }
 
         //RecyclerView
         galleryView.hasFixedSize()
         galleryView.adapter = GalleryAdapter(this, photoList)
+
+        //button onclick listener
+        leftButton_gallery.setOnClickListener {
+            rightButton_gallery.visibility = View.VISIBLE
+
+            var prePosition: Int = (selectedImage_gallery.getTag() as Int) - 1
+            if(prePosition == 0){   //이전 사진이 없는 경우
+                leftButton_gallery.visibility = View.INVISIBLE
+            }
+
+            selectedImage_gallery.setImageBitmap(photoList[prePosition].getImage(measuredWidth, measuredHeight))
+            selectedImage_gallery.setTag(prePosition)
+        }
+
+        rightButton_gallery.setOnClickListener {
+            leftButton_gallery.visibility = View.VISIBLE
+
+            var nextPosition: Int = (selectedImage_gallery.getTag() as Int) + 1
+            if(nextPosition == photoList.size - 1){  //이후 사진이 없는 경우
+                rightButton_gallery.visibility = View.INVISIBLE
+            }
+
+            selectedImage_gallery.setImageBitmap(photoList[nextPosition].getImage(measuredWidth, measuredHeight))
+            selectedImage_gallery.setTag(nextPosition)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -147,26 +176,14 @@ class GalleryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun showPreviousImage(v: View) {
-        try {
-            var prePosition: Int = (selectedImage.getTag() as Int) - 1
-            selectedImage.setImageBitmap(photoList[prePosition].getImage())
-            selectedImage.setTag(prePosition)
-        } catch (e: Exception) {
-            //Toast.makeText(this, "앞이 없음", Toast.LENGTH_SHORT).show()
-        }
+    override fun onStart() {
+        super.onStart()
+        //TODO 비트맵 메모리 반환: 이미지 다시 불러오기
     }
-
-    fun showNextImage(v: View) {
-        try {
-            var nextPosition: Int = (selectedImage.getTag() as Int) + 1
-            selectedImage.setImageBitmap(photoList[nextPosition].getImage())
-            selectedImage.setTag(nextPosition)
-        } catch (e: Exception) {
-            //Toast.makeText(this, "뒤가 없음", Toast.LENGTH_SHORT).show()
-        }
+    override fun onStop() {
+        super.onStop()
+        //TODO 비트맵 메모리 반환: 하드웨어 가속 끄고 비트맵 반환
     }
-
     fun assetsToExternalStorage() {
         //assets에 있는 파일을 외부저장소로 복사(테스트용)
         for (i in 1..4) {
