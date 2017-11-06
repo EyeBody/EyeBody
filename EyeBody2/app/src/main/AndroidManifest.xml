@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -66,12 +66,7 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
-        <receiver android:name=".SMSReceiver">
-            <intent-filter >
-                <!-- 문자를 받아올 수 있게 intent-filter 추가 -->
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
-            </intent-filter>
-        </receiver>
+
         <activity
             android:name=".gallery.CollageActivity"
             android:label="@string/collage" />
