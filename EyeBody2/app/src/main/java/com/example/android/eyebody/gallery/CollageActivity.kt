@@ -1,5 +1,7 @@
 package com.example.android.eyebody.gallery
 
+import com.example.android.eyebody.gallery.ShareKakao
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.example.android.eyebody.R
@@ -46,34 +48,10 @@ class CollageActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> {
-                shareKakao()
+                ShareKakao(this.baseContext).shareKakao()
             }
         }
         return super.onOptionsItemSelected(item)
     }
-    private fun shareKakao()
-    {
-        try{
-            val kakaoLink:KakaoLink = KakaoLink.getKakaoLink(this)
-            val kakaoBuilder: KakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder()
-
-            /*메시지 추가*/
-            kakaoBuilder.addText("친구야 같이 다이어트 하자!")
-
-            /*이미지 가로/세로 사이즈는 80px 보다 커야하며, 이미지 용량은 500kb 이하로 제한된다.*/
-            var url:String  = "https://cdn.iconscout.com/public/images/icon/premium/png-512/dumbbells-weight-lifting-gym-fitness-3250aa06165832ea-512x512.png"
-            kakaoBuilder.addImage(url, 160, 160)
-
-            /*앱 실행버튼 추가*/
-            kakaoBuilder.addAppButton("앱 실행 혹은 다운로드")
-
-            /*메시지 발송*/
-            kakaoLink.sendMessage(kakaoBuilder, this)
-
-        }catch (e:Exception)
-        {
-            e.printStackTrace()
-        }
-    }
-
 }
+
