@@ -193,10 +193,8 @@ class ExerciseActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionF
 */
 
 package com.example.android.eyebody
-
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-
 
 /*
 도장 찍는 캘린더(운동기록)
@@ -208,9 +206,15 @@ custom calendar로 UI 재구성
 
 class ExerciseActivity : AppCompatActivity() {
 
+    //var mDbOpenHelper: DbOpenHelper?=null
+    //var
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercise)
+        //setLayout()
+
+
+
     }
 }
 
