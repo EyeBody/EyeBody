@@ -19,22 +19,15 @@ import com.example.android.eyebody.gallery.GalleryActivity
 import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.support.v4.app.ActivityCompat.requestPermissions
-
-
 
 class MainActivity : PermissionsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        checkSMSPermission()
         //TODO : 문자내역을 가져오기 위한 통화내역 읽어오기 read_SMS 퍼미션.
 
         //TODO : 문자내역을 가져오기 위한 통화내역 읽어오기 read_SMS 퍼미션.
-
 
         fun onCreateOptionsMenu(menu: Menu): Boolean {
             super.onCreateOptionsMenu(menu)
@@ -67,12 +60,17 @@ class MainActivity : PermissionsActivity() {
         /* Listener (이벤트 리스너)
         클릭하면 반응
          */
+        fun checkCAMERAPermission(): Boolean {
+            var result: Int = ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.CAMERA)
+            return result == PackageManager.PERMISSION_GRANTED
+        }
         btn_activity_photo.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!checkCAMERAPermission()) {
                     requestPermissions(arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE), object : PermissionCallBack {
                         override fun permissionGranted() {
                             super.permissionGranted()
+
                             startActivity(cameraPage)
                             Log.v("Camera permissions", "Granted")
                         }
@@ -85,6 +83,8 @@ class MainActivity : PermissionsActivity() {
                 } else startActivity(cameraPage)
             } else startActivity(cameraPage)
         }
+
+
 
         btn_activity_gallery.setOnClickListener {
             val sharedPref: SharedPreferences = getSharedPreferences(
@@ -109,34 +109,8 @@ class MainActivity : PermissionsActivity() {
         btn_activity_func2.setOnClickListener {
             startActivity(settingPage)
         }
-    }
-    private fun checkSMSPReadPermission(): Boolean {
-        var result: Int = ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.READ_SMS)
-        return result == PackageManager.PERMISSION_GRANTED
-    }
-    private fun checkSMSReceivePermission():Boolean{
-        var result:Int=ContextCompat.checkSelfPermission(applicationContext,android.Manifest.permission.RECEIVE_SMS)
-        return result==PackageManager.PERMISSION_GRANTED
-    }
-    private fun checkCAMERAPermission(): Boolean {
-        var result: Int = ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.CAMERA)
-        return result == PackageManager.PERMISSION_GRANTED
-    }
-    private fun checkSMSPermission(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!checkSMSPReadPermission() || !checkSMSReceivePermission()) {
-                requestPermissions(arrayOf(android.Manifest.permission.READ_SMS, android.Manifest.permission.RECEIVE_SMS), object : PermissionCallBack {
-                    override fun permissionGranted() {
-                        super.permissionGranted()
-                    }
-                    override fun permissionDenied() {
-                        super.permissionDenied()
-                    }
-                })
-            }
-        }
-    }
 
+    }
 
     /* onCreateOptionMenu
     액션바에 옵션메뉴를 띄우게 함. xml 긁어서

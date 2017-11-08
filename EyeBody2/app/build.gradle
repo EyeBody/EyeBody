@@ -43,4 +43,3 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
-apply plugin: 'com.google.gms.google-services'
