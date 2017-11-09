@@ -34,7 +34,7 @@ class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
             var measuredWidth = itemView.imageView.getMeasuredWidth();
             var measuredHeight = itemView.imageView.getMeasuredHeight();
 
-            itemView.imageView.setImageBitmap(photo.getImage(measuredWidth, measuredHeight))
+            itemView.imageView.setImageBitmap(photo.getBitmap(measuredWidth, measuredHeight))
             itemView.date.text = photo.getMemo()
 
             itemView.setOnClickListener{
@@ -43,7 +43,7 @@ class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
                 var measuredWidth = itemView.imageView.getMeasuredWidth();
                 var measuredHeight = itemView.imageView.getMeasuredHeight();
 
-                imgView.setImageBitmap(photo.getImage(measuredWidth, measuredHeight))
+                imgView.setImageBitmap(photo.getBitmap(measuredWidth, measuredHeight))
                 imgView.setTag(pos)
 
                 //좌우 넘기기 버튼 visibility

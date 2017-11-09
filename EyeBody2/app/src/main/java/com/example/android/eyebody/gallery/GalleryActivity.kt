@@ -45,8 +45,8 @@ class GalleryActivity : AppCompatActivity() {
 
         //(이미지 리사이징)뷰가 그려지기 전이라서 width, height를 측정해서 가져옴
         selectedImage_gallery.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        var measuredWidth = selectedImage_gallery.getMeasuredWidth();
-        var measuredHeight = selectedImage_gallery.getMeasuredHeight();
+        var measuredWidth = selectedImage_gallery.measuredWidth
+        var measuredHeight = selectedImage_gallery.measuredHeight
 
         //이미지 불러오기
         var state: String = Environment.getExternalStorageState()   //외부저장소(SD카드)가 마운트되었는지 확인
@@ -69,7 +69,7 @@ class GalleryActivity : AppCompatActivity() {
             }
 
             if(photoList.size != 0){    //이미지가 하나도 없는 경우에는 selectedImage를 세팅하지 않음
-                selectedImage_gallery.setImageBitmap(photoList[0].getImage(measuredWidth, measuredHeight))
+                selectedImage_gallery.setImageBitmap(photoList[0].getBitmap(measuredWidth, measuredHeight))
                 selectedImage_gallery.setTag(0)
             }
             if(photoList.size > 1){ //이미지가 2개 이상일 때 오른쪽 버튼 보이기
@@ -92,7 +92,7 @@ class GalleryActivity : AppCompatActivity() {
                 leftButton_gallery.visibility = View.INVISIBLE
             }
 
-            selectedImage_gallery.setImageBitmap(photoList[prePosition].getImage(measuredWidth, measuredHeight))
+            selectedImage_gallery.setImageBitmap(photoList[prePosition].getBitmap(measuredWidth, measuredHeight))
             selectedImage_gallery.setTag(prePosition)
         }
 
@@ -104,7 +104,7 @@ class GalleryActivity : AppCompatActivity() {
                 rightButton_gallery.visibility = View.INVISIBLE
             }
 
-            selectedImage_gallery.setImageBitmap(photoList[nextPosition].getImage(measuredWidth, measuredHeight))
+            selectedImage_gallery.setImageBitmap(photoList[nextPosition].getBitmap(measuredWidth, measuredHeight))
             selectedImage_gallery.setTag(nextPosition)
         }
     }

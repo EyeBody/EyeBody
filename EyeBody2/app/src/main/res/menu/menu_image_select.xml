@@ -8,7 +8,7 @@
     <item
         android:id="@+id/action_edit_image"
         android:icon="@drawable/icon_magic"
-        android:title="@string/editImage"
+        android:title="@string/edit_image"
         app:showAsAction="always"
         android:visible="false" />
 

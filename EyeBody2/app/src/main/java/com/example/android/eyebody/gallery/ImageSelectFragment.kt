@@ -43,10 +43,6 @@ class ImageSelectFragment : Fragment() {
             R.id.action_edit_image -> {
                 //ImageEditFragment로 교체
                 var imageEditFragment = ImageEditFragment()
-                var bundle = Bundle()
-
-                bundle.putIntegerArrayList("selectedPhotoList", collage.selectedPhotoList)
-                imageEditFragment.arguments = bundle
 
                 fragmentManager
                         .beginTransaction()
@@ -75,7 +71,7 @@ class ImageSelectFragment : Fragment() {
                 try{
                     menu.findItem(R.id.action_edit_image).setVisible(false)
                 } catch (e: Exception) {
-                    //메뉴가 초기화 되기 전 리스트를 먼저 초기화 해서 kotlin.UninitializedPropertyAccessException: lateinit property menu has not been initialized 오류 발생
+                    //메뉴가 null일 때
                 }
             }
         }
