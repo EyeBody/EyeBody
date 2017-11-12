@@ -4,10 +4,14 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 
-class DbOpenHelper(private val mCtx: Context) {
+class DbOpenHelper() {
+    private val DATABASE_NAME:String="addressbook.db"
     private var mDBHelper: DatabaseHelper? = null
+    private var mCtx:Context?=null
+    private val DATABASE_VERSION=1
+    var mDB:SQLiteDatabase?=null
 
-    private inner class DatabaseHelper// 생성자
+    private inner class DatabaseHelper
     (context: Context, name: String,
      factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, name, factory, version) {
 
@@ -25,13 +29,13 @@ class DbOpenHelper(private val mCtx: Context) {
 
     @Throws(SQLException::class)
     fun open(): DbOpenHelper {
-        mDBHelper = DatabaseHelper(mCtx, DATABASE_NAME, null, DATABASE_VERSION)
+        mDBHelper = DatabaseHelper(mCtx as Context, DATABASE_NAME, null, DATABASE_VERSION)
         mDB = mDBHelper!!.writableDatabase
         return this
     }
 
     fun close() {
-        mDB.close()
+        mDB?.close()
     }
 
     companion object {

@@ -44,7 +44,6 @@ class GalleryActivity : AppCompatActivity() {
                     }
                 }
             }
-
         }
 
         //이미지 불러오기
