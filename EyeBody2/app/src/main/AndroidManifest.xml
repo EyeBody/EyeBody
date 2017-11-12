@@ -38,9 +38,6 @@
         <activity
             android:name=".ExerciseActivity"
             android:label="@string/category_exercise" />
-        <activity
-            android:name=".SettingActivity"
-            android:label="@string/category_setting" />
 
         <activity
             android:name=".init.InitActivity"
@@ -67,7 +64,13 @@
         <activity
             android:name=".gallery.CollageActivity"
             android:label="@string/collage" />
-        <activity android:name=".camera.StickerActivity"></activity>
+        <activity android:name=".camera.StickerActivity" />
+        <activity
+            android:name=".SettingActivity"
+            android:windowSoftInputMode="stateAlwaysVisible"
+            android:label="@string/category_setting" />
+        <activity
+            android:name=".management.ManagementActivity"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

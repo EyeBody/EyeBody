@@ -108,6 +108,7 @@ class MainActivity : PermissionsActivity() {
 
         btn_activity_func2.setOnClickListener {
             startActivity(settingPage)
+            finish()
         }
 
     }

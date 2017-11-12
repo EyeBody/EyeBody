@@ -26,4 +26,7 @@
     <string name="editImage">이미지 편집하기</string>
     <string name="category_init">눈바디 시작하기</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

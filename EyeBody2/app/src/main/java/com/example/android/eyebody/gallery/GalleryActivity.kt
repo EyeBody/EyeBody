@@ -1,7 +1,6 @@
 ﻿package com.example.android.eyebody.gallery
 
 import android.content.Intent
-import android.content.IntentSender
 import android.content.res.AssetManager
 import android.os.Bundle
 import android.os.Environment
@@ -13,8 +12,6 @@ import android.view.View
 import android.widget.Toast
 import com.example.android.eyebody.R
 import com.example.android.eyebody.googleDrive.GoogleDriveManager
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.drive.Drive
 import kotlinx.android.synthetic.main.activity_gallery.*
 import java.io.File
 import java.io.FileOutputStream
@@ -25,27 +22,23 @@ class GalleryActivity : AppCompatActivity() {
     private val TAG = "mydbg_gallery"
     var photoList = ArrayList<Photo>()
     var googleDriveManager: GoogleDriveManager? = null
-
-    var togleItem: MenuItem? = null
+    var toggleItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
         googleDriveManager = object : GoogleDriveManager(baseContext, this@GalleryActivity) {
-
             override fun onConnectionStatusChanged() {
-                super.onConnectionStatusChanged()
-                if (togleItem != null) {
+                if (toggleItem != null) {
                     if (googleDriveManager?.checkConnection() == true) {
-                        togleItem?.title = getString(R.string.googleDrive_do_signOut)
+                        toggleItem?.title = getString(R.string.googleDrive_do_signOut)
                         Toast.makeText(activity, "connect", Toast.LENGTH_LONG).show()
                     } else {
-                        togleItem?.title = getString(R.string.googleDrive_do_signIn)
+                        toggleItem?.title = getString(R.string.googleDrive_do_signIn)
                         Toast.makeText(activity, "connect xxx", Toast.LENGTH_LONG).show()
                     }
                 }
             }
-
         }
 
         //이미지 불러오기
@@ -105,7 +98,7 @@ class GalleryActivity : AppCompatActivity() {
             }
 
             R.id.action_googleDrive_signInOut_togle -> {//구글드라이브 로그인 토글
-                togleItem = item
+                toggleItem = item
                 when (googleDriveManager?.checkConnection()) {
                     true -> {
                         googleDriveManager?.signOut()
@@ -117,6 +110,23 @@ class GalleryActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            /*
+            TODO 와이파이가 되있는지 안되어있는지 확인 여부
+                > wifi / lte
+            TODO 자동저장을 위한 코딩
+                > 자동 저장 on 하면 바로 하는 함수 {
+                        내부Query 결과와 현재 리소스파일 전체가 일치하는지 확인
+                        일치하지 않는다면 그 차이를 가지고 update(upload and download)
+                    }
+                = 접속할 때 마다 동기화가 되어있는지 파악 {
+                        내부Query 결과와 현재 리소스파일 전체가 일치하는지 확인
+                        일치하지 않는다면 그 차이를 가지고 update
+                    }
+                > 촬영해서 저장할 때 마다 저장 / 선택해서 삭제할 때 마다 삭제 {
+                        단일 파일 저장/불러오기 함수 만들기
+                    }
+             */
 
             R.id.action_googleDrive_manualSave -> { //구글드라이브 수동 저장
                 object : Thread() {
@@ -133,23 +143,6 @@ class GalleryActivity : AppCompatActivity() {
                     }
                 }.start()
 
-                /*
-                intentsender 방식으로 업로드
-
-                val intentsender = googleDriveManager?.upload("${getExternalFilesDir(null)}/gallery_body/front_week4.jpg")
-                Log.i(TAG,"${getExternalFilesDir(null)}/gallery_body/front_week4.jpg upload request")
-                if (intentsender != null) {
-                    Log.d(TAG,"$intentsender")
-                    try {
-                        startIntentSenderForResult(intentsender, 123, null, 0, 0, 0)
-                    } catch(e : IntentSender.SendIntentException){
-                        e.printStackTrace()
-                    }
-                    Log.d(TAG,"upload request failed")
-                } else {
-                    Log.d(TAG, "save file ok")
-                }
-                */
             }
 
             R.id.action_googleDrive_manualLoad -> { //구글드라이브 수동 불러오기
