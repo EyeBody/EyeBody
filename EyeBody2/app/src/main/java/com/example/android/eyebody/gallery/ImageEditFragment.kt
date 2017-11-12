@@ -7,76 +7,42 @@ import android.view.*
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.fragment_image_edit.*
 
-//https://github.com/niravkalola/Android-StickerView
 class ImageEditFragment : Fragment() {
     lateinit var photoList: ArrayList<Photo>
     lateinit var selected: ArrayList<Int>
     lateinit var collage: CollageActivity
+    var imgViewWidth: Int = 0
+    var imgViewHeight: Int = 0
+    var currentImageIndex: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         collage = activity as CollageActivity
+        photoList = collage.photoList
+        selected = collage.selectedPhotoList
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        var view = inflater.inflate(R.layout.fragment_image_edit, container, false)
-        photoList = collage.photoList
-        selected = collage.selectedPhotoList
-
-        return view
+        return inflater.inflate(R.layout.fragment_image_edit, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //selectedImageView 가로 세로 크기
         selectedImage_edit.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        var measuredWidth = selectedImage_edit.getMeasuredWidth();
-        var measuredHeight = selectedImage_edit.getMeasuredHeight();
+        imgViewWidth = selectedImage_edit.measuredWidth
+        imgViewHeight = selectedImage_edit.measuredHeight
 
-        selectedImage_edit.setImageBitmap(photoList[selected[0]].getBitmap(measuredWidth, measuredHeight))
-        selectedImage_edit.setTag(0)
-
-        if(selected.size > 1){    //사진이 하나 이상인 경우
-            rightButton_edit.visibility = View.VISIBLE
-        }
-
-        imageIndexTextView.text = "1/" + selected.size
+        setImage(currentImageIndex) //이미지 편집(크롭, 스티커)하다가 다시 돌아왔을 때 해당 이미지 바로 보여주기, 초기값 0
 
         leftButton_edit.setOnClickListener {
-            try {
-                rightButton_edit.visibility = View.VISIBLE
-
-                var prePosition: Int = (selectedImage_edit.getTag() as Int) - 1
-                if (prePosition == 0) {   //이전 사진이 없는 경우
-                    leftButton_edit.visibility = View.INVISIBLE
-                }
-
-                selectedImage_edit.setImageBitmap(photoList[selected[prePosition]].getBitmap(measuredWidth, measuredHeight))
-                selectedImage_edit.setTag(prePosition)
-
-                imageIndexTextView.text = (prePosition + 1).toString() + "/" + selected.size
-            } catch (e: Exception){
-                Log.e("ImageEditFragment", "out of index")  //T버튼 빠르게 누르면 OutOfIndex 에러 발생
-            }
+            setImage(currentImageIndex - 1)
         }
 
         rightButton_edit.setOnClickListener {
-            try {
-                leftButton_edit.visibility = View.VISIBLE
-
-                var nextPosition: Int = (selectedImage_edit.getTag() as Int) + 1
-                if (nextPosition == selected.size - 1) {  //이후 사진이 없는 경우
-                    rightButton_edit.visibility = View.INVISIBLE
-                }
-
-                selectedImage_edit.setImageBitmap(photoList[selected[nextPosition]].getBitmap(measuredWidth, measuredHeight))
-                selectedImage_edit.setTag(nextPosition)
-
-                imageIndexTextView.text = (nextPosition + 1).toString() + "/" + selected.size
-            } catch (e: Exception){
-                Log.e("ImageEditFragment", "out of index")  //T버튼 빠르게 누르면 OutOfIndex 에러 발생
-
-            }
+            setImage(currentImageIndex + 1)
         }
 
         cropButton.setOnClickListener {
@@ -84,7 +50,7 @@ class ImageEditFragment : Fragment() {
             var imageCropFragment = ImageCropFragment()
             var bundle = Bundle()
 
-            bundle.putInt("idx", selected[selectedImage_edit.getTag() as Int])
+            bundle.putInt("idx", selected[currentImageIndex])
             imageCropFragment.arguments = bundle
 
             fragmentManager
@@ -97,13 +63,14 @@ class ImageEditFragment : Fragment() {
         rotationButton.setOnClickListener {
             //TODO 이미지뷰만 회전하고 나중에 저장
             //selectedImage_edit.setRotation((selectedImage_edit.getRotation() + 90) % 360);
-            var idx: Int = selected[selectedImage_edit.getTag() as Int]
+            var idx: Int = selected[currentImageIndex]
             photoList[idx].rotationImage(90f)
-            selectedImage_edit.setImageBitmap(photoList[idx].getBitmap(measuredWidth, measuredHeight))
+            selectedImage_edit.setImageBitmap(photoList[idx].getBitmap(imgViewWidth, imgViewHeight))
         }
 
         stickerButton.setOnClickListener {
-
+            //스티커 붙이기
+            //https://github.com/niravkalola/Android-StickerView
         }
     }
 
@@ -116,9 +83,7 @@ class ImageEditFragment : Fragment() {
         when (item.itemId) {
             R.id.action_image_collage -> {
                 //회전 저장
-                for(idx in selected){
-                    //photoList[idx].imageRotation()
-                }
+
                 //ImageCollageFragment로 교체
                 var imageCollageFragment = ImageCollageFragment()
 
@@ -130,5 +95,28 @@ class ImageEditFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun setImage(pos: Int){
+        try {
+            //좌우 넘기기 버튼
+            leftButton_edit.visibility = View.VISIBLE
+            rightButton_edit.visibility = View.VISIBLE
+
+            if (pos == 0) {   //이전 사진이 없는 경우
+                leftButton_edit.visibility = View.INVISIBLE
+            }
+
+            if (pos == selected.size - 1) {  //이후 사진이 없는 경우
+                rightButton_edit.visibility = View.INVISIBLE
+            }
+
+            //이미지와 현재 인덱스 변경
+            selectedImage_edit.setImageBitmap(photoList[selected[pos]].getBitmap(imgViewWidth, imgViewHeight))
+            imageIndexTextView.text = (pos + 1).toString() + "/" + selected.size
+            currentImageIndex = pos
+        } catch (e: Exception){
+            Log.e("ImageEditFragment", "out of index")  //버튼 빠르게 누르면 OutOfIndex 에러 발생
+        }
     }
 }
