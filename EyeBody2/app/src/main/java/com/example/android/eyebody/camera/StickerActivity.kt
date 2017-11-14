@@ -33,6 +33,8 @@ class StickerActivity : AppCompatActivity() {
 
        // var adapter=StickerAdapter(this,0,items)
        // listView?.adapter=adapter
+
+        //
     }
 }
 

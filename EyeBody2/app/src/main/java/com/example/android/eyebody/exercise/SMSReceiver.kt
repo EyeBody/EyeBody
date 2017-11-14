@@ -1,27 +1,29 @@
 package com.example.android.eyebody.exercise
 
+import android.app.Notification
 import android.content.*
-import android.database.Cursor
 import android.os.Build
 import android.provider.Telephony
+import android.support.v4.app.NotificationCompat
 import android.telephony.SmsMessage
 import android.util.Log
+import android.widget.RemoteViews
+import android.content.Context.NOTIFICATION_SERVICE
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.TaskStackBuilder
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import com.example.android.eyebody.MainActivity
+import com.example.android.eyebody.R
+import io.vrinda.kotlinpermissions.DeviceInfo.Companion.getPackageName
+
 
 /**
  * Created by ytw11 on 2017-11-06.
  */
-
 class SMSReceiver : BroadcastReceiver() {
-    private var spentMoney =String()
-
-    //private val mDbOpenHelper: DbOpenHelper? = null
-
-
-    private val mCursor: Cursor? = null
-    private val mInfoClass: InfoClass? = null
-    private val mInfoArray: ArrayList<InfoClass>? = null
-
-    //var spend_menu=String()
+    private var spentMoney = String()
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == ACTION) {
             //Bundle 널 체크
@@ -42,8 +44,9 @@ class SMSReceiver : BroadcastReceiver() {
 
                 if (checkBank(smsMessages[i]?.originatingAddress)) {
                     if (wonFind(smsMessages[i]?.displayMessageBody) != "") {
-                        spentMoney =wonFind(smsMessages[i]?.displayMessageBody)//TODO:어디서 사용했는지 저장
+                        spentMoney = wonFind(smsMessages[i]?.displayMessageBody)//TODO:어디서 사용했는지 저장
                         //spend_menu=placeFind(smsMessages[i]?.displayMessageBody)//TODO:단순 사용 저장 보다는 노티를 날리자.
+
                     }//얼마 썻는지 확인
 
                 }//카드사라는 것을 확인
@@ -57,6 +60,7 @@ class SMSReceiver : BroadcastReceiver() {
             }
         }
     }
+
     /*private fun placeFind(place:String?):String{
         var array: List<String>? = place?.split(" ")
         for (items in array as List<String>) {
@@ -88,4 +92,56 @@ class SMSReceiver : BroadcastReceiver() {
         internal val logTag = "SmsReceiver"
         internal val ACTION = "android.provider.Telephony.SMS_RECEIVED"
     }
+
+    fun notification() {
+        val mBuilder: NotificationCompat.Builder = createNotification()
+
+        var remoteViews: RemoteViews = RemoteViews(getPackageName(), R.layout.custom_notification)
+        remoteViews.setImageViewResource(R.id.img, R.mipmap.ic_launcher)
+        remoteViews.setTextViewText(R.id.title, "Title")
+        remoteViews.setTextViewText(R.id.message, "message")
+
+        mBuilder.setContent(remoteViews)
+        mBuilder.setContentIntent(createPendingIntent())
+
+        val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        mNotificationManager.notify(1, mBuilder.build())
+    }
+
+    fun createPendingIntent(): PendingIntent {
+        var resultIntent: Intent =
+        var stackBuilder: TaskStackBuilder = TaskStackBuilder.create(this)
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent)
+
+        return stackBuilder.getPendingIntent(
+                0,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
+    fun createNotification(): NotificationCompat.Builder
+    {
+        var icon:Bitmap = BitmapFactory . decodeResource (getResources(), R.mipmap.ic_launcher);
+        var builder:NotificationCompat.Builder =  NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(icon)
+                .setContentTitle("StatusBar Title")
+                .setContentText("StatusBar subTitle")
+                .setSmallIcon(R.mipmap.ic_launcher/*스와이프 전 아이콘*/)
+                .setAutoCancel(true)
+                .setWhen(System.currentTimeMillis())
+                .setDefaults(Notification.DEFAULT_ALL)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setCategory(Notification.CATEGORY_MESSAGE)
+                    .setPriority(Notification.PRIORITY_HIGH)
+                    .setVisibility(Notification.VISIBILITY_PUBLIC);
+        }
+        return builder
+    }
+}
+
+
+
+    출처: http://leanq.tistory.com/34 [린큐의 공부한걸 기록하자]
+
 }
