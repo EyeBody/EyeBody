@@ -1,23 +1,14 @@
 package com.example.android.eyebody.exercise
 
-import android.app.Notification
+import android.app.Activity
 import android.content.*
 import android.os.Build
 import android.provider.Telephony
-import android.support.v4.app.NotificationCompat
 import android.telephony.SmsMessage
 import android.util.Log
-import android.widget.RemoteViews
-import android.content.Context.NOTIFICATION_SERVICE
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.TaskStackBuilder
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import com.example.android.eyebody.MainActivity
-import com.example.android.eyebody.R
-import io.vrinda.kotlinpermissions.DeviceInfo.Companion.getPackageName
-
+import android.widget.Toast
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by ytw11 on 2017-11-06.
@@ -25,6 +16,10 @@ import io.vrinda.kotlinpermissions.DeviceInfo.Companion.getPackageName
 class SMSReceiver : BroadcastReceiver() {
     private var spentMoney = String()
     override fun onReceive(context: Context, intent: Intent) {
+        val dbHelper= DbHelper(context,"bill.db",null,1)
+        var now=System.currentTimeMillis()
+        var date= Date(now)
+        val simpleDateFormat=SimpleDateFormat("yyyy년 MM월 dd일")
         if (intent.action == ACTION) {
             //Bundle 널 체크
             val bundle = intent.extras ?: return
@@ -36,43 +31,28 @@ class SMSReceiver : BroadcastReceiver() {
             val smsMessages = arrayOfNulls<SmsMessage>(pdusObj.size)
             for (i in pdusObj.indices) {
                 if (Build.VERSION.SDK_INT >= 19) {
-                    var msgs: Array<SmsMessage> = Telephony.Sms.Intents.getMessagesFromIntent(intent)
-                    smsMessages[i] = msgs[0]
-                } else {
-                    smsMessages[i] = SmsMessage.createFromPdu(pdusObj[i] as ByteArray)
+                    var sms: Array<SmsMessage> = Telephony.Sms.Intents.getMessagesFromIntent(intent)
+                    smsMessages[i] = sms[0]
+                } else smsMessages[i] = SmsMessage.createFromPdu(pdusObj[i] as ByteArray)
+
+                if (!checkBank(smsMessages[i]?.originatingAddress)) {//카드사라는 것을 확인
+                   //if (wonFind(smsMessages[i]?.displayMessageBody) != "") {//얼마 썻는지 확인
+                       spentMoney = wonFind(smsMessages[i]?.displayMessageBody)
+                       var menu="후식"//TODO : 노티피케이션 받아서 저장하는 걸로 하자.
+                       //var price=spentMoney as Int
+                       var price=1000
+                        val activity= NotiActivity()
+                        activity.showBasicNotification()
+                       dbHelper.insert("what the",menu,price)
+                        //TODO:단순 사용 저장 보다는 노티를 날리자.
+                    //}
                 }
-
-                if (checkBank(smsMessages[i]?.originatingAddress)) {
-                    if (wonFind(smsMessages[i]?.displayMessageBody) != "") {
-                        spentMoney = wonFind(smsMessages[i]?.displayMessageBody)//TODO:어디서 사용했는지 저장
-                        //spend_menu=placeFind(smsMessages[i]?.displayMessageBody)//TODO:단순 사용 저장 보다는 노티를 날리자.
-
-                    }//얼마 썻는지 확인
-
-                }//카드사라는 것을 확인
-                /*
-                Log.e(logTag, "NEW SMS " + i + "th")
-                Log.e(logTag, "DisplayOriginatingAddress : " + smsMessages[i]?.displayOriginatingAddress) //문자 발신 번호
-                Log.e(logTag, "DisplayMessageBody : " + smsMessages[i]?.displayMessageBody) //문자 내용
-                Log.e(logTag, "OriginatingAddress : " + smsMessages[i]?.originatingAddress)//문자 발신 번호
-                Log.e(logTag, "MessageBody : " + smsMessages[i]?.messageBody)
-            */
             }
         }
     }
 
-    /*private fun placeFind(place:String?):String{
-        var array: List<String>? = place?.split(" ")
-        for (items in array as List<String>) {
-            Log.e(logTag, "haha : " + items) //문자 내용
-            if (items[items.length - 1] == '원') {
-                return items
-            }
-        }
-        return ""
-    }*/
-    private fun wonFind(price: String?): String {
-        var array: List<String>? = price?.split(" ")
+     private fun wonFind(price: String?): String {
+                    var array: List<String>? = price?.split(" ")
         for (items in array as List<String>) {
             Log.e(logTag, "haha : " + items) //문자 내용
             if (items[items.length - 1] == '원') {
@@ -92,56 +72,4 @@ class SMSReceiver : BroadcastReceiver() {
         internal val logTag = "SmsReceiver"
         internal val ACTION = "android.provider.Telephony.SMS_RECEIVED"
     }
-
-    fun notification() {
-        val mBuilder: NotificationCompat.Builder = createNotification()
-
-        var remoteViews: RemoteViews = RemoteViews(getPackageName(), R.layout.custom_notification)
-        remoteViews.setImageViewResource(R.id.img, R.mipmap.ic_launcher)
-        remoteViews.setTextViewText(R.id.title, "Title")
-        remoteViews.setTextViewText(R.id.message, "message")
-
-        mBuilder.setContent(remoteViews)
-        mBuilder.setContentIntent(createPendingIntent())
-
-        val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        mNotificationManager.notify(1, mBuilder.build())
-    }
-
-    fun createPendingIntent(): PendingIntent {
-        var resultIntent: Intent =
-        var stackBuilder: TaskStackBuilder = TaskStackBuilder.create(this)
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(resultIntent)
-
-        return stackBuilder.getPendingIntent(
-                0,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        )
-    }
-    fun createNotification(): NotificationCompat.Builder
-    {
-        var icon:Bitmap = BitmapFactory . decodeResource (getResources(), R.mipmap.ic_launcher);
-        var builder:NotificationCompat.Builder =  NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setLargeIcon(icon)
-                .setContentTitle("StatusBar Title")
-                .setContentText("StatusBar subTitle")
-                .setSmallIcon(R.mipmap.ic_launcher/*스와이프 전 아이콘*/)
-                .setAutoCancel(true)
-                .setWhen(System.currentTimeMillis())
-                .setDefaults(Notification.DEFAULT_ALL)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.setCategory(Notification.CATEGORY_MESSAGE)
-                    .setPriority(Notification.PRIORITY_HIGH)
-                    .setVisibility(Notification.VISIBILITY_PUBLIC);
-        }
-        return builder
-    }
-}
-
-
-
-    출처: http://leanq.tistory.com/34 [린큐의 공부한걸 기록하자]
-
 }

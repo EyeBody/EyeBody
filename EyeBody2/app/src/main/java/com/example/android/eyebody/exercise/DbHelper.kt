@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 /**
  * Created by ytw11 on 2017-11-15.
  */
-class DbHelper(var context: Context,var name:String,var factory: SQLiteDatabase.CursorFactory,var version:Int) : SQLiteOpenHelper(context,name,factory,version ) {
+class DbHelper(var context: Context,var name:String,var factory: SQLiteDatabase.CursorFactory?,var version:Int) : SQLiteOpenHelper(context,name,factory,version ) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE BILL (_id INTEGER PRIMARY KEY AUTOINCREMENT,menu STRING,price INTEGER,create_at TEXT);)")
     }
