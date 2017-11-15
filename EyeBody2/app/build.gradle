@@ -25,6 +25,7 @@ android {
     sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/gallery_body'] } }
 }
 dependencies {
+    compile 'com.naver.android.helloyako:imagecropview:1.2.0'   //crop image view
     compile 'com.google.android.gms:play-services-drive:11.4.2'
     compile 'io.vrinda.kotlinpermissions:kotlinpermissions:1.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'

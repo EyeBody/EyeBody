@@ -7,13 +7,19 @@
     android:background="@color/black"
     tools:context="com.example.android.eyebody.gallery.ImageCropFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!--
     <ImageView
         android:id="@+id/cropImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@mipmap/ic_launcher_round" />
+        -->
+    <com.naver.android.helloyako.imagecrop.view.ImageCropView
+        android:id="@+id/imageCropView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
 
     <LinearLayout
         android:layout_width="match_parent"

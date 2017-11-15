@@ -3,9 +3,10 @@ package com.example.android.eyebody.gallery
 import android.app.Fragment
 import android.os.Bundle
 import android.view.*
-
 import com.example.android.eyebody.R
+import com.naver.android.helloyako.imagecrop.view.ImageCropView
 import kotlinx.android.synthetic.main.fragment_image_crop.*
+import kotlinx.android.synthetic.main.fragment_image_crop.view.*
 
 class ImageCropFragment : Fragment() {
     lateinit var collage: CollageActivity
@@ -40,7 +41,25 @@ class ImageCropFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        cropImageView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        cropImageView.setImageBitmap(photo.getBitmap(cropImageView.measuredWidth, cropImageView.measuredHeight))
+        imageCropView.setImageBitmap(photo.getBitmap())
+        imageCropView.setAspectRatio(9, 16)
+        imageCropView.setGridInnerMode(ImageCropView.GRID_ON)
+        imageCropView.setGridOuterMode(ImageCropView.GRID_ON)
+
+        overlayGuideButton.setOnClickListener {
+
+        }
+
+        crop1to1Button.setOnClickListener {
+            imageCropView.setAspectRatio(1, 1)
+        }
+
+        crop3to4Button.setOnClickListener {
+            imageCropView.setAspectRatio(3, 4)
+        }
+
+        crop9to16Button.setOnClickListener{
+            imageCropView.setAspectRatio(9, 16)
+        }
     }
 }
