@@ -25,6 +25,7 @@
     <string name="button_submit">확인</string>
     <string name="edit_image">이미지 편집하기</string>
     <string name="crop_confirm">자르기 확인</string>
+    <string name="fail_to_crop">자르기에 실패하였습니다</string>
 
     <string name="category_init">눈바디 시작하기</string>
 

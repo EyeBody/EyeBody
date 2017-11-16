@@ -1,12 +1,20 @@
 package com.example.android.eyebody.gallery
 
 import android.app.Fragment
+import android.graphics.Bitmap
+import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.*
+import android.widget.Toast
 import com.example.android.eyebody.R
 import com.naver.android.helloyako.imagecrop.view.ImageCropView
 import kotlinx.android.synthetic.main.fragment_image_crop.*
-import kotlinx.android.synthetic.main.fragment_image_crop.view.*
+import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ImageCropFragment : Fragment() {
     lateinit var collage: CollageActivity
@@ -32,6 +40,15 @@ class ImageCropFragment : Fragment() {
         when (item.itemId) {
             R.id.action_crop_confirm -> {
                 //저장 후 뒤로가기
+                if (!imageCropView.isChangingScale) {
+                    var b = imageCropView.croppedImage
+                    if (b != null) {
+                        saveBitmapToFile(b)
+                        photo.setImageSize()
+                    } else {
+                        Toast.makeText(activity, R.string.fail_to_crop, Toast.LENGTH_SHORT).show()
+                    }
+                }
                 collage.onBackPressed()
             }
         }
@@ -61,5 +78,13 @@ class ImageCropFragment : Fragment() {
         crop9to16Button.setOnClickListener{
             imageCropView.setAspectRatio(9, 16)
         }
+    }
+
+    fun saveBitmapToFile(bitmap: Bitmap) {
+        //TODO 이렇게 그냥 자르면 원본 이미지가 훼손됨, 따로 저장해야됨
+        var f = File(photo.imageURL)
+        var fos = FileOutputStream(f)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        fos.close()
     }
 }

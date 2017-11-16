@@ -18,13 +18,7 @@ class Photo(): AppCompatActivity(), Parcelable {
         imageURL = imgFile.path //intent로 bitmap이미지를 넘기는 것 보다 url로 넘기는게 좋대서 바꿈
         fileName = imgFile.name //파일이름을 날짜로 저장하고(body20170922190523) 여기서 date정보와 memo 정보를 불러옴
 
-        //원본 이미지 가로세로 크기
-        var options = BitmapFactory.Options()
-        options.inJustDecodeBounds = true
-        BitmapFactory.decodeFile(imageURL, options)
-
-        imgWidth = options.outWidth
-        imgHeight = options.outHeight
+        setImageSize()
     }
 
     //Parcelable methods
@@ -54,6 +48,16 @@ class Photo(): AppCompatActivity(), Parcelable {
         override fun newArray(size: Int): Array<Photo?> {
             return arrayOfNulls(size)
         }
+    }
+
+    fun setImageSize(){
+        //원본 이미지 가로세로 크기
+        var options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(imageURL, options)
+
+        imgWidth = options.outWidth
+        imgHeight = options.outHeight
     }
 
     fun getBitmap(): Bitmap{
