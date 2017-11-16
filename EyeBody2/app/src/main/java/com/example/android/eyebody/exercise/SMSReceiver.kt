@@ -7,6 +7,7 @@ import android.provider.Telephony
 import android.telephony.SmsMessage
 import android.util.Log
 import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,17 +36,15 @@ class SMSReceiver : BroadcastReceiver() {
                     smsMessages[i] = sms[0]
                 } else smsMessages[i] = SmsMessage.createFromPdu(pdusObj[i] as ByteArray)
 
-                if (!checkBank(smsMessages[i]?.originatingAddress)) {//카드사라는 것을 확인
-                   //if (wonFind(smsMessages[i]?.displayMessageBody) != "") {//얼마 썻는지 확인
-                       spentMoney = wonFind(smsMessages[i]?.displayMessageBody)
+                if (checkBank(smsMessages[i]?.originatingAddress)) {//카드사라는 것을 확인
+                   if (wonFind(smsMessages[i]?.displayMessageBody) != "") {//얼마 썻는지 확인
+                        spentMoney = wonFind(smsMessages[i]?.displayMessageBody)
                        var menu="후식"//TODO : 노티피케이션 받아서 저장하는 걸로 하자.
-                       //var price=spentMoney as Int
-                       var price=1000
-                        val activity= NotiActivity()
-                        activity.showBasicNotification()
+                       var price=Integer.parseInt(spentMoney)
                        dbHelper.insert("what the",menu,price)
-                        //TODO:단순 사용 저장 보다는 노티를 날리자.
-                    //}
+                       //TODO:단순 사용 저장 보다는 노티를 날리자.
+                       Toast.makeText(context,"what the "+dbHelper.getResult(), LENGTH_LONG)
+                    }
                 }
             }
         }
@@ -54,9 +53,9 @@ class SMSReceiver : BroadcastReceiver() {
      private fun wonFind(price: String?): String {
                     var array: List<String>? = price?.split(" ")
         for (items in array as List<String>) {
-            Log.e(logTag, "haha : " + items) //문자 내용
             if (items[items.length - 1] == '원') {
-                return items
+                var won=items.replace("원","")
+                return won
             }
         }
         return ""

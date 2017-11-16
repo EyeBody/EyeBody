@@ -19,14 +19,14 @@ class DbHelper(var context: Context,var name:String,var factory: SQLiteDatabase.
 
     fun insert(create_at: String, menu: String, price: Int) {
         var db: SQLiteDatabase = writableDatabase
-        db.execSQL("INSERT INTO BILL VALUES(null, '" + menu + "', " + price + ", '" + create_at + "');")
+        db.execSQL("INSERT INTO BILL VALUES(null, '$menu', $price, '$create_at');")
         db.close()
     }
 
     fun update(menu: String, price: Int) {
         var db: SQLiteDatabase = writableDatabase
         // 입력한 항목과 일치하는 행의 가격 정보 수정
-        db.execSQL("UPDATE BILL SET price=" + price + " WHERE menu='" + menu + "';");
+        db.execSQL("UPDATE BILL SET price=$price WHERE menu='$menu';");
         db.close()
     }
     fun getResult(): String
