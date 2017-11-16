@@ -36,6 +36,10 @@ class ImageSelectFragment : Fragment() {
 
         menu.findItem(R.id.action_edit_image).setVisible(false)
         menu.findItem(R.id.action_share).setVisible(false)
+
+        if(collage.selectedPhotoList.size > 0){    //선택한 이미지가 하나 이상일 때 이미지편집 메뉴 아이콘 보여주기
+            menu.findItem(R.id.action_edit_image).setVisible(true)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
