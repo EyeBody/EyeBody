@@ -26,4 +26,8 @@
     <string name="editImage">이미지 편집하기</string>
     <string name="category_init">눈바디 시작하기</string>
 
+    <string name="notificationtitle">메뉴선택</string>
+    <string name="lbltitle">"Title : "</string>
+    <string name="lbltext">"Text : "</string>
+    <string name="title_activity_main">Broadcast Tutorial</string>
 </resources>
