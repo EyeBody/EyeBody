@@ -26,7 +26,7 @@ class InitActivity : AppCompatActivity() {
         MODE_PRIVATE : 다른 앱이 접근 불가(파일 권한 없이 불가를 뜻하는 것 같음) (mode_world_readable : 다른 앱이 공유 데이터에 접근 가능)
          */
         val sharedPref: SharedPreferences = getSharedPreferences(
-                getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+                getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
         val sharedPref_hashedPW = sharedPref.getString(
                 getString(R.string.sharedPreference_hashedPW), getString(R.string.sharedPreference_default_hashedPW))
         val sharedPref_targetWeight = sharedPref.getInt(

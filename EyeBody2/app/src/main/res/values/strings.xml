@@ -6,12 +6,18 @@
     <string name="category_exercise">운동</string>
     <string name="category_setting">설정</string>
 
-    <string name="sharedPreference_initSetting">initSetting</string>
+    <string name="getSharedPreference_initSetting">initSetting</string>
     <string name="sharedPreference_hashedPW">hashedPW</string>
     <string name="sharedPreference_targetWeight">targetWeight</string>
     <string name="sharedPreference_targetDate">targetDate</string>
     <string name="sharedPreference_default_hashedPW">none</string>
     <string name="sharedPreference_default_targetDate">none</string>
+
+    <string name="getSharedPreference_configuration">sharedPref_configuration</string>
+    <string name="sharedPreference_Backup_Only_Wifi">Backup_Only_Wifi</string>
+    <string name="sharedPreference_Backup_None">Backup_None</string>
+    <string name="sharedPreference_Backup_Auto">Backup_Auto</string>
+    <string name="sharedPreference_Security_Use_Fingerprint">Security_Use_Fingerprint</string>
 
     <string name="collage">콜라주</string>
     <string name="share">공유하기</string>

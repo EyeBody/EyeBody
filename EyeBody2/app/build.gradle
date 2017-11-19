@@ -29,6 +29,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-drive:11.4.2'
     compile 'io.vrinda.kotlinpermissions:kotlinpermissions:1.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
+    compile 'com.jjoe64:graphview:4.2.1'
 
     compile group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
     compile group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION

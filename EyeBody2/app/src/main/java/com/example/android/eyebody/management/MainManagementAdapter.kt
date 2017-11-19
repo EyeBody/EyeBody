@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.support.constraint.ConstraintLayout
-import android.support.design.widget.FloatingActionButton
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +12,16 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import com.example.android.eyebody.R
+import com.jjoe64.graphview.series.LineGraphSeries
+import com.jjoe64.graphview.GraphView
+import com.jjoe64.graphview.series.DataPoint
+
 
 /**
  * Created by YOON on 2017-11-12
+ *
+ * graph opensource at
+ * https://github.com/appsthatmatter/GraphView
  */
 class MainManagementAdapter(val context: Context, val contents: Array<MainManagementContent>) : BaseAdapter() {
 
@@ -33,10 +39,19 @@ class MainManagementAdapter(val context: Context, val contents: Array<MainManage
         val contentTitleText: TextView = view.findViewById(R.id.textView4)
         val contentTitleImageWeight: ImageButton = view.findViewById(R.id.imageButton3)
         val contentTitleImageFood: ImageButton = view.findViewById(R.id.imageButton4)
-        val contentGraph: Button = view.findViewById(R.id.button2)
+        val contentGraph: GraphView = view.findViewById(R.id.main_management_graph)
         val contentDeleteOrFail: ImageButton = view.findViewById(R.id.imageButton)
         val contentGoToGallery: ImageButton = view.findViewById(R.id.imageButton2)
 
+
+        val series = LineGraphSeries<DataPoint>( arrayOf<DataPoint>(
+                        DataPoint(0.0, 1.0),
+                        DataPoint(1.0, 5.0),
+                        DataPoint(2.0, 3.0),
+                        DataPoint(3.0, 2.0),
+                        DataPoint(4.0, 6.0)
+                ))
+        contentGraph.addSeries(series)
 
         contentGraph.setOnClickListener {
             val buttonRange: ConstraintLayout? = parent?.rootView?.findViewById(R.id.constraintLayout7)

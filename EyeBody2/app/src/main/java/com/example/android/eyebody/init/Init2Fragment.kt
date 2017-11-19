@@ -3,7 +3,6 @@ package com.example.android.eyebody.init
 import android.annotation.SuppressLint
 import android.app.Fragment
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -63,7 +62,7 @@ class Init2Fragment : Fragment() {
                 Log.d("mydbg_init2", "  MD5 pw >>> $hashedPW")
 
 
-                activity.getSharedPreferences(getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+                activity.getSharedPreferences(getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
                         .edit()
                         .putString("hashedPW", hashedPW)
                         .commit()

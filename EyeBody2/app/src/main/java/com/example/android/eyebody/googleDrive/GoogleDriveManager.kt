@@ -2,23 +2,21 @@ package com.example.android.eyebody.googleDrive
 
 import android.app.Activity
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.IntentSender
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.widget.Toast
+import com.example.android.eyebody.R
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.drive.Drive
 import com.google.android.gms.drive.DriveFile
 import com.google.android.gms.drive.MetadataChangeSet
-import com.google.android.gms.drive.metadata.SearchableMetadataField
-import com.google.android.gms.drive.query.Filter
 import com.google.android.gms.drive.query.Filters
 import com.google.android.gms.drive.query.Query
 import com.google.android.gms.drive.query.SearchableField
@@ -43,19 +41,27 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
         val PLAY_SERVICES_RESOLUTION_REQUEST = 9000
         val REQUEST_CODE_RESOLUTION = 3
         val NETWORK_MODE_WIFI = 1
-        val NETWORK_MODE_DATA = 2
+        val NETWORK_MODE_MOBILE = 2
         val FILE_LOCATION_SERVER = 1
         val FILE_LOCATION_LOCAL = -1
     }
 
     var mGoogleApiClient: GoogleApiClient? = null
     var mIntentSender: IntentSender? = null
-    var networkStatus = NETWORK_MODE_WIFI
-
+    var networkStatus: Int
+    val pref = context.getSharedPreferences(context.resources.getString(R.string.getSharedPreference_configuration), MODE_PRIVATE)
+    var prefValueBackupOnlyWifi: Int
+    var prefValueBackupAuto: Int
 
     init {
-        // TODO ----- if needed, check permission
-        // context.checkPermission("???", 1, 1)
+        prefValueBackupOnlyWifi = pref.getInt(context.resources.getString(R.string.sharedPreference_Backup_Only_Wifi), 0)
+        prefValueBackupAuto = pref.getInt(context.resources.getString(R.string.sharedPreference_Backup_Auto), 0)
+
+        networkStatus =
+                if (NetworkManager.isConnectedWithWifi(context))
+                    NETWORK_MODE_WIFI
+                else
+                    NETWORK_MODE_MOBILE
     }
 
     /**
@@ -392,7 +398,7 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
 
                 context.openFileOutput(photoURI, Context.MODE_APPEND)
                 for (f in context.fileList()) {
-                    Log.d(TAG,f)
+                    Log.d(TAG, f)
                 }
                 /*try {
 
