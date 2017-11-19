@@ -1,16 +1,20 @@
-package com.example.android.eyebody.management
+package com.example.android.eyebody.management.food
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListView
 
 import com.example.android.eyebody.R
+import com.example.android.eyebody.management.BasePageFragment
 
 /**
  * Created by YOON on 2017-11-11
+ *
+ * aka sms management
  */
-class ExerciseManagementFragment : BasePageFragment() {
+class FoodManagementFragment : BasePageFragment() {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
@@ -22,7 +26,14 @@ class ExerciseManagementFragment : BasePageFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_management_exercise, container, false)
+        val mView = inflater!!.inflate(R.layout.fragment_management_food, container, false)
+
+        val listview : ListView = mView.findViewById(R.id.listview_food_management)
+        listview.adapter = FoodManagementAdapter(context, arrayOf(
+                FoodManagementContent(), FoodManagementContent()
+        ))
+
+        return mView
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,10 +51,10 @@ class ExerciseManagementFragment : BasePageFragment() {
          * this fragment using the provided parameters.
          *
          * @param pn PageNumber (Int)
-         * @return A new instance of fragment ExerciseManagementFragment.
+         * @return A new instance of fragment FoodManagementFragment.
          */
-        fun newInstance(pn : Int) : ExerciseManagementFragment {
-            val fragment = ExerciseManagementFragment()
+        fun newInstance(pn : Int) : FoodManagementFragment {
+            val fragment = FoodManagementFragment()
             val args = Bundle()
             args.putInt(ARG_PAGE_NUMBER, pn)
             fragment.arguments = args

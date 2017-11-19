@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.eyebody.management.ConfigManagementFragment"
+    tools:context="com.example.android.eyebody.management.config.ConfigManagementFragment"
     android:background="#70a0F0">
 
     <ListView

@@ -1,8 +1,9 @@
-package com.example.android.eyebody.management
+package com.example.android.eyebody.management.main
 
 /**
- * Created by YOON on 2017-11-12
+ * Created by YOON on 2017-11-19
  */
+
 class MainManagementContent {
     // 진행중인거면 종료버튼을, 지난 거라면 쓰레기통 버튼을.
     var isInProgress = false

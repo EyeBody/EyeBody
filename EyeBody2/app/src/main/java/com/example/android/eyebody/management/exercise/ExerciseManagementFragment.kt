@@ -1,4 +1,4 @@
-package com.example.android.eyebody.management
+package com.example.android.eyebody.management.exercise
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.example.android.eyebody.R
+import com.example.android.eyebody.management.BasePageFragment
 
 /**
  * Created by YOON on 2017-11-11
  */
-class FoodManagementFragment : BasePageFragment() {
+class ExerciseManagementFragment : BasePageFragment() {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
@@ -22,7 +23,7 @@ class FoodManagementFragment : BasePageFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_management_food, container, false)
+        return inflater!!.inflate(R.layout.fragment_management_exercise, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,10 +41,10 @@ class FoodManagementFragment : BasePageFragment() {
          * this fragment using the provided parameters.
          *
          * @param pn PageNumber (Int)
-         * @return A new instance of fragment FoodManagementFragment.
+         * @return A new instance of fragment ExerciseManagementFragment.
          */
-        fun newInstance(pn : Int) : FoodManagementFragment {
-            val fragment = FoodManagementFragment()
+        fun newInstance(pn : Int) : ExerciseManagementFragment {
+            val fragment = ExerciseManagementFragment()
             val args = Bundle()
             args.putInt(ARG_PAGE_NUMBER, pn)
             fragment.arguments = args

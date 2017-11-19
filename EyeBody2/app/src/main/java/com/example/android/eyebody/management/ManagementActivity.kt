@@ -10,6 +10,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.example.android.eyebody.R
+import com.example.android.eyebody.management.config.ConfigManagementFragment
+import com.example.android.eyebody.management.exercise.ExerciseManagementFragment
+import com.example.android.eyebody.management.food.FoodManagementFragment
+import com.example.android.eyebody.management.main.MainManagementFragment
 import kotlinx.android.synthetic.main.activity_management.*
 
 /**
@@ -49,15 +53,15 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         /* actionbar, statusbar 연습 */
 
         //supportActionBar?.hide()
-        supportActionBar?.title = "MainManagement"
-        supportActionBar?.subtitle = "this is management activity for main"
-        supportActionBar?.setBackgroundDrawable(getDrawable(R.drawable.abc_text_select_handle_middle_mtrl_light)) //theme넣는건 api 23부터 (분기처리 해주어야 하나)
+        supportActionBar?.title = "Main"
+        supportActionBar?.subtitle = "메인관리창"
+        supportActionBar?.setBackgroundDrawable(getDrawable(R.drawable.samplebackground))
 
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.setIcon(R.drawable.icons8camera)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setIcon(getDrawable(R.drawable.icons8camera))
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        window.statusBarColor = 0x7f7f7f7f //0xAARRGGBB ~ format(7f ff ff ff) ~ (127, 255, 255, 255) ~ alpha 는 0이 투명 , resources.getColor(R.color.colorAccent)
+        window.statusBarColor = 0x7f100030 //0xAARRGGBB ~ format(7f ff ff ff) ~ (127, 255, 255, 255) ~ alpha 는 0이 투명 , resources.getColor(R.color.colorAccent)
 
         /* end of practices */
 

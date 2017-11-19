@@ -1,4 +1,4 @@
-package com.example.android.eyebody.management
+package com.example.android.eyebody.management.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import com.example.android.eyebody.R
+import com.example.android.eyebody.management.BasePageFragment
 
 /**
  * Created by YOON on 2017-11-11

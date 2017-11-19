@@ -1,14 +1,13 @@
-package com.example.android.eyebody.management
+package com.example.android.eyebody.management.config
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ListView
 
 import com.example.android.eyebody.R
+import com.example.android.eyebody.management.BasePageFragment
 
 /**
  * Created by YOON on 2017-11-11
@@ -36,7 +35,7 @@ class ConfigManagementFragment : BasePageFragment() {
                                 arrayOf(
                                         SwitchableSubContent("연습하기", "dd",
                                                 listOf("false 상태입니다.", "true 상태입니다.")),
-                                        SwitchableSubContent("true or false with switch", "dd",
+                                        SwitchableSubContent("true or false with switch", "ds",
                                                 listOf("false 에요", "true 에요")),
                                         DialogableSubContent("1,2,3 중에 선택", null,
                                                 listOf("1번째 선택", "2번째 선택", "3번째 선택"))

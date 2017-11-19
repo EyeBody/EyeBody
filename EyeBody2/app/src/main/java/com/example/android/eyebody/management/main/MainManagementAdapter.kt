@@ -1,4 +1,4 @@
-package com.example.android.eyebody.management
+package com.example.android.eyebody.management.main
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import com.example.android.eyebody.R
@@ -34,7 +33,7 @@ class MainManagementAdapter(val context: Context, val contents: Array<MainManage
         /* TODO : DB mapping here */
         val contentBackground: ConstraintLayout = view.findViewById(R.id.const_main_management_parent)
         val contentDate: TextView = view.findViewById(R.id.textView3)
-        val mainContentBackground: ConstraintLayout = view.findViewById(R.id.constraintLayout4)
+        val mainContentBackground: ConstraintLayout = view.findViewById(R.id.constraint_content_list_food_management)
         val contentTitleBackground: ConstraintLayout = view.findViewById(R.id.constraintLayout6)
         val contentTitleText: TextView = view.findViewById(R.id.textView4)
         val contentTitleImageWeight: ImageButton = view.findViewById(R.id.imageButton3)
