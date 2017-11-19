@@ -4,9 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.eyebody.gallery.ImageCollageFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="collage fragment" />
+    <Button
+        android:id="@+id/makeGifButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="make gif"/>
 
 </FrameLayout>

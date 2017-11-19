@@ -52,6 +52,7 @@ class Photo(): AppCompatActivity(), Parcelable {
 
     fun setImageSize(){
         //원본 이미지 가로세로 크기
+        //이미지 크기가 바뀌면 이 함수를 꼭 호출해줘야 함
         var options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
         BitmapFactory.decodeFile(imageURL, options)

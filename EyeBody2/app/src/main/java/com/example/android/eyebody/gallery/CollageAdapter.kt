@@ -21,7 +21,6 @@ class CollageAdapter (var context: Context, var photoList: ArrayList<Photo>, var
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        //TODO Fragment 종류로 데이터 바인딩 구분하기 if(fragment is ImageSelectFragment){ ... }
         (holder as Item).bindData(photoList[position], position, selectedPhotoList, fragment as ImageSelectFragment)
     }
 

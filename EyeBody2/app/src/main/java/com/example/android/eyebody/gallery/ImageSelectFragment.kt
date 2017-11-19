@@ -65,7 +65,7 @@ class ImageSelectFragment : Fragment() {
             if(!collage.selectedPhotoList.contains(pos)) collage.selectedPhotoList.add(pos)  //없으면 추가
 
             if(collage.selectedPhotoList.size > 0){    //선택한 이미지가 하나 이상일 때 이미지편집 메뉴 아이콘 보여주기
-                menu.findItem(R.id.action_edit_image).setVisible(true)  //TODO BUGFIX 다시 돌아왔을 때 아이콘 표시가 안됨
+                menu.findItem(R.id.action_edit_image).setVisible(true)
             }
         } else {
             itemView.setBackgroundColor(Color.RED)
