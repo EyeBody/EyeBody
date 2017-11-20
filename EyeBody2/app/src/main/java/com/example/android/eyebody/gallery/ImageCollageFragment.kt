@@ -47,42 +47,35 @@ class ImageCollageFragment : Fragment() {
         }
 
         makeGifButton.setOnClickListener {
-            makeGif()
+            saveGif(makeGif())
         }
     }
 
-    fun makeGif(){
+    fun makeGif(delay: Int = 500): ByteArrayOutputStream?{
         val bos = ByteArrayOutputStream()
         val encoder = AnimatedGifEncoder()
-        encoder.setDelay(500)
-        encoder.setRepeat(0)
+        encoder.setDelay(delay)
+        encoder.setRepeat(0)    //0 미만이면 반복안함, 0 이상이면 반복
         encoder.start(bos)
 
         try {
-            val bmp1: Bitmap
-            val bmp2: Bitmap
-            val bmp3: Bitmap
-
-            bmp1 = BitmapFactory.decodeStream(FileInputStream(photoList[selected[0]].imageURL))
-            encoder.addFrame(bmp1)
-            bmp1.recycle()
-
-            bmp2 = BitmapFactory.decodeStream(FileInputStream(photoList[selected[1]].imageURL))
-            encoder.addFrame(bmp2)
-            bmp2.recycle()
-
-            bmp3 = BitmapFactory.decodeStream(FileInputStream(photoList[selected[2]].imageURL))
-            encoder.addFrame(bmp3)
-            bmp3.recycle()
-
+            for(sel in selected){
+                val bmp: Bitmap = BitmapFactory.decodeStream(FileInputStream(photoList[sel].imageURL))
+                encoder.addFrame(bmp)
+                bmp.recycle()
+            }
         } catch (e: FileNotFoundException) {
             Toast.makeText(activity, "GIF 파일을 만들지 못하였습니다", Toast.LENGTH_SHORT).show()
-            return
+            return null
         }
-
 
         encoder.finish()
 
+        return bos
+    }
+
+    fun saveGif(bos: ByteArrayOutputStream?){
+        if(bos == null) return
 
         //폴더 만들기(외부저장소/Pictures/EyeBody)
         var filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath + "/EyeBody"
@@ -96,7 +89,7 @@ class ImageCollageFragment : Fragment() {
         }
 
         //파일 만들기
-        file = File(filePath, "sample.gif")
+        file = File(filePath, "sample.gif") //TODO 파일 이름 설정
         try {
             var fos = FileOutputStream(file)
             fos.write(bos.toByteArray())
@@ -111,5 +104,4 @@ class ImageCollageFragment : Fragment() {
 
         Toast.makeText(activity, "GIF 이미지를 저장하였습니다", Toast.LENGTH_SHORT).show()
     }
-
 }
