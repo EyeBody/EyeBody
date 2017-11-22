@@ -1,7 +1,9 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.android.eyebody.gallery.ImageCollageFragment">
 
     <Button
@@ -10,4 +12,18 @@
         android:layout_height="wrap_content"
         android:text="make gif"/>
 
-</FrameLayout>
+    <Button
+        android:id="@+id/makeCollageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="make collage" />
+
+    <ImageView
+        android:id="@+id/sampleImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffff00"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_launcher" />
+
+</LinearLayout>

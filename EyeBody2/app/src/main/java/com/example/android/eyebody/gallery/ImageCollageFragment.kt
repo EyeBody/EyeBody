@@ -17,9 +17,8 @@ import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import java.io.*
 import android.graphics.BitmapFactory
-
-
-
+import android.graphics.Canvas
+import android.graphics.Color
 
 class ImageCollageFragment : Fragment() {
     lateinit var collage: CollageActivity
@@ -48,6 +47,10 @@ class ImageCollageFragment : Fragment() {
 
         makeGifButton.setOnClickListener {
             saveGif(makeGif())
+        }
+
+        makeCollageButton.setOnClickListener {
+            sampleImageView.setImageBitmap(combineImage(photoList, selected))
         }
     }
 
@@ -103,5 +106,38 @@ class ImageCollageFragment : Fragment() {
         }
 
         Toast.makeText(activity, "GIF 이미지를 저장하였습니다", Toast.LENGTH_SHORT).show()
+    }
+
+    fun combineImage(photoList: ArrayList<Photo>, selected: ArrayList<Int>, columns: Int = 0): Bitmap{
+        //열이 columns개인 바둑판 모양으로 이미지 콜라주
+        //colums == 0이면 가로로만 이어붙임, 1이면 세로로만 이어붙임(열이 1개)
+
+        var result: Bitmap
+        var padding = 15
+
+        //TODO columns에 따라 다양한 콜라주 모양 생성
+
+        var totalWidth = padding * (selected.size + 1)  //사진 사이사이 패딩
+        var maxHeight = 0
+
+        for(idx in selected){
+            totalWidth += photoList[idx].imgWidth
+            if(maxHeight < photoList[idx].imgHeight)
+                maxHeight = photoList[idx].imgHeight
+        }
+        maxHeight += padding * 2 //위 아래 패딩
+
+        result = Bitmap.createBitmap(totalWidth, maxHeight, Bitmap.Config.ARGB_8888)
+
+        var comboImage = Canvas(result)
+        comboImage.drawColor(Color.WHITE)
+
+        var currentWidth: Float = padding.toFloat() //맨 왼쪽 패딩
+        for(idx in selected){
+            comboImage.drawBitmap(photoList[idx].getBitmap(), currentWidth, padding.toFloat(), null)   //오른쪽에 이어붙이기
+            currentWidth += photoList[idx].imgWidth.toFloat() + padding.toFloat()
+        }
+
+        return result
     }
 }
