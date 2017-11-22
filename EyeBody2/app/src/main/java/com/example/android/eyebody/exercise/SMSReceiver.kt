@@ -95,8 +95,11 @@ class SMSReceiver : BroadcastReceiver() {
                 // Set Text
                 .setContentText(message)
                 // Add an Action Button below notification
-                .addAction(R.mipmap.ic_launcher, "Action Button", pIntent)
-                // Set PendingIntent into notification
+                .addAction(R.mipmap.ic_launcher, "간식", pIntent)
+                .addAction(R.mipmap.ic_launcher,"음료",pIntent)
+                .addAction(R.mipmap.ic_launcher,"밥",pIntent)
+                .addAction(R.mipmap.ic_launcher,"군것질",pIntent)
+                .addAction(R.mipmap.ic_launcher,"식사아님",pIntent)
                 .setContentIntent(pIntent)
                 // Dismiss notification
                 .setAutoCancel(true)
