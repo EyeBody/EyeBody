@@ -110,32 +110,84 @@ class ImageCollageFragment : Fragment() {
 
     fun combineImage(photoList: ArrayList<Photo>, selected: ArrayList<Int>, columns: Int = 0): Bitmap{
         //열이 columns개인 바둑판 모양으로 이미지 콜라주
-        //colums == 0이면 가로로만 이어붙임, 1이면 세로로만 이어붙임(열이 1개)
+        //colums <= 0이면 가로로만 이어붙임, 1이면 세로로만 이어붙임(열이 1개)
+        // 0 1 2 <- 열(columns)은 3개
+        // 3 4 5
+        // 6 7 ...
 
+        var columns = columns
         var result: Bitmap
-        var padding = 15
+        val padding = 15
 
-        //TODO columns에 따라 다양한 콜라주 모양 생성
+        if(columns <= 0 || columns > selected.size) //가로로만 이어붙이거나, 사진 갯수가 columns보다 적으면
+            columns = selected.size //사진 갯수가 곧 columns
 
-        var totalWidth = padding * (selected.size + 1)  //사진 사이사이 패딩
-        var maxHeight = 0
+        //comboImage 가로 세로 최대 길이 구하기
+        var width: Int = padding * (columns + 1) //맨 왼쪽, 사진 사이사이, 맨 오른쪽 패딩
+        var height: Int = padding * 2 //위 아래 패딩
 
-        for(idx in selected){
-            totalWidth += photoList[idx].imgWidth
-            if(maxHeight < photoList[idx].imgHeight)
-                maxHeight = photoList[idx].imgHeight
+        //TODO 이미지 크기가 모두 같다면 이런 뻘짓 안해도 됨
+        val rows = selected.size / columns  //0부터 카운팅
+        val remainder = selected.size % columns
+
+        if(remainder == 0) rows - 1
+
+        for(r in 0..rows){
+            if(r == rows && remainder != 0) columns = remainder //마지막 줄
+
+           var rowWidth = 0
+            var rowHeight = 0
+
+            for(c in 0..(columns - 1)){
+                var w = photoList[selected[(r*c) + c]].imgWidth
+                var h = photoList[selected[(r*c) + c]].imgHeight
+
+                rowWidth += w
+                if(rowHeight < h) rowHeight = h
+            }
+
+            if(width < rowWidth)  width = rowWidth
+            height += rowHeight
         }
-        maxHeight += padding * 2 //위 아래 패딩
 
-        result = Bitmap.createBitmap(totalWidth, maxHeight, Bitmap.Config.ARGB_8888)
+
+//        var totalWidth = padding * (selected.size + 1)  //사진 사이사이 패딩
+//        var maxHeight = 0
+//
+//        for(idx in selected){
+//            totalWidth += photoList[idx].imgWidth
+//            if(maxHeight < photoList[idx].imgHeight)
+//                maxHeight = photoList[idx].imgHeight
+//        }
+//        maxHeight += padding * 2 //위 아래 패딩
+
+        result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
         var comboImage = Canvas(result)
         comboImage.drawColor(Color.WHITE)
 
         var currentWidth: Float = padding.toFloat() //맨 왼쪽 패딩
-        for(idx in selected){
-            comboImage.drawBitmap(photoList[idx].getBitmap(), currentWidth, padding.toFloat(), null)   //오른쪽에 이어붙이기
-            currentWidth += photoList[idx].imgWidth.toFloat() + padding.toFloat()
+        var currentHeight: Float = padding.toFloat()    //맨 위쪽 패딩
+
+//        for(idx in selected){
+//            comboImage.drawBitmap(photoList[idx].getBitmap(), currentWidth, currentHeight, null)   //오른쪽에 이어붙이기
+//            currentWidth += photoList[idx].imgWidth.toFloat() + padding.toFloat()
+//        }
+
+        for(r in 0..rows){
+            if(r == rows && remainder != 0) columns = remainder //마지막 줄
+            var rowHeight = 0
+
+            for(c in 0..(columns - 1)){
+                var photo = photoList[selected[(r*c) + c]]
+                var h = photo.imgHeight
+
+                comboImage.drawBitmap(photo.getBitmap(), currentWidth, currentHeight, null)   //다음 칸에 이어붙이기
+                currentWidth += photo.imgWidth.toFloat() + padding.toFloat()
+                if(rowHeight < h) rowHeight = h
+            }
+
+            currentHeight += rowHeight + padding
         }
 
         return result
