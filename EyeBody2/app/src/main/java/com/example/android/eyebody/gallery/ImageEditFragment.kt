@@ -15,6 +15,7 @@ class ImageEditFragment : Fragment() {
     var imgViewHeight: Int = 0
     var currentImageIndex: Int = 0
 
+    //TODO 편집된 이미지는 따로 저장해야 됨
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -61,8 +62,6 @@ class ImageEditFragment : Fragment() {
         }
 
         rotationButton.setOnClickListener {
-            //TODO 이미지뷰만 회전하고 나중에 저장
-            //selectedImage_edit.setRotation((selectedImage_edit.getRotation() + 90) % 360);
             var idx: Int = selected[currentImageIndex]
             photoList[idx].rotationImage(90f)
             selectedImage_edit.setImageBitmap(photoList[idx].getBitmap(imgViewWidth, imgViewHeight))

@@ -12,11 +12,33 @@
         android:layout_height="wrap_content"
         android:text="make gif"/>
 
-    <Button
-        android:id="@+id/makeCollageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="make collage" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/horizentalMakeCollageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="가로로 콜라주" />
+
+        <Button
+            android:id="@+id/verticalMakeCollageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="세로로 콜라주" />
+
+        <Button
+            android:id="@+id/twoMakeCollageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2개" />
+
+        <Button
+            android:id="@+id/threeMakeCollageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3개" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/sampleImageView"
