@@ -11,20 +11,36 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.support.v4.app.NotificationCompat
 import com.example.android.eyebody.R
+import com.example.android.eyebody.MainActivity
+import android.R.string.no
+import android.R.string.yes
+import android.app.Notification
+import android.provider.Settings.Global.getString
+import android.widget.Toast
+import android.widget.RemoteViews
+import io.vrinda.kotlinpermissions.DeviceInfo.Companion.getPackageName
 
 
 /**
  * Created by ytw11 on 2017-11-06.
  */
 class SMSReceiver : BroadcastReceiver() {
+
+    private val NOTIFY_ID = 100
+    private val MEAL = "com.example.android.eyebody.exercise.meal"
+    private val CANCEL = "com.example.android.eyebody.exercise.cancel"
+    private val BEVERAGE = "com.example.android.eyebody.exercise.beverage"
+    private val DESSERT="com.example.android.eyebody.exercise.dessert"
     private var spentMoney = String()
     var menu:String?=null
+    private var notificationManager:NotificationManager?=null
+
     override fun onReceive(context: Context, intent: Intent) {
         var now = System.currentTimeMillis()
         var date = Date(now)
         val simpleDateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
         val dbHelper = DbHelper(context, "bill.db", null, 1)
-
+        notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (intent.action == ACTION) {
             //Bundle 널 체크
             val bundle = intent.extras ?: return
@@ -43,7 +59,9 @@ class SMSReceiver : BroadcastReceiver() {
 
                 if (checkBank(smsMessages[i]?.originatingAddress)) {//카드사라는 것을 확인
                     if (wonFind(smsMessages[i]?.displayMessageBody) != "") {//얼마 썻는지 확인
-                        notification(context,"haha")
+                        //notification(context,"haha")
+                        getNotificationIntent(context)
+                        showActionButtonsNotification(context)
                         spentMoney = wonFind(smsMessages[i]?.displayMessageBody)
                         menu = "후식"//TODO : 노티피케이션 받아서 저장하는 걸로 하자.
                         var price = Integer.parseInt(spentMoney)
@@ -71,44 +89,44 @@ class SMSReceiver : BroadcastReceiver() {
         return numbers.contains(number)
     }//문자가 오면 은행들 번호랑 비교해 가면서 은행에서 온 문자라는 것을 판별, 확인 완료
 
-    private fun notification(context: Context, message: String) {
-        // Set notification Title
-        var menuSelectionAction=Intent(context,ActionReceiver::class.java)
+    private fun getNotificationIntent(context: Context): Intent {
+        val intent = Intent(context, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        return intent
+    }
 
-        val strTitle = context.getString(R.string.notificationtitle)
-        // Open NotificationView Class on notification Click
-        //val intent = Intent(context, NotificationCustomView::class.java)
-        // Send data to NotificationView Class
-        //intent.putExtra("title", strTitle)
-        //intent.putExtra("text", message)
-        // Open NotificationView.java Activity
-        val pIntent = PendingIntent.getActivity(context, 0, menuSelectionAction, PendingIntent.FLAG_UPDATE_CURRENT)
-        // Create notification using NotificationCompat.Builder
-        val builder = NotificationCompat.Builder(
-                context)
-                // Set Icon
+    private fun showActionButtonsNotification(context: Context) {
+
+        val notification = NotificationCompat.Builder(context)
+                .setContentIntent(PendingIntent.getActivity(context, 0, getNotificationIntent(context), PendingIntent.FLAG_UPDATE_CURRENT))
                 .setSmallIcon(R.mipmap.ic_launcher)
-                // Set Ticker Message
-                .setTicker(message)
-                // Set Title
-                .setContentTitle(context.getString(R.string.notificationtitle))
-                // Set Text
-                .setContentText(message)
-                // Add an Action Button below notification
-                .addAction(R.mipmap.ic_launcher, "간식", pIntent)
-                .addAction(R.mipmap.ic_launcher,"음료",pIntent)
-                .addAction(R.mipmap.ic_launcher,"밥",pIntent)
-                .addAction(R.mipmap.ic_launcher,"군것질",pIntent)
-                .addAction(R.mipmap.ic_launcher,"식사아님",pIntent)
-                .setContentIntent(pIntent)
-                // Dismiss notification
+                .setTicker("Action Buttons Notification Received")
+                .setContentTitle("Hi there!")
+                .setContentText("This is even more text.")
+                .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
+        var mealReceive=Intent()
+        mealReceive.action = MEAL
 
-        // Create notification Manager
-        val notificationmanager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        // Build notification with notification Manager
-        notificationmanager.notify(0, builder.build())
-
+                /*
+                .addAction(NotificationCompat.Action(
+                        R.mipmap.ic_launcher,
+                        "meal",
+                        PendingIntent.getActivity(context, 0, mealIntent, PendingIntent.FLAG_UPDATE_CURRENT)))
+                .addAction(NotificationCompat.Action(
+                        R.mipmap.ic_launcher,"디져트",
+                        PendingIntent.getActivity(context, 0, dessertIntent, PendingIntent.FLAG_UPDATE_CURRENT)))
+                .addAction(NotificationCompat.Action(
+                        R.mipmap.ic_launcher, "취소",
+                        PendingIntent.getActivity(context, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT)))
+                .addAction(NotificationCompat.Action(
+                        R.mipmap.ic_launcher,
+                        "음료",
+                        PendingIntent.getActivity(context, 0, beverageIntent, PendingIntent.FLAG_UPDATE_CURRENT)))
+                .build()*/
+        //val contentiew = RemoteViews(getPackageName(context), R.layout.activity_notification_custom_view)
+        //notification.contentView = contentiew
+        notificationManager?.notify(NOTIFY_ID, notification)
     }
     companion object {
         internal val logTag = "SmsReceiver"

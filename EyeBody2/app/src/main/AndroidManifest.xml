@@ -77,11 +77,16 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-
+        <receiver android:name=".exercise.ActionReceiver">
+            <intent-filter>
+                <action android:name="DESSERT"/>
+                <action android:name="BEVERAGE"/>
+                <action android:name="MEAL"/>
+                <action android:name="CANCEL"/>
+            </intent-filter>
+        </receiver>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity android:name=".exercise.NotificationCustomView"></activity>
     </application>
-
 </manifest>

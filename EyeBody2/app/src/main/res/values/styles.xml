@@ -7,7 +7,7 @@
         <item name="colorPrimary">@color/transparentBlack30</item>
         <item name="colorPrimaryDark">@color/transparentBlack40</item>
         <item name="android:windowBackground">@drawable/gradient_background</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/transparentBlack30</item>
         <item name="colorControlNormal">@color/white</item>
         <item name="colorControlActivated">@color/colorPrimary</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
