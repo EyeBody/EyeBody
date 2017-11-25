@@ -5,5 +5,15 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     tools:context="com.example.android.eyebody.ExerciseActivity">
+    <ScrollView
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

@@ -11,13 +11,6 @@ import android.util.Log
 class ActionReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
-        /*
-        if (MEAL.equals(action)) {
-            Log.v("shuffTest", "Pressed YES")
-        } else if (MAYBE_ACTION.equals(action)) {
-            Log.v("shuffTest", "Pressed NO")
-        } else if (NO_ACTION.equals(action)) {
-            Log.v("shuffTest", "Pressed MAYBE")
-        }*/
+
     }
 }

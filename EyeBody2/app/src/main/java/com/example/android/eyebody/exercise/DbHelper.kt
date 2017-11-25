@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 /**
  * Created by ytw11 on 2017-11-15.
  */
-class DbHelper(var context: Context,var name:String,var factory: SQLiteDatabase.CursorFactory?,var version:Int) : SQLiteOpenHelper(context,name,factory,version ) {
+class DbHelper(var context: Context, var name:String, private var factory: SQLiteDatabase.CursorFactory?, var version:Int) : SQLiteOpenHelper(context,name,factory,version ) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE BILL (_id INTEGER PRIMARY KEY AUTOINCREMENT,menu STRING,price INTEGER,create_at TEXT);)")
     }
@@ -26,7 +26,7 @@ class DbHelper(var context: Context,var name:String,var factory: SQLiteDatabase.
     fun update(menu: String, price: Int) {
         var db: SQLiteDatabase = writableDatabase
         // 입력한 항목과 일치하는 행의 가격 정보 수정
-        db.execSQL("UPDATE BILL SET price=$price WHERE menu='$menu';");
+        db.execSQL("UPDATE BILL SET price=$price WHERE menu='$menu';")
         db.close()
     }
     fun getResult(): String
