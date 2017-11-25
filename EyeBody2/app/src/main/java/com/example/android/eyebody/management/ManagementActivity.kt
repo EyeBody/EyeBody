@@ -1,15 +1,22 @@
 package com.example.android.eyebody.management
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.Window
+import android.widget.ImageView
 import android.widget.Toast
 import com.example.android.eyebody.R
+import com.example.android.eyebody.camera.CameraActivity
+import com.example.android.eyebody.gallery.GalleryActivity
 import com.example.android.eyebody.management.config.ConfigManagementFragment
 import com.example.android.eyebody.management.exercise.ExerciseManagementFragment
 import com.example.android.eyebody.management.food.FoodManagementFragment
@@ -46,20 +53,36 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // layout 처리
         setContentView(R.layout.activity_management)
 
-
         /* actionbar, statusbar 연습 */
-
         //supportActionBar?.hide()
-        supportActionBar?.title = "Main"
-        supportActionBar?.subtitle = "메인관리창"
-        supportActionBar?.setBackgroundDrawable(getDrawable(R.drawable.samplebackground))
-
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.setIcon(getDrawable(R.drawable.icons8camera))
-        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //supportActionBar?.title = "Main"
+        //supportActionBar?.subtitle = "메인관리창"
+        //supportActionBar?.setBackgroundDrawable(getDrawable(R.drawable.samplebackground))
+        val actionbar = supportActionBar
+        actionbar?.setDisplayShowCustomEnabled(true)
+        actionbar?.setDisplayShowTitleEnabled(false)
+        actionbar?.setDisplayHomeAsUpEnabled(false)
+        actionbar?.setDisplayShowHomeEnabled(false)
+        actionbar?.setDisplayUseLogoEnabled(false)
+        actionbar?.setCustomView(R.layout.actionbar_management)
+        val customView = actionbar?.customView
+        if(customView?.parent is Toolbar?) {
+            val toolbar: Toolbar? = customView?.parent as Toolbar?
+            toolbar?.setContentInsetsAbsolute(0, 0)
+        } else if (customView?.parent is android.widget.Toolbar?){
+            val toolbar: android.widget.Toolbar? = customView?.parent as android.widget.Toolbar?
+            toolbar?.setContentInsetsAbsolute(0, 0)
+        }
+        customView?.findViewById<ImageView>(R.id.goto_camera)?.setOnClickListener {
+            val mIntent = Intent(this,CameraActivity::class.java)
+            startActivity(mIntent)
+        }
+        customView?.findViewById<ImageView>(R.id.goto_gallery)?.setOnClickListener {
+            val mIntent = Intent(this, GalleryActivity::class.java)
+            startActivity(mIntent)
+        }
 
         window.statusBarColor = 0x7f100030 //0xAARRGGBB ~ format(7f ff ff ff) ~ (127, 255, 255, 255) ~ alpha 는 0이 투명 , resources.getColor(R.color.colorAccent)
 
