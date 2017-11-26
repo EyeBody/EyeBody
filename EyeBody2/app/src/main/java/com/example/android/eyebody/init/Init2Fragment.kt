@@ -11,9 +11,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.example.android.eyebody.EncryptStringManager
+import com.example.android.eyebody.utility.EncryptStringManager
 import com.example.android.eyebody.R
-import java.security.MessageDigest
 
 /**
  * Created by YOON on 2017-09-24

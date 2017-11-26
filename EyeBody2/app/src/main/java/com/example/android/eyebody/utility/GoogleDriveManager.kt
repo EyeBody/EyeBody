@@ -1,4 +1,4 @@
-package com.example.android.eyebody.googleDrive
+package com.example.android.eyebody.utility
 
 import android.app.Activity
 import android.content.Context

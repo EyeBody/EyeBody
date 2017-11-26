@@ -1,9 +1,11 @@
 package com.example.android.eyebody.management.config
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.constraint.ConstraintLayout
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +18,10 @@ import com.example.android.eyebody.R
  * Created by YOON on 2017-11-19
  */
 
-class ConfigManagementSubAdapter(val context: Context, private val contents: Array<ConfigManagementSubContent>) : BaseAdapter() {
+class ConfigManagementSubAdapter(val activity: Activity, private val contents: Array<ConfigManagementSubContent>) : BaseAdapter() {
+
+    val TAG = "mydbg_ConfigMNG_SubAdap"
+    val context = activity.applicationContext!!
 
     override fun getView(p: Int, convertView: View?, parent: ViewGroup?): View {
 
@@ -48,12 +53,61 @@ class ConfigManagementSubAdapter(val context: Context, private val contents: Arr
                     }
                 }
 
-        if (contents[p].hasSwitch) {
-            switch.visibility = View.VISIBLE
-            switch.isChecked = (prefValue != 0)
-            textConstraint.setOnClickListener {
-                switch.isChecked = !switch.isChecked
+
+        val clickToCallOrNoneAutoListener = View.OnClickListener { v->
+            // TODO 클릭했을 때 listview의 item click이 작동해야 함.
+
+            fun justToggleOrValueUp() {
+                Log.d(TAG, "${(pref.getInt(contents[p].preferenceName, 0))} -> ${(pref.getInt(contents[p].preferenceName, 0) + 1).rem(contents[p].preferenceValueExplanation?.size ?: 1)}")
+                if (switch.visibility == View.VISIBLE) {
+                    if(v !is Switch)
+                        switch.isChecked = !switch.isChecked
+                    // switch changed listener 를 통해서 value를 저장함.
+                } else {
+                    // value++
+                    if (contents[p].preferenceName != null) {
+                        savePreference(pref, contents[p].preferenceName!!,
+                                (pref.getInt(contents[p].preferenceName, 0) + 1).rem(contents[p].preferenceValueExplanation?.size ?: 1)
+                        )
+                        notifyDataSetChanged()
+                    }
+                }
             }
+
+            when (contents[p]) {
+
+                is CallableSubContent -> {
+
+                    val subContent = (contents[p] as CallableSubContent)
+                    val prefCurrentStatus = pref.getInt(contents[p].preferenceName, 0)
+
+                    if (subContent.canCall(prefCurrentStatus)) {
+                        // 현재 상태에서 정해진 dialog가 존재한다면 스위치 여부를 dialog에 물어보고 토글
+                        val result = 0
+                        // call이 fragment를 콜하는지 activity를 콜하는지 명시해줄 필요 있나..?
+                        subContent.call(activity, prefCurrentStatus)
+                        if (subContent is DialogCallerSubContent) {
+                            // TODO : fragment호출 후 switch 변동 주어야 함.
+                            if (result == 1) { // 물어봐서 된다고 했음.
+                                switch.isChecked = !switch.isChecked //TODO 다른데서 정의해줘야 하는 부분.
+                            }
+                        } else if (subContent is ActivityCallerSubContent) {
+                            // TODO : 다른 곳에서 forResult를 이용해서 switch 변동을 시켜주어야 함.
+                        }
+                    } else {
+                        // 정해진 dialog가 없다면 스위치 토글 또는 value ++
+                        justToggleOrValueUp()
+                    }
+                }
+
+            // Callable이 아닌 경우에도 스위치 토글 또는 value ++
+                else -> justToggleOrValueUp()
+            }
+        }
+
+        if (contents[p].hasSwitch) {
+            switch.isChecked = (prefValue != 0) //isChecked = prefValue != false
+            switch.setOnClickListener(clickToCallOrNoneAutoListener)
             switch.setOnCheckedChangeListener { compoundButton, b ->
                 savePreference(pref, contents[p].preferenceName!!,
                         if (switch.isChecked)
@@ -65,9 +119,9 @@ class ConfigManagementSubAdapter(val context: Context, private val contents: Arr
             }
         } else {
             switch.visibility = View.GONE
-            // TODO : Dialog open and set shared preference value
-            // preferenceName 이 null일 수 있음
         }
+        textConstraint.setOnClickListener(clickToCallOrNoneAutoListener)
+
 
         return view
     }

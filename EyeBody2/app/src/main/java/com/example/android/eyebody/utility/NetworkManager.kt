@@ -1,8 +1,7 @@
-package com.example.android.eyebody.googleDrive
+package com.example.android.eyebody.utility
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.telephony.TelephonyManager
 
 /**
  * Created by Yoon on 2017-11-19

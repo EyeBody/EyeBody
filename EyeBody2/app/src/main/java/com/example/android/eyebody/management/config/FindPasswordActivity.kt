@@ -5,7 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
-import com.example.android.eyebody.EncryptStringManager
+import com.example.android.eyebody.utility.EncryptStringManager
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.activity_find_password.*
 

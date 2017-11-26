@@ -1,11 +1,13 @@
 package com.example.android.eyebody.management.config
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.support.constraint.ConstraintLayout
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -17,7 +19,11 @@ import com.example.android.eyebody.R
 /**
  * Created by Yoon on 2017-11-18
  */
-class ConfigManagementAdapter(val context: Context, private val contents: Array<ConfigManagementContent>) : BaseAdapter() {
+class ConfigManagementAdapter(val activity: Activity, private val contents: Array<ConfigManagementContent>) : BaseAdapter() {
+
+    val context = activity.applicationContext!!
+
+    val TAG = "mydbg_ConfigMngAdapter"
 
     override fun getView(p: Int, convertView: View?, parent: ViewGroup?): View {
 
@@ -32,9 +38,16 @@ class ConfigManagementAdapter(val context: Context, private val contents: Array<
         subText.text = contents[p].subText
 
         val subListView: ListView = view.findViewById(R.id.listview_sub_config_management)
-        subListView.adapter = ConfigManagementSubAdapter(context, contents[p].subContent)
-        //ArrayAdapter(context, android.R.layout.simple_list_item_1, arrayOf("aa","bb"))
+        subListView.adapter = ConfigManagementSubAdapter(activity, contents[p].subContent)
 
+        subListView.setOnItemClickListener { parent, view, position, id -> //AdapterView<?> parent, View view, Int position, Long id
+            val entry = parent.adapter.getItem(position)
+            Toast.makeText(context, "parent : $parent\nview : $view\n position : $position\nid : $id", Toast.LENGTH_SHORT).show()
+            Log.d(TAG, "parent : $parent\n" +
+                    "view : $view\n" +
+                    " position : $position\n" +
+                    "id : $id")
+        }
 
         return view
     }
