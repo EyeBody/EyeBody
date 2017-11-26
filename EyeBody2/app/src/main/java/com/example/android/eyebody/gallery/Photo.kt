@@ -158,7 +158,7 @@ class Photo(): AppCompatActivity(), Parcelable {
         } catch(e: Exception){
             e.printStackTrace()
         }
-
+        
         return text
     }
 }

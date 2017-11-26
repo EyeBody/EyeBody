@@ -19,5 +19,4 @@
     <item
         android:id="@+id/action_googleDrive_manualLoad"
         android:title="@string/googleDrive_manualLoad" />
-
 </menu>

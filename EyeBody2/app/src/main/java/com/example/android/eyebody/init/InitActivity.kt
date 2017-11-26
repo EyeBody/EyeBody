@@ -5,11 +5,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.Spannable
+import android.text.SpannableString
 import android.util.Log
 import android.widget.ImageButton
 import com.example.android.eyebody.MainActivity
 import com.example.android.eyebody.R
-
+import com.example.android.eyebody.TypefaceSpan
 
 // 상단에 init N flagment 를 띄워준다.
 // progress dot (flagment에 따라 설정)
@@ -20,13 +22,17 @@ class InitActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_init)
-        //setActionBar(null)
+
+        //앱 바 커스텀 폰트 적용
+        var s: SpannableString = SpannableString(getString(R.string.app_name));
+        s.setSpan(TypefaceSpan(this, "roboto_regular.ttf"), 0, s.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        supportActionBar!!.setTitle(s)  //v7은 actionBar 대신 supportActionBar로 호출해야 함
 
         /* SharedPreferences (앱 공유 데이터)
         MODE_PRIVATE : 다른 앱이 접근 불가(파일 권한 없이 불가를 뜻하는 것 같음) (mode_world_readable : 다른 앱이 공유 데이터에 접근 가능)
          */
         val sharedPref: SharedPreferences = getSharedPreferences(
-                getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+                getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
         val sharedPref_hashedPW = sharedPref.getString(
                 getString(R.string.sharedPreference_hashedPW), getString(R.string.sharedPreference_default_hashedPW))
         val sharedPref_targetWeight = sharedPref.getInt(

@@ -1,17 +1,26 @@
 ﻿<resources>
-    <string name="app_name">눈바디</string>
+    <string name="app_name">EyeBody</string>
 
     <string name="category_camera">카메라</string>
     <string name="category_gallery">갤러리</string>
     <string name="category_exercise">운동</string>
     <string name="category_setting">설정</string>
 
-    <string name="sharedPreference_initSetting">initSetting</string>
+    <string name="getSharedPreference_initSetting">initSetting</string>
     <string name="sharedPreference_hashedPW">hashedPW</string>
     <string name="sharedPreference_targetWeight">targetWeight</string>
     <string name="sharedPreference_targetDate">targetDate</string>
     <string name="sharedPreference_default_hashedPW">none</string>
     <string name="sharedPreference_default_targetDate">none</string>
+    <string name="sharedPreference_email">email</string>
+    <string name="sharedPreference_email_auth_status">auth</string>
+    <string name="sharedPreference_email_auth_ok">email_authentication_ok</string>
+
+    <string name="getSharedPreference_configuration">sharedPref_configuration</string>
+    <string name="sharedPreference_Backup_Only_Wifi">Backup_Only_Wifi</string>
+    <string name="sharedPreference_Backup_None">Backup_None</string>
+    <string name="sharedPreference_Backup_Auto">Backup_Auto</string>
+    <string name="sharedPreference_Security_Use_Fingerprint">Security_Use_Fingerprint</string>
 
     <string name="collage">콜라주</string>
     <string name="share">공유하기</string>
@@ -23,13 +32,12 @@
     <string name="textview_target2">목표 날짜 : </string>
     <string name="button_cancel">취소</string>
     <string name="button_submit">확인</string>
+    <string name="email_auth_key">email_auth_key</string>
+
     <string name="edit_image">이미지 편집하기</string>
     <string name="crop_confirm">자르기 확인</string>
     <string name="fail_to_crop">자르기에 실패하였습니다</string>
 
     <string name="category_init">눈바디 시작하기</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

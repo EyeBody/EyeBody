@@ -19,15 +19,23 @@ import com.example.android.eyebody.gallery.GalleryActivity
 import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.support.v4.app.ActivityCompat.requestPermissions
+import android.widget.Toast.LENGTH_LONG
+import com.example.android.eyebody.exercise.SMSReceiver
 
 class MainActivity : PermissionsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        checkSMSPermission()
         //TODO : 문자내역을 가져오기 위한 통화내역 읽어오기 read_SMS 퍼미션.
 
         //TODO : 문자내역을 가져오기 위한 통화내역 읽어오기 read_SMS 퍼미션.
+
 
         fun onCreateOptionsMenu(menu: Menu): Boolean {
             super.onCreateOptionsMenu(menu)
@@ -64,13 +72,13 @@ class MainActivity : PermissionsActivity() {
             var result: Int = ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.CAMERA)
             return result == PackageManager.PERMISSION_GRANTED
         }
+
         btn_activity_photo.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!checkCAMERAPermission()) {
                     requestPermissions(arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE), object : PermissionCallBack {
                         override fun permissionGranted() {
                             super.permissionGranted()
-
                             startActivity(cameraPage)
                             Log.v("Camera permissions", "Granted")
                         }
@@ -84,11 +92,9 @@ class MainActivity : PermissionsActivity() {
             } else startActivity(cameraPage)
         }
 
-
-
         btn_activity_gallery.setOnClickListener {
             val sharedPref: SharedPreferences = getSharedPreferences(
-                    getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+                    getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
             val sharedPref_hashedPW = sharedPref.getString(
                     getString(R.string.sharedPreference_hashedPW), getString(R.string.sharedPreference_default_hashedPW))
 
@@ -101,6 +107,7 @@ class MainActivity : PermissionsActivity() {
                 //overridePendingTransition(0,0)
             }
         }
+
         btn_activity_func1.setOnClickListener {
 
             startActivity(exercisePage)
@@ -108,8 +115,38 @@ class MainActivity : PermissionsActivity() {
 
         btn_activity_func2.setOnClickListener {
             startActivity(settingPage)
+            finish()
         }
+    }
 
+    private fun checkSMSPReadPermission(): Boolean {
+        var result: Int = ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.READ_SMS)
+        return result == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun checkSMSReceivePermission():Boolean{
+        var result:Int=ContextCompat.checkSelfPermission(applicationContext,android.Manifest.permission.RECEIVE_SMS)
+        return result==PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun checkCAMERAPermission(): Boolean {
+        var result: Int = ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.CAMERA)
+        return result == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun checkSMSPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!checkSMSPReadPermission() || !checkSMSReceivePermission()) {
+                requestPermissions(arrayOf(android.Manifest.permission.READ_SMS, android.Manifest.permission.RECEIVE_SMS), object : PermissionCallBack {
+                    override fun permissionGranted() {
+                        super.permissionGranted()
+                    }
+                    override fun permissionDenied() {
+                        super.permissionDenied()
+                    }
+                })
+            }
+        }
     }
 
     /* onCreateOptionMenu
@@ -136,7 +173,7 @@ class MainActivity : PermissionsActivity() {
             R.id.Actionbar_Reset -> {
                 // init 으로 감 (sharedPreference가 채워져 있으면 init에서 저절로 main으로 오므로 clear작업을 해줌)
                 // debug용임.
-                getSharedPreferences(getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+                getSharedPreferences(getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
                         .edit()
                         .clear()
                         .commit()

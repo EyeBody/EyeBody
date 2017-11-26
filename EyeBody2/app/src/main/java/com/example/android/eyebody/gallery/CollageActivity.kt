@@ -43,14 +43,13 @@ class CollageActivity : AppCompatActivity() {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu_image_select, menu)
         this.menu = menu
-
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> {
-                shareKakao()
+                ShareKakao(baseContext).shareKakao()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -65,49 +64,19 @@ class CollageActivity : AppCompatActivity() {
         //캐시 파일 삭제
         var dir: File
 
-        if(file == null)
-            dir = cacheDir
-        else
-            dir = file
+        if(file == null) dir = cacheDir
+        else dir = file
 
-        if(dir == null)
-            return
+        if(dir == null) return
 
         var children = dir.listFiles()
         try{
             for(child in children){
-                if(child.isDirectory)
-                    clearApplicationCache(child)
-                else
-                    child.delete()
+                if(child.isDirectory) clearApplicationCache(child)
+                else child.delete()
             }
         } catch(e: Exception){
 
-        }
-    }
-    
-    fun shareKakao()
-    {
-        try{
-            val kakaoLink:KakaoLink = KakaoLink.getKakaoLink(this)
-            val kakaoBuilder: KakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder()
-
-            /*메시지 추가*/
-            kakaoBuilder.addText("친구야 같이 다이어트 하자!")
-
-            /*이미지 가로/세로 사이즈는 80px 보다 커야하며, 이미지 용량은 500kb 이하로 제한된다.*/
-            var url:String  = "https://cdn.iconscout.com/public/images/icon/premium/png-512/dumbbells-weight-lifting-gym-fitness-3250aa06165832ea-512x512.png"
-            kakaoBuilder.addImage(url, 160, 160)
-
-            /*앱 실행버튼 추가*/
-            kakaoBuilder.addAppButton("앱 실행 혹은 다운로드")
-
-            /*메시지 발송*/
-            kakaoLink.sendMessage(kakaoBuilder, this)
-
-        }catch (e:Exception)
-        {
-            e.printStackTrace()
         }
     }
 }

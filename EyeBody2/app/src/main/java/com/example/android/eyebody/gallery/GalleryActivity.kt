@@ -9,9 +9,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.example.android.eyebody.R
 import android.widget.Toast
-import com.example.android.eyebody.googleDrive.GoogleDriveManager
+import com.example.android.eyebody.R
+import com.example.android.eyebody.utility.GoogleDriveManager
 import kotlinx.android.synthetic.main.activity_gallery.*
 import java.io.File
 import java.io.FileOutputStream
@@ -19,28 +19,27 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class GalleryActivity : AppCompatActivity() {
-    var photoList = ArrayList<Photo>()
+    private val TAG = "mydbg_gallery"
     var googleDriveManager: GoogleDriveManager? = null
-    var togleItem : MenuItem? = null
+    var toggleItem: MenuItem? = null
+
+    var photoList = ArrayList<Photo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
         googleDriveManager = object : GoogleDriveManager(baseContext, this@GalleryActivity) {
-
             override fun onConnectionStatusChanged() {
-                super.onConnectionStatusChanged()
-                if(togleItem != null) {
+                if (toggleItem != null) {
                     if (googleDriveManager?.checkConnection() == true) {
-                        togleItem?.title = getString(R.string.googleDrive_do_signOut)
-                        Toast.makeText(activity, "connect",Toast.LENGTH_LONG).show()
+                        toggleItem?.title = getString(R.string.googleDrive_do_signOut)
+                        Toast.makeText(activity, "connect", Toast.LENGTH_LONG).show()
                     } else {
-                        togleItem?.title = getString(R.string.googleDrive_do_signIn)
+                        toggleItem?.title = getString(R.string.googleDrive_do_signIn)
                         Toast.makeText(activity, "connect xxx", Toast.LENGTH_LONG).show()
                     }
                 }
             }
-
         }
 
         //(이미지 리사이징)뷰가 그려지기 전이라서 width, height를 측정해서 가져옴
@@ -133,44 +132,64 @@ class GalleryActivity : AppCompatActivity() {
             }
 
             R.id.action_googleDrive_signInOut_togle -> {//구글드라이브 로그인 토글
-                togleItem = item
+                toggleItem = item
                 when (googleDriveManager?.checkConnection()) {
                     true -> {
                         googleDriveManager?.signOut()
-                        Log.d("mydbg_gallery", "do sign out")
+                        Log.d(TAG, "do sign out")
                     }
                     false -> {
                         googleDriveManager?.signIn()
-                        Log.d("mydbg_gallery", "do sign in")
+                        Log.d(TAG, "do sign in")
                     }
                 }
             }
 
-            R.id.action_googleDrive_manualSave -> { //구글드라이브 수동 저장
-                //googleDriveManager?.saveAllFile()
-                googleDriveManager?.upload("${getExternalFilesDir(null)}/gallery_body/front_week4.jpg")
-                /*
-                intentsender 방식
-
-                val intentsender = googleDriveManager?.upload("${getExternalFilesDir(null)}/gallery_body/front_week4.jpg")
-                Log.i("mydbg_gallery","${getExternalFilesDir(null)}/gallery_body/front_week4.jpg upload request")
-                if (intentsender != null) {
-                    Log.d("mydbg_gallery","$intentsender")
-                    try {
-                        startIntentSenderForResult(intentsender, 123, null, 0, 0, 0)
-                    } catch(e : IntentSender.SendIntentException){
-                        e.printStackTrace()
-                    }
-                    Log.d("mydbg_gallery","upload request failed")
-                } else {
-                    Log.d("mydbg_gallery", "save file ok")
+        /*
+        TODO 와이파이가 되있는지 안되어있는지 확인 여부
+            > wifi / lte
+        TODO 자동저장을 위한 코딩
+            > 자동 저장 on 하면 바로 하는 함수 {
+                    내부Query 결과와 현재 리소스파일 전체가 일치하는지 확인
+                    일치하지 않는다면 그 차이를 가지고 update(upload and download)
                 }
-                */
+            = 접속할 때 마다 동기화가 되어있는지 파악 {
+                    내부Query 결과와 현재 리소스파일 전체가 일치하는지 확인
+                    일치하지 않는다면 그 차이를 가지고 update
+                }
+            > 촬영해서 저장할 때 마다 저장 / 선택해서 삭제할 때 마다 삭제 {
+                    단일 파일 저장/불러오기 함수 만들기
+                }
+         */
+
+            R.id.action_googleDrive_manualSave -> { //구글드라이브 수동 저장
+                object : Thread() {
+                    override fun run() {
+                        //TODO 전체 경로를 savelocation 과 savefile 로 나눠서 하는 것이 좋을 듯.
+                        val successPair = googleDriveManager?.saveAllFile(
+                                arrayOf(/* 내부저장소에 있는 모든 .eyebody (백업대상) 파일이름을 array로 구성해야 함. */
+                                        "${getExternalFilesDir(null)}/gallery_body/front_week1.jpg",
+                                        "${getExternalFilesDir(null)}/gallery_body/front_week2.jpg",
+                                        "${getExternalFilesDir(null)}/gallery_body/front_week3.jpg",
+                                        "${getExternalFilesDir(null)}/gallery_body/front_week4.jpg")
+                        )
+                        Log.d(TAG, "saving file : (${successPair?.first} / ${successPair?.second})")
+                    }
+                }.start()
+
             }
 
             R.id.action_googleDrive_manualLoad -> { //구글드라이브 수동 불러오기
-                googleDriveManager?.loadAllFile()
-                Log.d("mydbg_gallery", "do load file")
+                object : Thread() {
+                    override fun run() {
+                        val successPair = googleDriveManager?.loadAllFile(
+                                arrayOf(/* 내부저장소에 있는 모든 .eyebody (백업대상) 파일이름을 array로 구성해야 함. */
+                                        "${getExternalFilesDir(null)}/gallery_body/front_week1.jpg",
+                                        "${getExternalFilesDir(null)}/gallery_body/front_week2.jpg")
+                        )
+                        Log.d(TAG, "loading file : (${successPair?.first} / ${successPair?.second})")
+                    }
+                }.start()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -180,10 +199,12 @@ class GalleryActivity : AppCompatActivity() {
         super.onStart()
         //TODO 비트맵 메모리 반환: 이미지 다시 불러오기
     }
+
     override fun onStop() {
         super.onStop()
         //TODO 비트맵 메모리 반환: 하드웨어 가속 끄고 비트맵 반환
     }
+
     fun assetsToExternalStorage() {
         //assets에 있는 파일을 외부저장소로 복사(테스트용)
         for (i in 1..4) {

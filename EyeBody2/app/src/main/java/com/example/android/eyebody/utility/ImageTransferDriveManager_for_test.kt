@@ -1,4 +1,4 @@
-package com.example.android.eyebody.googleDrive
+package com.example.android.eyebody.utility
 
 import android.annotation.SuppressLint
 import java.io.ByteArrayOutputStream
@@ -36,7 +36,7 @@ android:value="@integer/google_play_services_version"
  *      if image !null : upload
  */
 @SuppressLint("Registered")
-class ImageTransferDriveManager : Activity(), ConnectionCallbacks, OnConnectionFailedListener {
+class ImageTransferDriveManager_for_test : Activity(), ConnectionCallbacks, OnConnectionFailedListener {
 
     init {
         val g = GoogleDriveManager(this.baseContext, this)

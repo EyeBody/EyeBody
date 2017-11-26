@@ -1,3 +1,28 @@
+<<<<<<< HEAD
+
+# copied at https://github.com/googledrive/android-demos/blob/master/.gitignore
+# and add, edit some files.
+
+# kotlinpermission build excludes
+EyeBody2/kotlinpermissions/build/intermediates/incremental/packageDebugResources/compile-file-map.properties
+EyeBody2/kotlinpermissions/build/intermediates/incremental/packageDebugResources/merger.xml
+EyeBody2/kotlinpermissions/build/outputs/logs/manifest-merger-debug-report.txt
+
+# AndroidStudio excludes
+EyeBody2/.idea/
+EyeBody2/*.iml
+
+# Gradle build excludes
+EyeBody2/.gradle/
+EyeBody2/build/
+EyeBody2/local.properties
+EyeBody2/gradle.properties
+
+# Misc
+EyeBody2/.DS_Store
+EyeBody2/.idea/misc.xml
+EyeBody2/kotlinpermissions/build/
+=======
 ﻿# Built application files
 /*/build/
 
@@ -35,3 +60,4 @@ local.properties
 .Trashes
 ehthumbs.db
 Thumbs.db
+>>>>>>> gallery

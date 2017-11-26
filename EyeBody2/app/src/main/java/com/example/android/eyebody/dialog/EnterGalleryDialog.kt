@@ -32,7 +32,7 @@ class EnterGalleryDialog : DialogFragment() {
 
 
         val sharedPref: SharedPreferences = activity.getSharedPreferences(
-                getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+                getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
         val sharedPref_hashedPW = sharedPref.getString(
                 getString(R.string.sharedPreference_hashedPW), getString(R.string.sharedPreference_default_hashedPW))
 
