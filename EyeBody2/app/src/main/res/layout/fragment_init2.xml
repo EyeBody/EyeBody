@@ -12,14 +12,6 @@
         android:gravity="center"
         android:orientation="vertical">
 
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Password"
-            android:textSize="25dp"
-            android:textAlignment="center" />
-
         <EditText
             android:id="@+id/EditText_input_password"
             android:layout_width="match_parent"

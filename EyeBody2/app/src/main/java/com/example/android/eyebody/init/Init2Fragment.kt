@@ -59,7 +59,6 @@ class Init2Fragment : Fragment() {
                 Log.d("mydbg_init2", " 평문 pw >>> ${pwByte.toString(charset("unicode"))}")
                 Log.d("mydbg_init2", "  MD5 pw >>> $hashedPW")
 
-
                 activity.getSharedPreferences(getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
                         .edit()
                         .putString("hashedPW", hashedPW)

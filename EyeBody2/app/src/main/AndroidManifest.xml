@@ -44,7 +44,11 @@
             android:label="@string/category_exercise" />
         <activity
             android:name=".init.InitActivity"
-            android:label="@string/category_init">
+            android:label="@string/category_init"/>
+
+        <activity android:name=".SplashActivity"
+            android:theme="@style/NoTitle">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,7 +63,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-
         <activity android:name=".management.config.FindPasswordActivity" />
         <activity android:name=".camera.ConfirmActivity" />
 
@@ -73,12 +76,13 @@
         <activity android:name=".camera.StickerActivity" />
         <activity
             android:name=".SettingActivity"
-            android:windowSoftInputMode="stateAlwaysVisible"
-            android:label="@string/category_setting" />
+            android:label="@string/category_setting"
+            android:windowSoftInputMode="stateAlwaysVisible" />
         <activity
-            android:hardwareAccelerated="true"
             android:name=".management.ManagementActivity"
-            android:label="관리"/>
+            android:hardwareAccelerated="true"
+            android:label="관리" />
+
         <receiver android:name=".exercise.SMSReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
@@ -86,14 +90,17 @@
         </receiver>
         <receiver android:name=".exercise.ActionReceiver">
             <intent-filter>
-                <action android:name="DESSERT"/>
-                <action android:name="BEVERAGE"/>
-                <action android:name="MEAL"/>
-                <action android:name="CANCEL"/>
+                <action android:name="DESSERT" />
+                <action android:name="BEVERAGE" />
+                <action android:name="MEAL" />
+                <action android:name="CANCEL" />
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
     </application>
+
 </manifest>

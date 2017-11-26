@@ -25,12 +25,12 @@ import android.support.v4.app.ActivityCompat.requestPermissions
 import android.widget.Toast.LENGTH_LONG
 import com.example.android.eyebody.exercise.SMSReceiver
 
-
 class MainActivity : PermissionsActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         checkSMSPermission()
         //TODO : 문자내역을 가져오기 위한 통화내역 읽어오기 read_SMS 퍼미션.
 
@@ -68,6 +68,11 @@ class MainActivity : PermissionsActivity() {
         /* Listener (이벤트 리스너)
         클릭하면 반응
          */
+        fun checkCAMERAPermission(): Boolean {
+            var result: Int = ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.CAMERA)
+            return result == PackageManager.PERMISSION_GRANTED
+        }
+
         btn_activity_photo.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!checkCAMERAPermission()) {
@@ -102,6 +107,7 @@ class MainActivity : PermissionsActivity() {
                 //overridePendingTransition(0,0)
             }
         }
+
         btn_activity_func1.setOnClickListener {
 
             startActivity(exercisePage)
@@ -112,18 +118,22 @@ class MainActivity : PermissionsActivity() {
             finish()
         }
     }
+
     private fun checkSMSPReadPermission(): Boolean {
         var result: Int = ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.READ_SMS)
         return result == PackageManager.PERMISSION_GRANTED
     }
+
     private fun checkSMSReceivePermission():Boolean{
         var result:Int=ContextCompat.checkSelfPermission(applicationContext,android.Manifest.permission.RECEIVE_SMS)
         return result==PackageManager.PERMISSION_GRANTED
     }
+
     private fun checkCAMERAPermission(): Boolean {
         var result: Int = ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.CAMERA)
         return result == PackageManager.PERMISSION_GRANTED
     }
+
     private fun checkSMSPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!checkSMSPReadPermission() || !checkSMSReceivePermission()) {
@@ -138,7 +148,6 @@ class MainActivity : PermissionsActivity() {
             }
         }
     }
-
 
     /* onCreateOptionMenu
     액션바에 옵션메뉴를 띄우게 함. xml 긁어서
