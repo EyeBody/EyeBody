@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -42,9 +43,6 @@
             android:name=".ExerciseActivity"
             android:label="@string/category_exercise" />
         <activity
-            android:name=".SettingActivity"
-            android:label="@string/category_setting" />
-        <activity
             android:name=".init.InitActivity"
             android:label="@string/category_init">
             <intent-filter>
@@ -61,6 +59,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".management.config.FindPasswordActivity" />
         <activity android:name=".camera.ConfirmActivity" />
 
         <meta-data
@@ -71,7 +71,14 @@
             android:name=".gallery.CollageActivity"
             android:label="@string/collage" />
         <activity android:name=".camera.StickerActivity" />
-
+        <activity
+            android:name=".SettingActivity"
+            android:windowSoftInputMode="stateAlwaysVisible"
+            android:label="@string/category_setting" />
+        <activity
+            android:hardwareAccelerated="true"
+            android:name=".management.ManagementActivity"
+            android:label="관리"/>
         <receiver android:name=".exercise.SMSReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />

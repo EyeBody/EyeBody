@@ -3,7 +3,6 @@ package com.example.android.eyebody.init
 import android.annotation.SuppressLint
 import android.app.Fragment
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,11 +11,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.example.android.eyebody.utility.EncryptStringManager
 import com.example.android.eyebody.R
-import java.security.MessageDigest
 
 /**
- * Created by YOON on 2017-09-24.
+ * Created by YOON on 2017-09-24
  */
 
 // password 설정
@@ -54,16 +53,14 @@ class Init2Fragment : Fragment() {
 
                 // TODO ----- MD5 에서 SHA-3 (KECCAK) or SHA128 로 알고리즘 개선
                 // MIT license code : https://github.com/walleth/keccak/blob/master/keccak/src/main/kotlin/org/walleth/keccak/Keccak.kt
-                val md5 = MessageDigest.getInstance("MD5")
                 val pwByte = strPW.toString().toByteArray(charset("unicode"))
-                md5.update(pwByte)
-                val hashedPW = md5.digest().toString(charset("unicode"))
+                val hashedPW = EncryptStringManager.encryptString(strPW.toString())
 
                 Log.d("mydbg_init2", " 평문 pw >>> ${pwByte.toString(charset("unicode"))}")
                 Log.d("mydbg_init2", "  MD5 pw >>> $hashedPW")
 
 
-                activity.getSharedPreferences(getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+                activity.getSharedPreferences(getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
                         .edit()
                         .putString("hashedPW", hashedPW)
                         .commit()

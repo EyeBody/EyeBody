@@ -70,6 +70,8 @@ class SMSReceiver : BroadcastReceiver() {
                         dbHelper.insert(time, menu!!, price)//날짜랑 메뉴 가격을 한 칼럼으로 테이블에 넣는다
                     //TODO:단순 사용 저장 보다는 노티를 날리자.//
                     }
+                    else{
+                    }
                 }
             }
         }

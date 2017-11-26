@@ -60,7 +60,7 @@ class Init3Fragment : Fragment() {
             if (weight != resources.getInteger(R.integer.sharedPreference_default_targetWeight) &&
                     date != getString(R.string.textview_target2)) {
 
-                activity.getSharedPreferences(getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+                activity.getSharedPreferences(getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
                         .edit()
                         .putInt(getString(R.string.sharedPreference_targetWeight), weight!!)
                         .putString(getString(R.string.sharedPreference_targetDate), date)

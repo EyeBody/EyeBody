@@ -89,7 +89,7 @@ class MainActivity : PermissionsActivity() {
 
         btn_activity_gallery.setOnClickListener {
             val sharedPref: SharedPreferences = getSharedPreferences(
-                    getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+                    getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
             val sharedPref_hashedPW = sharedPref.getString(
                     getString(R.string.sharedPreference_hashedPW), getString(R.string.sharedPreference_default_hashedPW))
 
@@ -109,6 +109,7 @@ class MainActivity : PermissionsActivity() {
 
         btn_activity_func2.setOnClickListener {
             startActivity(settingPage)
+            finish()
         }
     }
     private fun checkSMSPReadPermission(): Boolean {
@@ -163,7 +164,7 @@ class MainActivity : PermissionsActivity() {
             R.id.Actionbar_Reset -> {
                 // init 으로 감 (sharedPreference가 채워져 있으면 init에서 저절로 main으로 오므로 clear작업을 해줌)
                 // debug용임.
-                getSharedPreferences(getString(R.string.sharedPreference_initSetting), Context.MODE_PRIVATE)
+                getSharedPreferences(getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
                         .edit()
                         .clear()
                         .commit()

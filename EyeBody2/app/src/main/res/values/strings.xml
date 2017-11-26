@@ -6,17 +6,22 @@
     <string name="category_exercise">운동</string>
     <string name="category_setting">설정</string>
 
-    <string name="sharedPreference_initSetting">initSetting</string>
+    <string name="getSharedPreference_initSetting">initSetting</string>
     <string name="sharedPreference_hashedPW">hashedPW</string>
     <string name="sharedPreference_targetWeight">targetWeight</string>
     <string name="sharedPreference_targetDate">targetDate</string>
     <string name="sharedPreference_default_hashedPW">none</string>
     <string name="sharedPreference_default_targetDate">none</string>
+    <string name="sharedPreference_email">email</string>
+    <string name="sharedPreference_email_auth_status">auth</string>
+    <string name="sharedPreference_email_auth_ok">email_authentication_ok</string>
 
-    <string name="cd_repeat">Repeat one or all</string>
-    <string name="cd_previous">Skip backwards</string>
-    <string name="cd_play">Play and pause</string>
-    <string name="cd_next">Skip forwards</string>
+    <string name="getSharedPreference_configuration">sharedPref_configuration</string>
+    <string name="sharedPreference_Backup_Only_Wifi">Backup_Only_Wifi</string>
+    <string name="sharedPreference_Backup_None">Backup_None</string>
+    <string name="sharedPreference_Backup_Auto">Backup_Auto</string>
+    <string name="sharedPreference_Security_Use_Fingerprint">Security_Use_Fingerprint</string>
+
     <string name="collage">콜라주</string>
     <string name="share">공유하기</string>
     <string name="googleDrive_manualSave">Google 수동 저장</string>
@@ -28,10 +33,9 @@
     <string name="button_cancel">취소</string>
     <string name="button_submit">확인</string>
     <string name="editImage">이미지 편집하기</string>
-    <string name="category_init">눈바디 시작하기</string>
+    <string name="category_init">눈바디</string>
 
-    <string name="notificationtitle">메뉴선택</string>
-    <string name="lbltitle">"Title : "</string>
-    <string name="lbltext">"Text : "</string>
-    <string name="title_activity_main">Broadcast Tutorial</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email_auth_key">email_auth_key</string>
+
 </resources>
