@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.fragment_image_collage.*
 import android.graphics.Bitmap
@@ -22,14 +21,12 @@ import android.graphics.Color
 
 class ImageCollageFragment : Fragment() {
     lateinit var collage: CollageActivity
-    lateinit var photoList: ArrayList<Photo>
-    lateinit var selected: ArrayList<Int>
+    lateinit var selected: ArrayList<Photo>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         collage = activity as CollageActivity
-        photoList = collage.photoList
         selected = collage.selectedPhotoList
     }
 
@@ -50,19 +47,19 @@ class ImageCollageFragment : Fragment() {
         }
 
         horizentalMakeCollageButton.setOnClickListener {
-            sampleImageView.setImageBitmap(combineImage(photoList, 0))
+            sampleImageView.setImageBitmap(combineImage(selected, 0))
         }
 
         verticalMakeCollageButton.setOnClickListener {
-            sampleImageView.setImageBitmap(combineImage(photoList, 1))
+            sampleImageView.setImageBitmap(combineImage(selected, 1))
         }
 
         twoMakeCollageButton.setOnClickListener {
-            sampleImageView.setImageBitmap(combineImage(photoList, 2))
+            sampleImageView.setImageBitmap(combineImage(selected, 2))
         }
 
         threeMakeCollageButton.setOnClickListener {
-            sampleImageView.setImageBitmap(combineImage(photoList, 3))
+            sampleImageView.setImageBitmap(combineImage(selected, 3))
         }
     }
 
@@ -74,8 +71,8 @@ class ImageCollageFragment : Fragment() {
         encoder.start(bos)
 
         try {
-            for(sel in selected){
-                val bmp: Bitmap = BitmapFactory.decodeStream(FileInputStream(photoList[sel].imageURL))
+            for(photo in selected){
+                val bmp: Bitmap = BitmapFactory.decodeStream(FileInputStream(photo.fileUrl))
                 encoder.addFrame(bmp)
                 bmp.recycle()
             }

@@ -2,10 +2,7 @@ package com.example.android.eyebody.gallery
 
 import android.app.Fragment
 import android.graphics.Bitmap
-import android.media.MediaScannerConnection
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.view.*
 import android.widget.Toast
 import com.example.android.eyebody.R
@@ -13,8 +10,6 @@ import com.naver.android.helloyako.imagecrop.view.ImageCropView
 import kotlinx.android.synthetic.main.fragment_image_crop.*
 import java.io.File
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ImageCropFragment : Fragment() {
     lateinit var collage: CollageActivity
@@ -24,7 +19,7 @@ class ImageCropFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         collage = activity as CollageActivity
-        photo = collage.photoList[arguments.getInt("idx")]
+        photo = collage.selectedPhotoList[arguments.getInt("idx")]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -81,8 +76,7 @@ class ImageCropFragment : Fragment() {
     }
 
     fun saveBitmapToFile(bitmap: Bitmap) {
-        //TODO 이렇게 그냥 자르면 원본 이미지가 훼손됨, 따로 저장해야됨
-        var f = File(photo.imageURL)
+        var f = File(photo.fileUrl)
         var fos = FileOutputStream(f)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
         fos.close()

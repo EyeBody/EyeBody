@@ -8,20 +8,23 @@ import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.fragment_image_edit.*
 
 class ImageEditFragment : Fragment() {
-    lateinit var photoList: ArrayList<Photo>
-    lateinit var selected: ArrayList<Int>
     lateinit var collage: CollageActivity
+    lateinit var selected: ArrayList<Photo>
+
     var imgViewWidth: Int = 0
     var imgViewHeight: Int = 0
-    var currentImageIndex: Int = 0
+    var currentIndex: Int = 0
 
-    //TODO 편집된 이미지는 따로 저장해야 됨
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
         collage = activity as CollageActivity
-        photoList = collage.photoList
         selected = collage.selectedPhotoList
+
+        for(s in collage.selectedIndexList){
+            selected.add(collage.photoList[s].copyToCacheDir(activity)) //임시 폴더로 복사
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -36,14 +39,14 @@ class ImageEditFragment : Fragment() {
         imgViewWidth = selectedImage_edit.measuredWidth
         imgViewHeight = selectedImage_edit.measuredHeight
 
-        setImage(currentImageIndex) //이미지 편집(크롭, 스티커)하다가 다시 돌아왔을 때 해당 이미지 바로 보여주기, 초기값 0
+        setImage(currentIndex) //다른거(크롭, 스티커)하다가 다시 돌아왔을 때 해당 이미지 바로 보여주기, 초기값 0
 
         leftButton_edit.setOnClickListener {
-            setImage(currentImageIndex - 1)
+            setImage(currentIndex - 1)
         }
 
         rightButton_edit.setOnClickListener {
-            setImage(currentImageIndex + 1)
+            setImage(currentIndex + 1)
         }
 
         cropButton.setOnClickListener {
@@ -51,7 +54,7 @@ class ImageEditFragment : Fragment() {
             var imageCropFragment = ImageCropFragment()
             var bundle = Bundle()
 
-            bundle.putInt("idx", selected[currentImageIndex])
+            bundle.putInt("idx", currentIndex)
             imageCropFragment.arguments = bundle
 
             fragmentManager
@@ -62,9 +65,8 @@ class ImageEditFragment : Fragment() {
         }
 
         rotationButton.setOnClickListener {
-            var idx: Int = selected[currentImageIndex]
-            photoList[idx].rotationImage(90f)
-            selectedImage_edit.setImageBitmap(photoList[idx].getBitmap(imgViewWidth, imgViewHeight))
+            selected[currentIndex].rotationImage(90f)
+            selectedImage_edit.setImageBitmap(selected[currentIndex].getBitmap(imgViewWidth, imgViewHeight))
         }
 
         stickerButton.setOnClickListener {
@@ -111,9 +113,9 @@ class ImageEditFragment : Fragment() {
             }
 
             //이미지와 현재 인덱스 변경
-            selectedImage_edit.setImageBitmap(photoList[selected[pos]].getBitmap(imgViewWidth, imgViewHeight))
+            selectedImage_edit.setImageBitmap(selected[pos].getBitmap(imgViewWidth, imgViewHeight))
             imageIndexTextView.text = (pos + 1).toString() + "/" + selected.size
-            currentImageIndex = pos
+            currentIndex = pos
         } catch (e: Exception){
             Log.e("ImageEditFragment", "out of index")  //버튼 빠르게 누르면 OutOfIndex 에러 발생
         }

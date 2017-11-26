@@ -7,10 +7,13 @@ import android.view.Menu
 import android.view.MenuItem
 import com.kakao.kakaolink.KakaoLink
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder
+import java.io.File
 
 class CollageActivity : AppCompatActivity() {
     var photoList: ArrayList<Photo> = ArrayList<Photo>()
-    var selectedPhotoList: ArrayList<Int> = ArrayList<Int>()
+    var selectedIndexList: ArrayList<Int> = ArrayList<Int>()
+    var selectedPhotoList: ArrayList<Photo> = ArrayList<Photo>()
+
     lateinit var menu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +54,36 @@ class CollageActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        clearApplicationCache(null)
+    }
+
+    fun clearApplicationCache(file: File?){
+        //캐시 파일 삭제
+        var dir: File
+
+        if(file == null)
+            dir = cacheDir
+        else
+            dir = file
+
+        if(dir == null)
+            return
+
+        var children = dir.listFiles()
+        try{
+            for(child in children){
+                if(child.isDirectory)
+                    clearApplicationCache(child)
+                else
+                    child.delete()
+            }
+        } catch(e: Exception){
+
+        }
     }
     
     fun shareKakao()

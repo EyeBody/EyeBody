@@ -24,7 +24,7 @@ class ImageSelectFragment : Fragment() {
         //RecyclerView
         imageSelectView = view.findViewById(R.id.imageSelectView)
         imageSelectView.hasFixedSize()
-        imageSelectView.adapter = CollageAdapter(activity, collage.photoList, collage.selectedPhotoList, this)
+        imageSelectView.adapter = CollageAdapter(activity, collage.photoList, collage.selectedIndexList, this)
 
         return view
     }
@@ -37,7 +37,7 @@ class ImageSelectFragment : Fragment() {
         menu.findItem(R.id.action_edit_image).setVisible(false)
         menu.findItem(R.id.action_share).setVisible(false)
 
-        if(collage.selectedPhotoList.size > 0){    //선택한 이미지가 하나 이상일 때 이미지편집 메뉴 아이콘 보여주기
+        if(collage.selectedIndexList.size > 0){    //선택한 이미지가 하나 이상일 때 이미지편집 메뉴 아이콘 보여주기
             menu.findItem(R.id.action_edit_image).setVisible(true)
         }
     }
@@ -59,19 +59,19 @@ class ImageSelectFragment : Fragment() {
     }
 
     fun setSelected(itemView: View, pos: Int, isSelected: Boolean){
+        //TODO 최대 선택갯수 설정, 선택할 때 번호매기기
         if(isSelected){
             itemView.setBackgroundColor(Color.BLUE)
-            //TODO 선택한 순서를 유지할지 말지 고민중
-            if(!collage.selectedPhotoList.contains(pos)) collage.selectedPhotoList.add(pos)  //없으면 추가
+            if(!collage.selectedIndexList.contains(pos)) collage.selectedIndexList.add(pos)  //없으면 추가
 
-            if(collage.selectedPhotoList.size > 0){    //선택한 이미지가 하나 이상일 때 이미지편집 메뉴 아이콘 보여주기
+            if(collage.selectedIndexList.size > 0){    //선택한 이미지가 하나 이상일 때 이미지편집 메뉴 아이콘 보여주기
                 menu.findItem(R.id.action_edit_image).setVisible(true)
             }
         } else {
             itemView.setBackgroundColor(Color.RED)
-            collage.selectedPhotoList.remove(pos)
+            collage.selectedIndexList.remove(pos)
 
-            if(collage.selectedPhotoList.size == 0){    //선택한 이미지가 하나도 없을 때 이미지편집 메뉴 아이콘 숨기기
+            if(collage.selectedIndexList.size == 0){    //선택한 이미지가 하나도 없을 때 이미지편집 메뉴 아이콘 숨기기
                 try{
                     menu.findItem(R.id.action_edit_image).setVisible(false)
                 } catch (e: Exception) {
