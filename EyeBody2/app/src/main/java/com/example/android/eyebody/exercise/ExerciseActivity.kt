@@ -218,6 +218,5 @@ class ExerciseActivity: Activity() {
     private fun setText(dbHelper: DbHelper){
         result.text = dbHelper.getResult()
     }
-
 }
 

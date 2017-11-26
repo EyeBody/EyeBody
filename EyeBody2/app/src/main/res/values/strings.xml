@@ -13,6 +13,10 @@
     <string name="sharedPreference_default_hashedPW">none</string>
     <string name="sharedPreference_default_targetDate">none</string>
 
+    <string name="cd_repeat">Repeat one or all</string>
+    <string name="cd_previous">Skip backwards</string>
+    <string name="cd_play">Play and pause</string>
+    <string name="cd_next">Skip forwards</string>
     <string name="collage">콜라주</string>
     <string name="share">공유하기</string>
     <string name="googleDrive_manualSave">Google 수동 저장</string>
