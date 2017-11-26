@@ -76,7 +76,9 @@
             android:windowSoftInputMode="stateAlwaysVisible"
             android:label="@string/category_setting" />
         <activity
-            android:name=".management.ManagementActivity"/>
+            android:hardwareAccelerated="true"
+            android:name=".management.ManagementActivity"
+            android:label="관리"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
