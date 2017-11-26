@@ -19,6 +19,9 @@ class ImageCropFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         collage = activity as CollageActivity
+        //TODO 이미지 편집을 다시 할 땐 원본 이미지를 불러와야함
+        //TODO 이미지 비율 고정, 같은 크기로 리사이징(이건 collage에서 해야할듯)
+        //TODO 이전 이미지로 오버레이
         photo = collage.selectedPhotoList[arguments.getInt("idx")]
     }
 
