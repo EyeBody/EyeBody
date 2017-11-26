@@ -1,21 +1,12 @@
 package com.example.android.eyebody.gallery
 
-<<<<<<< HEAD
-import android.app.Activity
-=======
->>>>>>> gallery
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-<<<<<<< HEAD
-import android.widget.ImageView
-import com.example.android.eyebody.R
-=======
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.activity_gallery.*
->>>>>>> gallery
 import kotlinx.android.synthetic.main.list_gallery.view.*
 
 
@@ -39,15 +30,6 @@ class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
 
     class Item(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindData(photo: Photo, pos: Int) {
-<<<<<<< HEAD
-            itemView.imageView.setImageBitmap(photo.getImage())
-            itemView.date.text = photo.getMemo()
-
-            itemView.setOnClickListener{
-                var imgView: ImageView = (itemView.context as Activity).findViewById(R.id.selectedImage)
-                imgView.setImageBitmap(photo.getImage())
-                imgView.setTag(pos)
-=======
             itemView.imageView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             var measuredWidth = itemView.imageView.getMeasuredWidth();
             var measuredHeight = itemView.imageView.getMeasuredHeight();
@@ -73,7 +55,6 @@ class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
                 if(pos == (itemView.context as GalleryActivity).photoList.size - 1){
                     (itemView.context as GalleryActivity).rightButton_gallery.visibility = View.INVISIBLE
                 }
->>>>>>> gallery
             }
         }
     }
