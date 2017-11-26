@@ -20,16 +20,4 @@ EyeBody2/gradle.properties
 # Misc
 EyeBody2/.DS_Store
 EyeBody2/.idea/misc.xml
-EyeBody2/kotlinpermissions/build/generated/source/buildConfig/debug/io/vrinda/kotlinpermissions/BuildConfig.java
-EyeBody2/kotlinpermissions/build/intermediates/attr/R.txt
-EyeBody2/kotlinpermissions/build/intermediates/bundles/debug/R.txt
-EyeBody2/kotlinpermissions/build/intermediates/bundles/debug/res/values-w820dp-v13/values-w820dp-v13.xml
-EyeBody2/kotlinpermissions/build/intermediates/bundles/debug/res/values/values.xml
-EyeBody2/kotlinpermissions/build/intermediates/incremental/packageDebugResources/merged.dir/values-w820dp-v13/values-w820dp-v13.xml
-EyeBody2/kotlinpermissions/build/intermediates/incremental/packageDebugResources/compile-file-map.properties
-EyeBody2/kotlinpermissions/build/intermediates/incremental/packageDebugResources/merged.dir/values/values.xml
-EyeBody2/kotlinpermissions/build/intermediates/incremental/packageDebugResources/merger.xml
-EyeBody2/kotlinpermissions/build/intermediates/manifests/aapt/debug/AndroidManifest.xml
-EyeBody2/kotlinpermissions/build/intermediates/manifests/full/debug/AndroidManifest.xml
-EyeBody2/kotlinpermissions/build/intermediates/res/symbol-table-with-package/debug/package-aware-r.txt
-EyeBody2/kotlinpermissions/build/outputs/logs/manifest-merger-debug-report.txt
+EyeBody2/kotlinpermissions/build/

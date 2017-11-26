@@ -63,7 +63,7 @@ class GalleryActivity : AppCompatActivity() {
 
             if (photoList.size != 0) {    //이미지가 하나도 없는 경우에는 selectedImage를 세팅하지 않음
                 selectedImage.setImageBitmap(photoList[0].getImage())
-                selectedImage.setTag(0)
+                selectedImage.tag=0
             }
         } else {
             //EXCEPTION 외부저장소가 마운트되지 않아서 파일을 읽고 쓸 수 없음

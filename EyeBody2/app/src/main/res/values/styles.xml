@@ -9,7 +9,6 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
     <style name="actionbar_image" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:src">@drawable/imagebutton_setting</item>
     </style>

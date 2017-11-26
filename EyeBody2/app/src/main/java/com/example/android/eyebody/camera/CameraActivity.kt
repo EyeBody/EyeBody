@@ -81,7 +81,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     private fun shutterButtonClicked() {
         btn_shutter.setOnClickListener {
             try {
-                camera?.takePicture(shutterCallback, rawCallback, jpegCallback)
+                camera?.takePicture(null, null, jpegCallback)
             } catch (e: RuntimeException) {
                 Log.d(TAG, "take picture failed")
             }
@@ -102,16 +102,6 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         rootPath = getExternalFilesDir(null).toString() + "/gallery_body"
         var file = File(rootPath)
         file.mkdirs()
-    }
-
-    //TODO : 카메라 전후면 변경 토글키를 넣어야함
-    private var shutterCallback = ShutterCallback {
-        Log.d(TAG, "onShutter'd")
-        Toast.makeText(baseContext, "shutter Clicked", Toast.LENGTH_SHORT)
-    }
-
-    private var rawCallback = PictureCallback { bytes: ByteArray?, camera: Camera? ->
-        Log.d(TAG, "onPictureTaken-raw")
     }
 
     //TODO : 사진 저장시 용량이 터질 경우 예외처리.
@@ -147,11 +137,11 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
+/*
         var intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         var uri = Uri.parse("file://" + path)
         intent.data = uri
-        sendBroadcast(intent)
+        sendBroadcast(intent)*/
         count++
         if (count == 2) {
             sideImage = bytes
@@ -184,6 +174,25 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         camera = Camera.open()
+        camera!!.setDisplayOrientation(90)
+        try{
+            var width:Int?=0
+            var height:Int?=0
+            var rotation:Int=0
+            width=camera?.parameters?.pictureSize?.width
+            height=camera?.parameters?.pictureSize?.height
+            val parameters=camera?.parameters
+
+            width=640
+            height=480
+
+            parameters?.setPictureSize(width,height)
+            parameters?.setRotation(rotation)
+            camera?.parameters=parameters
+        }catch (e:IOException){
+            camera?.release()
+            camera=null
+        }
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
@@ -191,5 +200,10 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         camera?.release()
         camera = null
         previewing = false
+    }
+
+    override fun onDestroy() {
+
+        super.onDestroy()
     }
 }
