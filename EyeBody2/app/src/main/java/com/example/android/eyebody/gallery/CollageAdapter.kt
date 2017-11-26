@@ -2,7 +2,10 @@ package com.example.android.eyebody.gallery
 
 import android.app.Fragment
 import android.content.Context
+<<<<<<< HEAD
 import android.graphics.Color
+=======
+>>>>>>> gallery
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -22,13 +25,17 @@ class CollageAdapter (var context: Context, var photoList: ArrayList<Photo>, var
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+<<<<<<< HEAD
         //TODO Fragment 종류로 데이터 바인딩 구분하기 if(fragment is ImageSelectFragment){ ... }
+=======
+>>>>>>> gallery
         (holder as Item).bindData(photoList[position], position, selectedPhotoList, fragment as ImageSelectFragment)
     }
 
     class Item(itemView: View) : RecyclerView.ViewHolder(itemView) {
         //ImageSelectFragment에서 데이터 바인딩
         fun bindData(photo: Photo, pos: Int, selectedPhotoList: ArrayList<Int>, fragment: ImageSelectFragment) {
+<<<<<<< HEAD
             itemView.imageView.setImageBitmap(photo.getImage())
             itemView.date.text = photo.getDate()
 
@@ -50,6 +57,18 @@ class CollageAdapter (var context: Context, var photoList: ArrayList<Photo>, var
                         fragment.actionEditImage_setVisible(false)
                     }
                 }
+=======
+            itemView.imageView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+            var measuredWidth = itemView.imageView.measuredWidth
+            var measuredHeight = itemView.imageView.measuredHeight
+
+            itemView.imageView.setImageBitmap(photo.getBitmap(measuredWidth, measuredHeight))
+            itemView.date.text = photo.getDate()
+            fragment.setSelected(itemView, pos, selectedPhotoList.contains(pos))
+
+            itemView.setOnClickListener{
+                fragment.setSelected(itemView, pos, !selectedPhotoList.contains(pos))   //없으면(false) 추가해줌(true)
+>>>>>>> gallery
             }
         }
     }

@@ -1,0 +1,13 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".gallery.CollageActivity" >
+
+    <item
+        android:id="@+id/action_crop_confirm"
+        android:icon="@drawable/ic_check_white_48dp"
+        android:title="@string/crop_confirm"
+        app:showAsAction="always" />
+
+</menu>

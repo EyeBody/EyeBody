@@ -1,0 +1,64 @@
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/black"
+    tools:context="com.example.android.eyebody.gallery.ImageCropFragment">
+
+    <!--
+    <ImageView
+        android:id="@+id/cropImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_launcher_round" />
+        -->
+    <com.naver.android.helloyako.imagecrop.view.ImageCropView
+        android:id="@+id/imageCropView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/overlayGuideButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/ic_overlay_guide_white_48dp" />
+
+        <Button
+            android:id="@+id/crop1to1Button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/rectangle"
+            android:text="1:1"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/crop3to4Button"
+            android:layout_width="36dp"
+            android:layout_height="48dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/rectangle"
+            android:text="3:4"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/crop9to16Button"
+            android:layout_width="30dp"
+            android:layout_height="53dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/rectangle"
+            android:text="9:16"
+            android:textColor="#ffffff" />
+    </LinearLayout>
+</android.support.v7.widget.LinearLayoutCompat>
