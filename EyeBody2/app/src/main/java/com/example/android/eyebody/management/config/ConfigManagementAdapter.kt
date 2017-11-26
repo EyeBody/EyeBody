@@ -40,15 +40,6 @@ class ConfigManagementAdapter(val activity: Activity, private val contents: Arra
         val subListView: ListView = view.findViewById(R.id.listview_sub_config_management)
         subListView.adapter = ConfigManagementSubAdapter(activity, contents[p].subContent)
 
-        subListView.setOnItemClickListener { parent, view, position, id -> //AdapterView<?> parent, View view, Int position, Long id
-            val entry = parent.adapter.getItem(position)
-            Toast.makeText(context, "parent : $parent\nview : $view\n position : $position\nid : $id", Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "parent : $parent\n" +
-                    "view : $view\n" +
-                    " position : $position\n" +
-                    "id : $id")
-        }
-
         return view
     }
 

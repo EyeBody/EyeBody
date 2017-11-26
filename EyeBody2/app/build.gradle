@@ -30,19 +30,18 @@ dependencies {
     compile 'io.vrinda.kotlinpermissions:kotlinpermissions:1.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
     compile 'com.jjoe64:graphview:4.2.1'
-
     compile group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
     compile group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION
-
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-
     testImplementation 'junit:junit:4.12'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation 'com.android.support:design:26.1.0'
+    implementation files('libs/mail.jar')
+    implementation files('libs/additionnal.jar')
 }

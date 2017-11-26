@@ -119,14 +119,6 @@ class ConfigManagementFragment : BasePageFragment() {
                         )
                 ))
 
-        listview.setOnItemClickListener { parent, view, position, id -> //AdapterView<?> parent, View view, Int position, Long id
-            Toast.makeText(context, "parent : $parent\nview : $view\n position : $position\nid : $id", Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "parent : $parent\n" +
-                    "view : $view\n" +
-                    " position : $position\n" +
-                    "id : $id")
-        }
-
         return mView
     }
 

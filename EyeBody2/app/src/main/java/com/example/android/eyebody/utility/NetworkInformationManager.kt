@@ -6,7 +6,7 @@ import android.net.ConnectivityManager
 /**
  * Created by Yoon on 2017-11-19
  */
-class NetworkManager {
+class NetworkInformationManager {
 
     companion object {
 

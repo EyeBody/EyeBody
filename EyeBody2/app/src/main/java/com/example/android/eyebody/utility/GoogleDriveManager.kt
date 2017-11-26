@@ -58,7 +58,7 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
         prefValueBackupAuto = pref.getInt(context.resources.getString(R.string.sharedPreference_Backup_Auto), 0)
 
         networkStatus =
-                if (NetworkManager.isConnectedWithWifi(context))
+                if (NetworkInformationManager.isConnectedWithWifi(context))
                     NETWORK_MODE_WIFI
                 else
                     NETWORK_MODE_MOBILE
