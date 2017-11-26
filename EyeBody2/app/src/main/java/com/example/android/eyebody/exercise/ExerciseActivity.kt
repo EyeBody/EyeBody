@@ -193,10 +193,12 @@ class ExerciseActivity : AppCompatActivity(), ConnectionCallbacks, OnConnectionF
 */
 
 package com.example.android.eyebody
-
+import android.app.Activity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
-
+import com.example.android.eyebody.exercise.DbHelper
+import kotlinx.android.synthetic.main.activity_exercise.*
 
 /*
 도장 찍는 캘린더(운동기록)
@@ -205,12 +207,16 @@ custom calendar로 UI 재구성
 
 꼭 캘린더를 구현할 필요는 없고, 적당히 운동기록 기능을 만들면 됨
  */
+class ExerciseActivity: Activity() {
 
-class ExerciseActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onCreate(savedInstanceState, persistentState)
+        val dbHelper =DbHelper(baseContext, "bill.db", null, 1)
         setContentView(R.layout.activity_exercise)
+        setText(dbHelper)
+    }
+    private fun setText(dbHelper: DbHelper){
+        result.text = dbHelper.getResult()
     }
 }
 

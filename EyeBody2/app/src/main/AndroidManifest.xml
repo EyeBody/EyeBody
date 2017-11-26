@@ -9,14 +9,15 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
 
     <application
         android:allowBackup="true"
@@ -27,7 +28,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".MainActivity"
             android:label="메인" />
@@ -43,12 +43,12 @@
         <activity
             android:name=".ExerciseActivity"
             android:label="@string/category_exercise" />
-
         <activity
             android:name=".init.InitActivity"
             android:label="@string/category_init">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
@@ -62,7 +62,6 @@
         </activity>
 
         <activity android:name=".management.config.FindPasswordActivity" />
-
         <activity android:name=".camera.ConfirmActivity" />
 
         <meta-data
@@ -80,12 +79,22 @@
         <activity
             android:name=".management.ManagementActivity"
             android:hardwareAccelerated="true"
-            android:label="관리" />
-
+            android:label="관리"/>
+        <receiver android:name=".exercise.SMSReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".exercise.ActionReceiver">
+            <intent-filter>
+                <action android:name="DESSERT"/>
+                <action android:name="BEVERAGE"/>
+                <action android:name="MEAL"/>
+                <action android:name="CANCEL"/>
+            </intent-filter>
+        </receiver>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
     </application>
-
 </manifest>
