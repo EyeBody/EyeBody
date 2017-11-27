@@ -41,7 +41,7 @@ class SMSReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         var now = System.currentTimeMillis()
         var date = Date(now)
-        val simpleDateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
+        val simpleDateFormat = SimpleDateFormat("MM월 dd일")
         val dbHelper = DbHelper(context, "bill.db", null, 1)
         notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (intent.action == ACTION) {
@@ -63,10 +63,10 @@ class SMSReceiver : BroadcastReceiver() {
                 if (checkBank(smsMessages[i]?.originatingAddress)) {//카드사라는 것을 확인
                     if (wonFind(smsMessages[i]?.displayMessageBody) != "") {//얼마 썻는지 확인
                         spentMoney = wonFind(smsMessages[i]?.displayMessageBody)
-                        showCustomLayoutNotification(context)
-                        menu = "후식"//TODO : 노티피케이션 받아서 저장하는 걸로 하자.
                         var price = Integer.parseInt(spentMoney)
                         var time = (simpleDateFormat.format(date)).toString()
+                        showCustomLayoutNotification(context,price,time)
+                        menu = "후식"//TODO : 노티피케이션 받아서 저장하는 걸로 하자.
                         dbHelper.insert(time, menu!!, price)//날짜랑 메뉴 가격을 한 칼럼으로 테이블에 넣는다
                     //TODO:단순 사용 저장 보다는 노티를 날리자.//
                     }
@@ -92,23 +92,31 @@ class SMSReceiver : BroadcastReceiver() {
         return numbers.contains(number)
     }//문자가 오면 은행들 번호랑 비교해 가면서 은행에서 온 문자라는 것을 판별, 확인 완료
 
-    private fun showCustomLayoutNotification(context: Context) {
+    private fun showCustomLayoutNotification(context: Context,price:Int,time:String) {
         val mBuilder = createNotification(context)
 
         //커스텀 화면 만들기
-        val remoteViews = RemoteViews(getPackageName(context), R.layout.custom_notification)
-        remoteViews.setImageViewResource(R.id.img, R.mipmap.ic_launcher)
-        remoteViews.setTextViewText(R.id.title, "Title")
-        remoteViews.setTextViewText(R.id.message, "message")
+        var remoteViews = RemoteViews(getPackageName(context), R.layout.custom_notification)
+        remoteViews=setAttributesInNotificationLayout(remoteViews,price,time)
 
-        //노티피케이션에 커스텀 뷰 장착
         mBuilder.setContent(remoteViews)
         mBuilder.setContentIntent(createPendingIntent(context))
 
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationManager.notify(1, mBuilder.build())
     }
-
+    private fun setAttributesInNotificationLayout(remoteViews:RemoteViews,price:Int,time:String) :RemoteViews
+    {
+        remoteViews.setImageViewResource(R.id.img, R.mipmap.ic_launcher)
+        remoteViews.setTextViewText(R.id.title, price.toString()+"원 지출!")
+        remoteViews.setTextViewText(R.id.time,time)
+        //remoteViews.setOnClickPendingIntent(R.id.meal,)
+        //remoteViews.setOnClickPendingIntent(R.id.beverage)
+        //remoteViews.setOnClickPendingIntent(R.id.dessert)
+        //remoteViews.setOnClickPendingIntent(R.id.cancel)
+        //노티피케이션에 커스텀 뷰 장착
+        return remoteViews
+    }
     private fun createPendingIntent(context : Context): PendingIntent {
         val resultIntent = Intent(context, MainActivity::class.java)
         val stackBuilder = TaskStackBuilder.create(context)
