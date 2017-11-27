@@ -101,6 +101,10 @@ class SMSReceiver : BroadcastReceiver() {
 
         mBuilder.setContent(remoteViews)
         mBuilder.setContentIntent(createPendingIntent(context))
+        val intentAction = Intent(context, ActionReceiver::class.java)
+        intentAction.putExtra("action","actionName")
+
+
 
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationManager.notify(1, mBuilder.build())
