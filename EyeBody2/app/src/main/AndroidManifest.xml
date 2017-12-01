@@ -82,7 +82,6 @@
             android:name=".management.ManagementActivity"
             android:hardwareAccelerated="true"
             android:label="관리" />
-
         <receiver android:name=".exercise.SMSReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
