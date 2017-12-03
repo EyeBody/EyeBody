@@ -49,7 +49,7 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
     var mGoogleApiClient: GoogleApiClient? = null
     var mIntentSender: IntentSender? = null
     var networkStatus: Int
-    val pref = context.getSharedPreferences(context.resources.getString(R.string.getSharedPreference_configuration), MODE_PRIVATE)
+    val pref = context.getSharedPreferences(context.resources.getString(R.string.getSharedPreference_configuration_Only_Int), MODE_PRIVATE)
     var prefValueBackupOnlyWifi: Int
     var prefValueBackupAuto: Int
 

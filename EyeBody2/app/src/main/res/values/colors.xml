@@ -5,9 +5,14 @@
 
     <color name="transparentBlack30">#30000000</color>
     <color name="transparentBlack40">#40000000</color>
+    <color name="transparentBlack7f">#7f000000</color>
+
+    <color name="transparentWhite30">#30ffffff</color>
+    <color name="transparentWhite40">#40ffffff</color>
 
     <color name="gradientBlue">#1919a0</color>
     <color name="gradientPurple">#820082</color>
 
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
 </resources>

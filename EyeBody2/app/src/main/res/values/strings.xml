@@ -16,11 +16,11 @@
     <string name="sharedPreference_email_auth_status">auth</string>
     <string name="sharedPreference_email_auth_ok">email_authentication_ok</string>
 
-    <string name="getSharedPreference_configuration">sharedPref_configuration</string>
+    <string name="getSharedPreference_configuration_Only_Int">sharedPref_configuration</string>
     <string name="sharedPreference_Backup_Only_Wifi">Backup_Only_Wifi</string>
-    <string name="sharedPreference_Backup_None">Backup_None</string>
     <string name="sharedPreference_Backup_Auto">Backup_Auto</string>
     <string name="sharedPreference_Security_Use_Fingerprint">Security_Use_Fingerprint</string>
+    <string name="sharedPreference_GoogleLogin_Status">GoogleLogin_Status</string>
 
     <string name="collage">콜라주</string>
     <string name="share">공유하기</string>

@@ -20,8 +20,8 @@
 
         <ImageButton
             android:id="@+id/management_button_main_management"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/icons8timesheet"
             android:contentDescription="메인관리"
             android:maxHeight="100dp"
@@ -35,8 +35,8 @@
 
         <ImageButton
             android:id="@+id/management_button_exercise_management"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/icons8dumbbell"
             android:contentDescription="운동관리"
             android:maxHeight="100dp"
@@ -49,8 +49,8 @@
 
         <ImageButton
             android:id="@+id/management_button_food_management"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/icons8hamburger"
             android:contentDescription="식단관리"
             android:maxHeight="100dp"
@@ -63,8 +63,8 @@
 
         <ImageButton
             android:id="@+id/management_button_config_management"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/icons8tasktools"
             android:contentDescription="설정관리"
             android:maxHeight="100dp"

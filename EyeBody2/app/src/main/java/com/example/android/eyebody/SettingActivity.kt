@@ -1,33 +1,53 @@
 package com.example.android.eyebody
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import android.support.v4.os.CancellationSignal
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
 import com.example.android.eyebody.management.ManagementActivity
+import com.example.android.eyebody.management.config.subcontent.callee.content.FindPasswordActivity
 import kotlinx.android.synthetic.main.activity_setting.*
-import java.security.MessageDigest
+import java.security.*
+import java.security.spec.ECGenParameterSpec
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import android.security.keystore.KeyPermanentlyInvalidatedException
+import android.support.annotation.RequiresApi
+
 
 // 임시 UI 만드는 곳
 // 비번입력하고 SchedulerActivity로 넘어감.
 class SettingActivity : AppCompatActivity() {
 
     val TAG = "mydbg_setting"
+    val KEY_NAME = "my_key"
+    //-------- 조금만 참아 ---------------------------------------
+    var mKeyStore: KeyStore? = null
+    var mKeyPairGenerator: KeyPairGenerator? = null
+    var mSignature: Signature? = null
+    //-------- 조금만 참아 ---------------------------------------
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
 
         Log.d(TAG, "setting 진입")
 
-        val sharedPref: SharedPreferences = getSharedPreferences(
-                getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
-        val sharedPref_hashedPW = sharedPref.getString(
-                getString(R.string.sharedPreference_hashedPW), getString(R.string.sharedPreference_default_hashedPW))
+        val initSharedPref: SharedPreferences = getSharedPreferences(getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
+        val sharedPref_hashedPW = initSharedPref.getString(getString(R.string.sharedPreference_hashedPW), getString(R.string.sharedPreference_default_hashedPW))
 
+        val configSharedPref = getSharedPreferences(getString(R.string.getSharedPreference_configuration_Only_Int), Context.MODE_PRIVATE)
+        val isUserSetCanFingerPrintAuth = configSharedPref.getInt(getString(R.string.sharedPreference_Security_Use_Fingerprint), 0) == 1
 
         // 키보드-확인 눌렀을 때 반응
         setting_input_pw.setOnEditorActionListener { textView, i, keyEvent ->
@@ -51,6 +71,170 @@ class SettingActivity : AppCompatActivity() {
             }
 
             true
+        }
+
+        // password 찾기/수정 액티비티
+        button_explore_password.setOnClickListener {
+            Log.d(TAG, "explore password")
+
+            val mIntent = Intent(this, FindPasswordActivity::class.java)
+            startActivity(mIntent)
+
+        }
+
+        // 지문인식
+        if (isUserSetCanFingerPrintAuth && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val fpManager = FingerprintManagerCompat.from(this)
+            if (fpManager.isHardwareDetected) {
+                setting_image_fingerprint.setImageDrawable(getDrawable(R.drawable.icons8fingerprint))
+                setting_text_pw_guide.text = "지문 또는 비밀번호를 입력하세요."
+
+                /*
+                // --------------------------------------------------------------------------------
+                // ------- signature 사용해보기 ---------------------------------------------------
+                // --------------------------------------------------------------------------------
+                                @RequiresApi(Build.VERSION_CODES.M)
+                                fun createKeyPair() {
+                                    try {
+                                        // Set the alias of the entry in Android KeyStore where the key will appear
+                                        // and the constrains (purposes) in the constructor of the Builder
+                                        mKeyPairGenerator?.initialize(
+                                                KeyGenParameterSpec.Builder(KEY_NAME,
+                                                        KeyProperties.PURPOSE_SIGN)
+                                                        .setDigests(KeyProperties.DIGEST_SHA256)
+                                                        .setAlgorithmParameterSpec(ECGenParameterSpec("secp256r1"))
+                                                        .setUserAuthenticationRequired(true)
+                                                        .build())
+                                        mKeyPairGenerator?.generateKeyPair()
+                                    } catch (e: InvalidAlgorithmParameterException) {
+                                        throw RuntimeException(e)
+                                    }
+
+                                }
+
+                                @RequiresApi(Build.VERSION_CODES.M)
+                                fun initSignature(): Boolean {
+                                    try {
+                                        mKeyStore?.load(null)
+                                        val key = mKeyStore?.getKey(KEY_NAME, null) as PrivateKey
+                                        mSignature?.initSign(key)
+                                        return true
+                                    } catch (e: KeyPermanentlyInvalidatedException) {
+                                        return false
+                                    } catch (e: Exception) {
+                                        throw RuntimeException("Failed to init Cipher : ${e.localizedMessage}", e)
+                                    }
+
+                                }
+                // --------------------------------------------------------------------------------
+                // 비대칭키를 생성한다.
+                val kpg = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore")
+                kpg.initialize(
+                        KeyGenParameterSpec.Builder("key1",
+                                KeyProperties.PURPOSE_SIGN)
+                                .setDigests(KeyProperties.DIGEST_SHA256)
+                                .setAlgorithmParameterSpec(ECGenParameterSpec("secp256r1"))
+                                .setUserAuthenticationRequired(true)
+                                .build())
+                kpg.generateKeyPair()
+
+                // setUserAuthenticationRequired true 하면 등록한 상태에서만 하겠다는거고 이러면 대칭키를 만들어서 활용해야함?
+                val keyStore1 = KeyStore.getInstance("AndroidKeyStore")
+                keyStore1.load(null)
+                val publicKey = keyStore1.getCertificate("Public Key").publicKey
+
+                val keyStore2 = KeyStore.getInstance("AndroidKeyStore")
+                keyStore2.load(null)
+                val privateKey = keyStore2.getKey("Private Key", null) as PrivateKey
+
+                val signature = Signature.getInstance("SHA256withECDSA")
+                val keyStore = KeyStore.getInstance("AndroidKeyStore")
+                keyStore.load(null)
+                signature.initSign(privateKey)
+                val cryptObject = FingerprintManagerCompat.CryptoObject(signature)
+                // --------------------------------------------------------------------------------
+                // --------------------------------------------------------------------------------
+
+
+                // --------------------------------------------------------------------------------
+                // ---------- cipher 사용해보기 ---------------------------------------------------
+                // --------------------------------------------------------------------------------
+                val KEY_NAME = "머라고써야돼는거야!!"
+                val KEY_BYTE = KEY_NAME.toByteArray()
+
+                // 임의의 키를 만든다. 앱별로 만들어짐. 해시처럼 비대칭키인것같다. 근데 rsa로 해버리기?
+                val keyGenerator = KeyGenerator.getInstance("HmacSHA256")
+                keyGenerator
+                        .init(KeyGenParameterSpec.Builder(KEY_NAME, KeyProperties.PURPOSE_ENCRYPT.or(KeyProperties.PURPOSE_DECRYPT))
+                                .setBlockModes(KeyProperties.BLOCK_MODE_ECB)
+                                .setUserAuthenticationRequired(true)
+                                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
+                                .build())
+                keyGenerator.generateKey()
+
+                // 지문인식에 enc, dec를 해주는 보안 모듈?? 사이퍼를 위 키에 맞춰 만든다.
+                val cipher = Cipher.getInstance("${KeyProperties.KEY_ALGORITHM_RSA}/${KeyProperties.BLOCK_MODE_ECB}/${KeyProperties.ENCRYPTION_PADDING_RSA_OAEP}")
+                val keyStore = KeyStore.getInstance(KeyProperties.KEY_ALGORITHM_RSA)
+                keyStore.load(null)
+                cipher.init(Cipher.ENCRYPT_MODE, keyStore.getKey(KEY_NAME, null))
+                val crypto: FingerprintManagerCompat.CryptoObject = FingerprintManagerCompat.CryptoObject(cipher)
+                // --------------------------------------------------------------------------------
+                // --------------------------------------------------------------------------------
+                */
+
+                //createKeyPair()
+                if (true/*initSignature()*/) {
+                    //val cryptObject = FingerprintManagerCompat.CryptoObject(mSignature)
+                    val cancelSignal = CancellationSignal()
+
+                    val authCallback = object : FingerprintManagerCompat.AuthenticationCallback() {
+                        override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult?) {
+                            super.onAuthenticationSucceeded(result)
+                            val schedulerPage = Intent(baseContext, ManagementActivity::class.java)
+                            startActivity(schedulerPage)
+                            finish()
+                            Toast.makeText(baseContext, "성공.", Toast.LENGTH_SHORT).show()
+                        }
+
+                        override fun onAuthenticationFailed() {
+                            super.onAuthenticationFailed()
+                            Toast.makeText(baseContext, "실패.", Toast.LENGTH_SHORT).show()
+                            fpManager.authenticate(null, 0, cancelSignal, this, null)
+                        }
+
+                        override fun onAuthenticationError(errMsgId: Int, errString: CharSequence?) {
+                            super.onAuthenticationError(errMsgId, errString)
+                            if (!cancelSignal.isCanceled)
+                                Toast.makeText(baseContext, "에러 : $errMsgId : $errString", Toast.LENGTH_SHORT).show()
+                            else
+                                Toast.makeText(baseContext, "에러 cancel : $errMsgId : $errString", Toast.LENGTH_SHORT).show()
+                        }
+
+                        override fun onAuthenticationHelp(helpMsgId: Int, helpString: CharSequence?) {
+                            super.onAuthenticationHelp(helpMsgId, helpString)
+                            if (!cancelSignal.isCanceled)
+                                Toast.makeText(baseContext, "헬프 : $helpMsgId : $helpString", Toast.LENGTH_SHORT).show()
+                            else
+                                Toast.makeText(baseContext, "헬프 cancel: $helpMsgId : $helpString", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    fpManager.authenticate(null/*cryptoObject*/, 0, cancelSignal, authCallback, null)
+                }
+
+            } else {
+                setting_image_fingerprint.setImageDrawable(getDrawable(R.drawable.icons8privacy))
+                if (fpManager.hasEnrolledFingerprints()) {
+                    // 등록을 안함.
+                    setting_text_pw_guide.text = "비밀번호를 입력하세요.\n(지문을 등록하셔야 이용하실 수 있습니다.)"
+                } else {
+                    // 디바이스 미지원
+                    setting_text_pw_guide.text = "비밀번호를 입력하세요."
+                }
+            }
+        } else {
+            setting_image_fingerprint.setImageDrawable(getDrawable(R.drawable.icons8privacy))
+            setting_text_pw_guide.text = "비밀번호를 입력하세요."
         }
 
     }

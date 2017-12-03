@@ -5,7 +5,7 @@ import java.security.MessageDigest
 /**
  * Created by Yoon on 2017-11-25
  */
-class EncryptStringManager {
+class StringHashManager {
     companion object {
         fun encryptString(str: String?): String? {
             if (str != null) {

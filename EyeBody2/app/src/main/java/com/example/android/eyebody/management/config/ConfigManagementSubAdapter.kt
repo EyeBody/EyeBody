@@ -13,12 +13,16 @@ import android.widget.BaseAdapter
 import android.widget.Switch
 import android.widget.TextView
 import com.example.android.eyebody.R
+import com.example.android.eyebody.management.config.subcontent.CMBaseSubContent
+import com.example.android.eyebody.management.config.subcontent.caller.CallableSubContent
+import com.example.android.eyebody.management.config.subcontent.caller.DialogCallerSubContent
+import com.example.android.eyebody.management.config.subcontent.caller.FunctionCallerSubContent
 
 /**
  * Created by YOON on 2017-11-19
  */
 
-class ConfigManagementSubAdapter(val activity: Activity, private val contents: Array<ConfigManagementSubContent>) : BaseAdapter() {
+class ConfigManagementSubAdapter(val activity: Activity, private val contents: Array<CMBaseSubContent>) : BaseAdapter() {
 
     val TAG = "mydbg_ConfigMNG_SubAdap"
     val context = activity.applicationContext!!
@@ -32,7 +36,7 @@ class ConfigManagementSubAdapter(val activity: Activity, private val contents: A
         val subText: TextView = view.findViewById(R.id.sub_textview_sub_listview_config_management)
         val switch: Switch = view.findViewById(R.id.switch_sub_listview_config_management)
 
-        val pref = context.getSharedPreferences(context.resources.getString(R.string.getSharedPreference_configuration), Context.MODE_PRIVATE)
+        val pref = context.getSharedPreferences(context.resources.getString(R.string.getSharedPreference_configuration_Only_Int), Context.MODE_PRIVATE)
         val prefValue = pref.getInt(contents[p].preferenceName, 0)
 
         mainText.text = contents[p].text
@@ -54,13 +58,11 @@ class ConfigManagementSubAdapter(val activity: Activity, private val contents: A
                 }
 
 
-        val clickToCallOrNoneAutoListener = View.OnClickListener { v->
-            // TODO 클릭했을 때 listview의 item click이 작동해야 함.
-
+        val clickToCallOrNoneAutoListener = View.OnClickListener { v ->
             fun justToggleOrValueUp() {
                 Log.d(TAG, "${(pref.getInt(contents[p].preferenceName, 0))} -> ${(pref.getInt(contents[p].preferenceName, 0) + 1).rem(contents[p].preferenceValueExplanation?.size ?: 1)}")
                 if (switch.visibility == View.VISIBLE) {
-                    if(v !is Switch)
+                    if (v !is Switch)
                         switch.isChecked = !switch.isChecked
                     // switch changed listener 를 통해서 value를 저장함.
                 } else {
@@ -83,17 +85,25 @@ class ConfigManagementSubAdapter(val activity: Activity, private val contents: A
 
                     if (subContent.canCall(prefCurrentStatus)) {
                         // 현재 상태에서 정해진 dialog가 존재한다면 스위치 여부를 dialog에 물어보고 토글
-                        val result = 0
-                        // call이 fragment를 콜하는지 activity를 콜하는지 명시해줄 필요 있나..?
-                        subContent.call(activity, prefCurrentStatus)
+
                         if (subContent is DialogCallerSubContent) {
-                            // TODO : fragment호출 후 switch 변동 주어야 함.
-                            if (result == 1) { // 물어봐서 된다고 했음.
-                                switch.isChecked = !switch.isChecked //TODO 다른데서 정의해줘야 하는 부분.
+                            // 현재 서브컨텐츠의 상태값을 미리 기록했다가
+                            subContent.storableDialog?.get(prefCurrentStatus)?.storedInt = prefCurrentStatus
+                            // dismiss했을 때 그 값(또는 변경됐을 값)으로 sharedPreference에 저장하여 값을 수정한다.
+                            subContent.storableDialog?.get(prefCurrentStatus)?.setOnDismissListener {
+                                savePreference(pref, contents[p].preferenceName!!, subContent.storableDialog[prefCurrentStatus]?.storedInt ?: prefCurrentStatus)
+                                notifyDataSetChanged()
                             }
-                        } else if (subContent is ActivityCallerSubContent) {
-                            // TODO : 다른 곳에서 forResult를 이용해서 switch 변동을 시켜주어야 함.
+                        } else if (subContent is FunctionCallerSubContent) {
+                            subContent.ret = prefCurrentStatus
+                            subContent.setOnReturnListener{
+                                savePreference(pref, contents[p].preferenceName!!, subContent.ret ?: prefCurrentStatus)
+                                notifyDataSetChanged()
+                            }
                         }
+
+                        subContent.call(activity, prefCurrentStatus) //activity, dialog, function will call.
+
                     } else {
                         // 정해진 dialog가 없다면 스위치 토글 또는 value ++
                         justToggleOrValueUp()

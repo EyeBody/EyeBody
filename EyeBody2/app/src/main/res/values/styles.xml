@@ -7,10 +7,11 @@
         <item name="colorPrimary">@color/transparentBlack30</item>
         <item name="colorPrimaryDark">@color/transparentBlack40</item>
         <item name="android:windowBackground">@drawable/gradient_background</item>
-        <item name="android:textColor">@color/transparentBlack30</item>
+        <item name="android:textColor">@color/transparentBlack7f</item>
         <item name="colorControlNormal">@color/white</item>
         <item name="colorControlActivated">@color/colorPrimary</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/transparentWhite30</item>
     </style>
     <style name="actionbar_image" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:src">@drawable/imagebutton_setting</item>

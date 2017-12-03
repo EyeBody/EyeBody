@@ -1,6 +1,7 @@
 package com.example.android.eyebody.init
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
@@ -8,11 +9,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.example.android.eyebody.utility.EncryptStringManager
+import com.example.android.eyebody.utility.StringHashManager
 import com.example.android.eyebody.R
+import kotlinx.android.synthetic.main.fragment_init2.*
 
 /**
  * Created by YOON on 2017-09-24
@@ -34,28 +38,36 @@ class Init2Fragment : Fragment() {
         val v = inflater!!.inflate(R.layout.fragment_init2, container, false)
         Log.d("mydbg_init2", "[ init2 진입 ]")
 
-        val viewPassword = v.findViewById<EditText>(R.id.EditText_input_password)
-        val viewPasswordSubmit = v.findViewById<Button>(R.id.Button_submit_password)
+        val viewPassword = v.findViewById<EditText>(R.id.editText_input_password)
+        val viewPasswordConfirm = v.findViewById<EditText>(R.id.editText_input_password_confirm)
+        val viewPasswordSubmit = v.findViewById<Button>(R.id.button_submit_password)
 
         viewPassword.setOnEditorActionListener { textView, i, keyEvent ->
+            viewPasswordConfirm.requestFocus()
+        }
+        viewPasswordConfirm.setOnEditorActionListener { textView, i, keyEvent ->
             viewPasswordSubmit.callOnClick()
+            val imm: InputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+            true
         }
 
 
         viewPasswordSubmit.setOnClickListener { view ->
             val strPW = viewPassword.text
-            Log.d("mydbg_init2", "password >>> $strPW")
+            val strConfirmPW = editText_input_password_confirm.text
+            Log.d("mydbg_init2", "password >>> $strPW / $strConfirmPW")
 
-            if (strPW.isNotEmpty()) {
+            if (strPW.isNotEmpty() && strPW.toString() == strConfirmPW.toString()) {
                 Toast.makeText(activity, "${strPW}를 입력하였습니다.", Toast.LENGTH_LONG).show()
                 Log.d("mydbg_init2", "  length >>> ${strPW.length}")
 
 
                 // TODO ----- MD5 에서 SHA-3 (KECCAK) or SHA128 로 알고리즘 개선
                 // MIT license code : https://github.com/walleth/keccak/blob/master/keccak/src/main/kotlin/org/walleth/keccak/Keccak.kt
-                val pwByte = strPW.toString().toByteArray(charset("unicode"))
-                val hashedPW = EncryptStringManager.encryptString(strPW.toString())
+                val hashedPW = StringHashManager.encryptString(strPW.toString())
 
+                val pwByte = strPW.toString().toByteArray(charset("unicode"))
                 Log.d("mydbg_init2", " 평문 pw >>> ${pwByte.toString(charset("unicode"))}")
                 Log.d("mydbg_init2", "  MD5 pw >>> $hashedPW")
 
