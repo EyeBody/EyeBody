@@ -196,8 +196,7 @@ package com.example.android.eyebody
 import android.app.Activity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.v7.app.AppCompatActivity
-import com.example.android.eyebody.exercise.DbHelper
+import com.example.android.eyebody.management.food.DbHelper
 import kotlinx.android.synthetic.main.activity_exercise.*
 
 /*
@@ -211,7 +210,7 @@ class ExerciseActivity: Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
-        val dbHelper =DbHelper(baseContext, "bill.db", null, 1)
+        val dbHelper = DbHelper(baseContext, "bill.db", null, 1)
         setContentView(R.layout.activity_exercise)
         setText(dbHelper)
     }

@@ -82,18 +82,12 @@
             android:name=".management.ManagementActivity"
             android:hardwareAccelerated="true"
             android:label="관리" />
-        <receiver android:name=".exercise.SMSReceiver">
+        <receiver android:name=".management.food.SMSReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".exercise.ActionReceiver">
-            <intent-filter>
-                <action android:name="DESSERT" />
-                <action android:name="BEVERAGE" />
-                <action android:name="MEAL" />
-                <action android:name="CANCEL" />
-            </intent-filter>
+        <receiver android:name=".management.food.ActionReceiver">
         </receiver>
 
         <meta-data

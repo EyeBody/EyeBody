@@ -1,4 +1,4 @@
-package com.example.android.eyebody.exercise
+package com.example.android.eyebody.management.food
 
 import android.content.Context
 import android.database.Cursor

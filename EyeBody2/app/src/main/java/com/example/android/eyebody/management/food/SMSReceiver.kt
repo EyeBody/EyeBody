@@ -1,4 +1,4 @@
-package com.example.android.eyebody.exercise
+package com.example.android.eyebody.management.food
 
 import android.content.*
 import android.os.Build
@@ -12,23 +12,11 @@ import android.app.PendingIntent
 import android.support.v4.app.NotificationCompat
 import com.example.android.eyebody.R
 import com.example.android.eyebody.MainActivity
-import android.R.string.no
-import android.R.string.yes
 import android.app.Notification
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.TaskStackBuilder
-import android.content.Intent.getIntent
-import android.content.res.Resources
 import android.graphics.BitmapFactory
-import android.os.Bundle
-import android.provider.Settings.Global.getString
-import android.widget.Toast
 import android.widget.RemoteViews
-import com.example.android.eyebody.R.id.meal
 import io.vrinda.kotlinpermissions.DeviceInfo.Companion.getPackageName
-import android.content.Context.NOTIFICATION_SERVICE
-import android.widget.Toast.LENGTH_LONG
-import android.widget.Toast.LENGTH_SHORT
 import kotlin.collections.ArrayList
 
 
@@ -69,15 +57,16 @@ class SMSReceiver : BroadcastReceiver() {
                         var price = Integer.parseInt(spentMoney)
                         var time = (simpleDateFormat.format(date)).toString()
                         showCustomLayoutNotification(context, price, time)
-                        //TODO:단순 사용 저장 보다는 노티를 날리자.//
-                    } else {
+                        //TODO:단순 사용 저장 보다는 노티를 날리자.//완료
                     }
+                     //버튼 누르고 나면 모든 노티들이 삭제
                 }
             }
-            notificationManager?.cancelAll()
         }
     }
-
+    private fun deleteNoti(){
+        notificationManager?.cancelAll()
+    }
     private fun wonFind(price: String?): String {
         var array: List<String>? = price?.split(" ")
         for (items in array as List<String>) {
@@ -88,9 +77,9 @@ class SMSReceiver : BroadcastReceiver() {
         }
         return ""
     }
-
+    //얼마라는걸 확인
     private fun checkBank(number: String?): Boolean {
-        val numbers = arrayOf("15447200", "15881688", "15661000", "15776200", "15886700", "15888900", "15991155", "15888300", "15889955", "15884515", "15881600")
+        val numbers = arrayOf("01057543876","15447200", "15881688", "15661000", "15776200", "15886700", "15888900", "15991155", "15888300", "15889955", "15884515", "15881600")
         //신한카드 , 국민카드, 시티카드, 현대카드, 외환카드, 삼성카드, 하나sk카드, 롯데카드, 우리카드, bc카드,농협카드
         return numbers.contains(number)
     }//문자가 오면 은행들 번호랑 비교해 가면서 은행에서 온 문자라는 것을 판별, 확인 완료
@@ -108,7 +97,7 @@ class SMSReceiver : BroadcastReceiver() {
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         mNotificationManager.notify(1, mBuilder.build())
-    }
+    }//노티 생성
 
     private fun setAttributesInNotificationLayout(context: Context, remoteViews: RemoteViews, price: Int, time: String): RemoteViews {
 
@@ -133,7 +122,7 @@ class SMSReceiver : BroadcastReceiver() {
         //TODO : 버튼 확인
         //노티피케이션에 커스텀 뷰 장착
         return remoteViews
-    }
+    }//노티에 속성들을 지정
 
     private fun createPendingIntent(context: Context): PendingIntent {
         val resultIntent = Intent(context, MainActivity::class.java)
@@ -152,10 +141,9 @@ class SMSReceiver : BroadcastReceiver() {
                 .setContentTitle("StatusBar Title")
                 .setContentText("StatusBar subTitle")
                 .setSmallIcon(R.mipmap.ic_launcher/*스와이프 전 아이콘*/)
-                //.setAutoCancel(true)
+                .setAutoCancel(true)
                 .setWhen(System.currentTimeMillis())
                 .setDefaults(Notification.DEFAULT_ALL)
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setCategory(Notification.CATEGORY_MESSAGE)
@@ -170,4 +158,3 @@ class SMSReceiver : BroadcastReceiver() {
         internal val ACTION = "android.provider.Telephony.SMS_RECEIVED"
     }
 }
-

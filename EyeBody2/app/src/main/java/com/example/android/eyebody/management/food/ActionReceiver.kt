@@ -1,10 +1,9 @@
-package com.example.android.eyebody.exercise
+package com.example.android.eyebody.management.food
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.LENGTH_SHORT
 
 /**
@@ -42,7 +41,7 @@ class ActionReceiver : BroadcastReceiver() {
         menu="cancel"
         Toast.makeText(context,menu, LENGTH_SHORT).show()
     }
-    private fun putValuesInDb(dbHelper: DbHelper,time:String,menu:String,price:Int){
+    private fun putValuesInDb(dbHelper: DbHelper, time:String, menu:String, price:Int){
         if(menu!="cancel"){
             dbHelper.insert(time,menu,price)
         }
