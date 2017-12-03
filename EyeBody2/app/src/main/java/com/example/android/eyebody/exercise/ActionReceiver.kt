@@ -5,35 +5,46 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
 
 /**
  * Created by ytw11 on 2017-11-19.
  */
 class ActionReceiver : BroadcastReceiver() {
-    var returnIntent=Intent()
+
+    var menu:String=""
     override fun onReceive(context:Context ,  intent:Intent) {
-        //Toast.makeText(context,"recieved",Toast.LENGTH_SHORT).show();
-        var action = intent.getStringExtra("action")
-        when (action) {
+        val dbHelper = DbHelper(context, "bill.db", null, 1)
+        val menu = intent.getStringExtra("menu")
+        val time=intent.getStringExtra("time")
+        val price=intent.getIntExtra("price",0)
+        when (menu) {
             "meal" -> mealClicked(context)
             "beverage" -> beverageClicked(context)
             "dessert" -> dessertClicked(context)
             "cancel" ->cancelClicked(context)
         }
+        putValuesInDb(dbHelper,time,menu,price)
     }
     private fun mealClicked(context: Context) {
-        Toast.makeText(context,"meal",LENGTH_LONG).show()
+        menu="meal"
+        Toast.makeText(context,menu, LENGTH_SHORT).show()
     }
     private fun beverageClicked(context: Context) {
-
-        Toast.makeText(context,"beverage",LENGTH_LONG).show()
-
+        menu="beverage"
+        Toast.makeText(context,menu, LENGTH_SHORT).show()
     }
     private fun dessertClicked(context: Context){
-
-        Toast.makeText(context,"dessert",LENGTH_LONG).show()
+        menu="dessert"
+        Toast.makeText(context,menu, LENGTH_SHORT).show()
     }
     private fun cancelClicked(context:Context){
-        Toast.makeText(context,"cancel", LENGTH_LONG).show()
+        menu="cancel"
+        Toast.makeText(context,menu, LENGTH_SHORT).show()
+    }
+    private fun putValuesInDb(dbHelper: DbHelper,time:String,menu:String,price:Int){
+        if(menu!="cancel"){
+            dbHelper.insert(time,menu,price)
+        }
     }
 }

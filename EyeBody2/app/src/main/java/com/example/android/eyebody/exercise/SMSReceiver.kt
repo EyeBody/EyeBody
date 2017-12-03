@@ -17,13 +17,19 @@ import android.R.string.yes
 import android.app.Notification
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.TaskStackBuilder
+import android.content.Intent.getIntent
 import android.content.res.Resources
 import android.graphics.BitmapFactory
+import android.os.Bundle
 import android.provider.Settings.Global.getString
 import android.widget.Toast
 import android.widget.RemoteViews
 import com.example.android.eyebody.R.id.meal
 import io.vrinda.kotlinpermissions.DeviceInfo.Companion.getPackageName
+import android.content.Context.NOTIFICATION_SERVICE
+import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
+import kotlin.collections.ArrayList
 
 
 /**
@@ -39,11 +45,11 @@ class SMSReceiver : BroadcastReceiver() {
         var now = System.currentTimeMillis()
         var date = Date(now)
         val simpleDateFormat = SimpleDateFormat("MM월 dd일")
-        val dbHelper = DbHelper(context, "bill.db", null, 1)
+
         notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (intent.action == ACTION) {
             //Bundle 널 체크
-            val bundle = intent.extras ?: return
+            val bundle = intent.extras
 
             //pdu 객체 널 체크
             val pdusObj = bundle.get("pdus") as Array<Any> ?: return
@@ -63,13 +69,12 @@ class SMSReceiver : BroadcastReceiver() {
                         var price = Integer.parseInt(spentMoney)
                         var time = (simpleDateFormat.format(date)).toString()
                         showCustomLayoutNotification(context, price, time)
-                        menu = "후식"//TODO : 노티피케이션 받아서 저장하는 걸로 하자.
-                        dbHelper.insert(time, menu!!, price)//날짜랑 메뉴 가격을 한 칼럼으로 테이블에 넣는다
                         //TODO:단순 사용 저장 보다는 노티를 날리자.//
                     } else {
                     }
                 }
             }
+            notificationManager?.cancelAll()
         }
     }
 
@@ -94,13 +99,12 @@ class SMSReceiver : BroadcastReceiver() {
         val mBuilder = createNotification(context)
 
         //커스텀 화면 만들기
-        val intentAction = Intent(context, ActionReceiver::class.java)
         var remoteViews = RemoteViews(getPackageName(context), R.layout.custom_notification)
         remoteViews = setAttributesInNotificationLayout(context, remoteViews, price, time)
 
         mBuilder.setContent(remoteViews)
         mBuilder.setContentIntent(createPendingIntent(context))
-        intentAction.putExtra("action", 2)
+
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         mNotificationManager.notify(1, mBuilder.build())
@@ -108,38 +112,27 @@ class SMSReceiver : BroadcastReceiver() {
 
     private fun setAttributesInNotificationLayout(context: Context, remoteViews: RemoteViews, price: Int, time: String): RemoteViews {
 
-        var mealIntent = Intent(context, ActionReceiver::class.java).putExtra("action","meal")
-        var pendingMealIntent = PendingIntent.getBroadcast(context, 1,mealIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        var dessertIntent = Intent(context, ActionReceiver::class.java).putExtra("action","dessert")
-        var pendingDessertIntent = PendingIntent.getBroadcast(context, 2,dessertIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        var beverageIntent = Intent(context, ActionReceiver::class.java).putExtra("action","beverage")
-        var pendingBeverageIntent = PendingIntent.getBroadcast(context, 3,beverageIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        var cancelIntent = Intent(context, ActionReceiver::class.java).putExtra("action","cancel")
-        var pendingCancelIntent = PendingIntent.getBroadcast(context, 4,cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        var passIntent = ArrayList<Intent>(4)
 
+        var pendingIntent = ArrayList<PendingIntent>(4)
+        var menuArray = arrayOf("meal", "beverage","dessert", "cancel")
+        var button=arrayOf(R.id.meal,R.id.dessert,R.id.beverage,R.id.cancel)
+        for (i in 0..3) {
+            passIntent.add(Intent(context, ActionReceiver::class.java).putExtra("menu", menuArray[i]).putExtra("time",time).putExtra("price",price))
+        }
+        for (i in 0..3) {
+            pendingIntent.add(PendingIntent.getBroadcast(context, i, passIntent[i], PendingIntent.FLAG_UPDATE_CURRENT))
+        }
         remoteViews.setImageViewResource(R.id.img, R.mipmap.ic_launcher)
         remoteViews.setTextViewText(R.id.title, price.toString() + "원 지출!")
         remoteViews.setTextViewText(R.id.time, time)
 
-        remoteViews.setOnClickPendingIntent(R.id.meal, pendingMealIntent)
-        remoteViews.setOnClickPendingIntent(R.id.dessert, pendingDessertIntent)
-        remoteViews.setOnClickPendingIntent(R.id.beverage, pendingBeverageIntent)
-        remoteViews.setOnClickPendingIntent(R.id.cancel, pendingCancelIntent)
+        for(i in 0..3){
+            remoteViews.setOnClickPendingIntent(button[i], pendingIntent[i])
+        }
         //TODO : 버튼 확인
         //노티피케이션에 커스텀 뷰 장착
         return remoteViews
-    }
-
-    fun changeIntentInput(intent: Intent, a: Int): Intent {
-        if (a == R.id.meal) {
-            return intent.putExtra("action", 1)
-        } else if (a == R.id.beverage) {
-            return intent.putExtra("action", 2)
-        } else if (a == R.id.dessert) {
-            return intent.putExtra("action", 3)
-        } else {
-            return intent.putExtra("action", 4)
-        }
     }
 
     private fun createPendingIntent(context: Context): PendingIntent {
@@ -159,7 +152,7 @@ class SMSReceiver : BroadcastReceiver() {
                 .setContentTitle("StatusBar Title")
                 .setContentText("StatusBar subTitle")
                 .setSmallIcon(R.mipmap.ic_launcher/*스와이프 전 아이콘*/)
-                .setAutoCancel(true)
+                //.setAutoCancel(true)
                 .setWhen(System.currentTimeMillis())
                 .setDefaults(Notification.DEFAULT_ALL)
 
