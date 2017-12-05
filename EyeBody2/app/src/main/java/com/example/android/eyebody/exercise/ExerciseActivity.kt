@@ -210,12 +210,7 @@ class ExerciseActivity: Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
-        val dbHelper = DbHelper(baseContext, "bill.db", null, 1)
         setContentView(R.layout.activity_exercise)
-        setText(dbHelper)
-    }
-    private fun setText(dbHelper: DbHelper){
-        result.text = dbHelper.getResult()
     }
 }
 

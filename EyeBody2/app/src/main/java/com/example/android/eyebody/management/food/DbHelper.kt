@@ -29,17 +29,35 @@ class DbHelper(var context: Context, var name:String, private var factory: SQLit
         db.execSQL("UPDATE BILL SET price=$price WHERE menu='$menu';")
         db.close()
     }
-    fun getResult(): String
+    fun getResult(count:Int): ArrayList<String>
     {
         // 읽기가 가능하게 DB 열기
-        var db:SQLiteDatabase = readableDatabase
-        var result:String = ""
-
-        // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
-         var cursor:Cursor = db . rawQuery ("SELECT * FROM BILL", null)
-            while (cursor.moveToNext()) {
-            result += cursor.getString(0)+" : "+cursor.getString(1)+" | "+cursor.getInt(2)+"원 "+cursor.getString(3)+"\n"
+        // 읽기가 가능하게 DB 열기
+        val db:SQLiteDatabase = readableDatabase
+        var result= ArrayList<String>()
+        // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 인덱스가 주어질 때 테이블에 있는 데이터 출력
+        var cursor:Cursor = db . rawQuery ("SELECT * FROM BILL", null)
+        for(x in 1..count){
+            cursor.moveToNext()
         }
+        var date=cursor.getString(0)
+        var menu=cursor.getString(1)
+        var price=cursor.getInt(2).toString()
+        cursor.getInt(2)
+        result.add(date)//date
+        result.add(menu)//menu
+        result.add(price)//price
         return result
+    }//TODO : 인자로 인덱스를 넘기면 db에서 그 인덱스번째에 있는 칼럼들을 가져오는 걸로 구현
+
+    fun getCount():Int
+    {
+        var count=0
+        var db:SQLiteDatabase=readableDatabase
+        var cursor:Cursor = db . rawQuery ("SELECT * FROM BILL", null)
+        while (cursor.moveToNext()) {
+            count++
+        }
+        return count
     }
 }

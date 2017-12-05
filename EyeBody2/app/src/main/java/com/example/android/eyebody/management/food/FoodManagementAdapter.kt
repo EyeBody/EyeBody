@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_management_food.view.*
 /**
  * Created by YOON on 2017-11-19
  */
-class FoodManagementAdapter(val context: Context, val contents: Array<FoodManagementContent>) : BaseAdapter() {
+class FoodManagementAdapter(val context: Context, val contents: ArrayList<FoodManagementContent>) : BaseAdapter() {
     @SuppressLint("SetTextI18n")
     override fun getView(item: Int, convertView: View?, parent: ViewGroup?): View {
         val mView = convertView ?: LayoutInflater.from(context).inflate(R.layout.list_food_management, parent, false)
