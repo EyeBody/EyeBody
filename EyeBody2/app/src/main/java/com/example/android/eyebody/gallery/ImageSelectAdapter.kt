@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.list_gallery.view.*
 
-class CollageAdapter (var context: Context, var photoList: ArrayList<Photo>, var selectedPhotoList: ArrayList<Int>, var fragment: Fragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ImageSelectAdapter(var context: Context, var photoList: ArrayList<Photo>, var selectedPhotoList: ArrayList<Int>, var fragment: Fragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
-        var v = LayoutInflater.from(context).inflate(R.layout.list_collage, parent, false)
+        var v = LayoutInflater.from(context).inflate(R.layout.list_image_select, parent, false)
         return Item(v)
     }
 

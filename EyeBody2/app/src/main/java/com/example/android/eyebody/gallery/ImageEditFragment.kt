@@ -86,7 +86,7 @@ class ImageEditFragment : Fragment() {
                 //회전 저장
 
                 //ImageCollageFragment로 교체
-                var imageCollageFragment = ImageCollageFragment()
+                var imageCollageFragment = ImageSaveFragment()
 
                 fragmentManager
                         .beginTransaction()

@@ -9,13 +9,13 @@ import android.os.Parcelable
 import android.support.v7.app.AppCompatActivity
 import java.io.*
 
-class Photo(): AppCompatActivity(), Parcelable {
+class Photo: AppCompatActivity, Parcelable {
     var fileUrl: String = ""
     var fileName: String = ""
     var imgWidth: Int = 0
     var imgHeight: Int = 0
 
-    constructor(imgFile: File) : this() {
+    constructor(imgFile: File) {
         fileUrl = imgFile.path //intent로 bitmap이미지를 넘기는 것 보다 url로 넘기는게 좋대서 바꿈
         fileName = imgFile.name //파일이름을 날짜로 저장하고(body20170922190523) 여기서 date정보와 memo 정보를 불러옴
 
@@ -23,7 +23,7 @@ class Photo(): AppCompatActivity(), Parcelable {
     }
 
     //Parcelable methods
-    protected constructor(parcel: Parcel) : this() {
+    protected constructor(parcel: Parcel) {
         fileUrl = parcel.readString()
         fileName = parcel.readString()
         imgWidth = parcel.readInt()
@@ -133,7 +133,7 @@ class Photo(): AppCompatActivity(), Parcelable {
     }
 
     fun getDate(): String{
-        return "날짜라능"
+        return "2017.00.00"
     }
 
     fun getMemo(): String{

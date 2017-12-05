@@ -4,11 +4,8 @@ import android.Manifest
 import android.os.Bundle
 import android.app.Fragment
 import android.content.pm.PackageManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.example.android.eyebody.R
-import kotlinx.android.synthetic.main.fragment_image_collage.*
+import kotlinx.android.synthetic.main.fragment_image_save.*
 import android.graphics.Bitmap
 import android.os.Environment
 import android.support.v4.app.ActivityCompat
@@ -18,27 +15,45 @@ import java.io.*
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.view.*
 
-class ImageCollageFragment : Fragment() {
+class ImageSaveFragment : Fragment() {
     lateinit var collage: CollageActivity
     lateinit var selected: ArrayList<Photo>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
 
         collage = activity as CollageActivity
         selected = collage.selectedPhotoList
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_image_collage, container, false)
+        return inflater.inflate(R.layout.fragment_image_save, container, false)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_image_save, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_image_save -> {
+                //이미지 저장
+                Toast.makeText(activity, "저장저장", Toast.LENGTH_SHORT).show()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         //WRITE_EXTERNAL_STORAGE 권한 요청
-        if(ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+        //TODO 권한 거부할 때 예외처리
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
         }
 
@@ -118,6 +133,7 @@ class ImageCollageFragment : Fragment() {
     }
 
     fun combineImage(photos: ArrayList<Photo>, COLUMNS: Int = 0): Bitmap{
+        //TODO 임시폴더에 저장
         //열이 columns개인 바둑판 모양으로 이미지 콜라주
         //이미지는 모두 가로세로 크기가 같음
         //colums가 0 이하 이면 가로로만 이어붙임, 1이면 세로로만 이어붙임(열이 1개)

@@ -33,6 +33,7 @@
     <string name="button_cancel">취소</string>
     <string name="button_submit">확인</string>
     <string name="email_auth_key">email_auth_key</string>
+    <string name="save">저장</string>
 
     <string name="edit_image">이미지 편집하기</string>
     <string name="crop_confirm">자르기 확인</string>
