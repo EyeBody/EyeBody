@@ -3,8 +3,10 @@ package com.example.android.eyebody.gallery
 import android.os.Bundle
 import android.app.Fragment
 import android.graphics.Color
+import android.opengl.Visibility
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.Toast
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.list_image_select.view.*
 
@@ -60,10 +62,19 @@ class ImageSelectFragment : Fragment() {
     }
 
     fun setSelected(itemView: View, pos: Int, isSelected: Boolean){
-        //TODO 최대 선택갯수 설정, 선택할 때 번호매기기
+        var cnt = collage.selectedIndexList.size + 1
+
         if(isSelected){
+            if(cnt > 5){
+                Toast.makeText(activity, "5개까지만", Toast.LENGTH_SHORT).show()
+                return
+            }
+
             itemView.setBackgroundColor(Color.WHITE)
             itemView.date.setTextColor(R.color.gradientPurple)
+            itemView.numberTextView.text = cnt.toString()
+            itemView.numberTextView.visibility = View.VISIBLE
+
             if(!collage.selectedIndexList.contains(pos)) collage.selectedIndexList.add(pos)  //없으면 추가
 
             if(collage.selectedIndexList.size > 0){    //선택한 이미지가 하나 이상일 때 이미지편집 메뉴 아이콘 보여주기
@@ -72,6 +83,8 @@ class ImageSelectFragment : Fragment() {
         } else {
             itemView.setBackgroundColor(Color.TRANSPARENT)
             itemView.date.setTextColor(Color.WHITE)
+            itemView.numberTextView.visibility = View.INVISIBLE
+
             collage.selectedIndexList.remove(pos)
 
             if(collage.selectedIndexList.size == 0){    //선택한 이미지가 하나도 없을 때 이미지편집 메뉴 아이콘 숨기기

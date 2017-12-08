@@ -69,11 +69,18 @@
             android:src="@drawable/ic_rotate_white_48dp" />
 
         <ImageView
-            android:id="@+id/stickerButton"
+            android:id="@+id/reverseButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_insert_emoticon_white_48dp" />
+            android:src="@drawable/ic_compare_white_48dp" />
+
+        <ImageView
+        android:id="@+id/stickerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_insert_emoticon_white_48dp" />
 
     </LinearLayout>
 </android.support.v7.widget.LinearLayoutCompat>

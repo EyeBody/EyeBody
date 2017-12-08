@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/rectangle">
+    android:layout_margin="1px">
 
     <LinearLayout
         android:orientation="vertical"
@@ -29,4 +29,20 @@
             android:textSize="15dp"
             android:text="2017.00.00" />
     </LinearLayout>
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/numberTextView"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginTop="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/gradient_circle"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:text="0"
+        android:visibility="invisible" />
+
+</android.support.constraint.ConstraintLayout>
