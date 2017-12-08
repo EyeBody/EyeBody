@@ -7,10 +7,10 @@ import android.support.constraint.ConstraintLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageButton
 import android.widget.TextView
 import com.example.android.eyebody.R
+import com.example.android.eyebody.management.BasePageAdapter
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
@@ -22,7 +22,9 @@ import com.jjoe64.graphview.series.DataPoint
  * graph opensource at
  * https://github.com/appsthatmatter/GraphView
  */
-class MainManagementAdapter(val context: Context, val contents: Array<MainManagementContent>) : BaseAdapter() {
+class MainManagementAdapter(context: Context, contents: Array<MainManagementContent>) : BasePageAdapter(context, contents as Array<Any>) {
+
+    override fun getItem(position: Int): MainManagementContent = contents[position] as MainManagementContent
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         // item을 가지고 어떻게 표시할 것이냐 -> layout에 있는 xml파일을 부른다음에 거기에 contents 아이템들을 넣고 반환
@@ -43,13 +45,13 @@ class MainManagementAdapter(val context: Context, val contents: Array<MainManage
         val contentGoToGallery: ImageButton = view.findViewById(R.id.imageButton2)
 
 
-        val series = LineGraphSeries<DataPoint>( arrayOf<DataPoint>(
-                        DataPoint(0.0, 1.0),
-                        DataPoint(1.0, 5.0),
-                        DataPoint(2.0, 3.0),
-                        DataPoint(3.0, 2.0),
-                        DataPoint(4.0, 6.0)
-                ))
+        val series = LineGraphSeries<DataPoint>(arrayOf<DataPoint>(
+                DataPoint(0.0, 1.0),
+                DataPoint(1.0, 5.0),
+                DataPoint(2.0, 3.0),
+                DataPoint(3.0, 2.0),
+                DataPoint(4.0, 6.0)
+        ))
         contentGraph.addSeries(series)
 
         contentGraph.setOnClickListener {
@@ -84,10 +86,4 @@ class MainManagementAdapter(val context: Context, val contents: Array<MainManage
 
         return view
     }
-
-    override fun getItem(position: Int): Any = contents[position]
-
-    override fun getItemId(position: Int): Long = position.toLong()
-
-    override fun getCount(): Int = contents.size
 }

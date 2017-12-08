@@ -3,21 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:background="@drawable/samplebackground">
+    android:layout_height="50dp"
+    android:background="@drawable/samplebackground"
+    android:gravity="center_vertical">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/const_logo"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="10">
+        android:layout_weight="10000">
 
         <ImageView
             android:id="@+id/image_logo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="#00000000"
-            android:padding="4dp"
             android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -29,20 +29,18 @@
 
     <ImageView
         android:id="@+id/goto_gallery"
-        android:layout_width="40dp"
-        android:layout_height="match_parent"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_weight="1"
-        android:padding="4dp"
         android:scaleType="centerInside"
         app:srcCompat="@drawable/icons8gallery"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/goto_camera"
-        android:layout_width="40dp"
-        android:layout_height="match_parent"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_weight="1"
-        android:padding="4dp"
         android:scaleType="centerInside"
         app:srcCompat="@drawable/icons8camera"
         tools:ignore="ContentDescription" />

@@ -24,6 +24,8 @@ class MainManagementFragment : BasePageFragment() {
         contents = getContentsFromDB()
         if (contents != null)
             listview.adapter = MainManagementAdapter(context, contents!!)
+        else;
+            // TODO 빈 컨텐츠 일때 보여줘야 하는 무언가를 구성해줘야 함.
 
         return mView
     }
@@ -65,7 +67,19 @@ class MainManagementFragment : BasePageFragment() {
     }
 
     fun getContentsFromDB(): Array<MainManagementContent> {
-        return arrayOf(MainManagementContent(), MainManagementContent())
+        //TODO db에서 data 삽입 해야 함.
+        return arrayOf(
+                MainManagementContent(
+                        false,
+                        "",
+                        "",
+                        ""),
+                MainManagementContent(
+                        false,
+                        "",
+                        "",
+                        "")
+        )
     }
 
 }// Required empty public constructor

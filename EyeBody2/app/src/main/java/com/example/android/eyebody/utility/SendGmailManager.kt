@@ -1,17 +1,12 @@
 package com.example.android.eyebody.utility
 
 import android.util.Log
-import java.io.ByteArrayInputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
 import java.security.AccessController
 import java.security.PrivilegedAction
 import java.security.Provider
 import java.security.Security
 import java.util.*
 import javax.activation.DataHandler
-import javax.activation.DataSource
 import javax.mail.*
 import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeMessage
@@ -91,7 +86,7 @@ class SendGmailManager private constructor() : javax.mail.Authenticator() {
         val message = MimeMessage(session)
         try {
 
-            class ByteArrayDataSource(private var data: ByteArray?, private var type: String?) : DataSource {
+            /*class ByteArrayDataSource(private var data: ByteArray?, private var type: String?) : DataSource {
                 override fun getContentType() = type ?: "application/octet-stream"
 
                 //@Throws(IOException::class)
@@ -103,7 +98,7 @@ class SendGmailManager private constructor() : javax.mail.Authenticator() {
                 }
 
                 override fun getName() = "ByteArrayDataSource"
-            }
+            }*/
 
             val handler = DataHandler(javax.mail.util.ByteArrayDataSource(body?.toByteArray(), bodyType))
             message.sender = InternetAddress(senderId)
@@ -153,26 +148,19 @@ class SendGmailManager private constructor() : javax.mail.Authenticator() {
         }
     }
 
-    class Builder {
-        private var senderId: String? = null
-        private var senderPw: String? = null
+    /**
+     * @param bodyType default : "text/plain", can use "text/html", etc...
+     */
+    class Builder(private val senderId: String, private val senderPw: String,
+                  private val subject: String = "제목 없음", private val body: String = "내용 없음", private val bodyType: String = "text/plain") {
         private var senderVisibleId: String? = null
         private var receiverId: String? = null
         private var ccReceiverId: String? = null
         private var bccReceiverId: String? = null
-        private var subject: String? = null
-        private var body: String? = null
-        private var bodyType: String? = null
 
         fun build(): SendGmailManager? {
             if (senderVisibleId == null)
                 senderVisibleId = senderId
-            if (subject == null)
-                subject = "제목 없음"
-            if (body == null)
-                body = "내용 없음"
-            if (bodyType == null)
-                bodyType = "text/plain"
 
             return SendGmailManager(
                     senderId = senderId,
@@ -186,20 +174,10 @@ class SendGmailManager private constructor() : javax.mail.Authenticator() {
                     bodyType = bodyType)
         }
 
-        fun addSenderId(senderId: String): SendGmailManager.Builder {
-            this.senderId = senderId
-            return this
-        }
-
-        fun addSenderPw(senderPw: String): SendGmailManager.Builder {
-            this.senderPw = senderPw
-            return this
-        }
-
         /**
          * 받는 입장에서 보이는 주소
          */
-        fun addSenderVisibleId(senderVisibleId: String): SendGmailManager.Builder {
+        fun setSenderVisibleId(senderVisibleId: String): SendGmailManager.Builder {
             this.senderVisibleId = senderVisibleId
             return this
         }
@@ -209,7 +187,12 @@ class SendGmailManager private constructor() : javax.mail.Authenticator() {
          * 콤마로 구분해서 받을 수 있음.
          */
         fun addReceiverId(receiverId: String): SendGmailManager.Builder {
-            this.receiverId = receiverId
+            // TODO receiverId 를 정규화시켜야 함. 이거말고도 다른거 다
+            // 주소 , 주소 , 주소 이런식으로 끝나게. 콤마가 연속되거나 등등의 잘못 입력하는 예외 상황 있을 수 있음.
+            if (this.receiverId == null)
+                this.receiverId = receiverId
+            else
+                this.receiverId = this.receiverId + ", " + receiverId
             return this
         }
 
@@ -218,7 +201,10 @@ class SendGmailManager private constructor() : javax.mail.Authenticator() {
          * 콤마로 구분해서 받을 수 있음.
          */
         fun addCcReceiver(ccReceiverId: String): SendGmailManager.Builder {
-            this.ccReceiverId = ccReceiverId
+            if (this.ccReceiverId == null)
+                this.ccReceiverId = ccReceiverId
+            else
+                this.ccReceiverId = this.ccReceiverId + ", " + ccReceiverId
             return this
         }
 
@@ -227,22 +213,10 @@ class SendGmailManager private constructor() : javax.mail.Authenticator() {
          * 콤마로 구분해서 받을 수 있음.
          */
         fun addBccReceiver(bccReceiverId: String): SendGmailManager.Builder {
-            this.bccReceiverId = bccReceiverId
-            return this
-        }
-
-        fun addSubject(subject: String): SendGmailManager.Builder {
-            this.subject = subject
-            return this
-        }
-
-        fun addBody(body: String): SendGmailManager.Builder {
-            this.body = body
-            return this
-        }
-
-        fun addBodyType(bodyType: String): SendGmailManager.Builder {
-            this.bodyType = bodyType
+            if (this.bccReceiverId == null)
+                this.bccReceiverId = bccReceiverId
+            else
+                this.bccReceiverId = this.bccReceiverId + ", " + bccReceiverId
             return this
         }
     }

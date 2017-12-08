@@ -18,6 +18,7 @@ import com.example.android.eyebody.utility.StringHashManager
 import com.example.android.eyebody.R
 import com.example.android.eyebody.utility.SendGmailManager
 import kotlinx.android.synthetic.main.activity_find_password.*
+import javax.mail.AuthenticationFailedException
 
 /**
  * Created by Yoon on 2017-11-24
@@ -47,25 +48,35 @@ class FindPasswordActivity : AppCompatActivity() {
         if (emailButton.isClickable) {
             emailButton.setOnClickListener {
 
-                //TODO random text generater 를 만들거나 5회이상 입력시 5분 뒤 시도하게 만들기
+                //TODO random text generater 를 만들거나 5회이상 입력시 5분 뒤 시도하게 만들기 또는 firebase 로 전향
                 val key: Int? = (Math.random() * 1_000_000).toInt()
 
-                val mailSender = SendGmailManager.Builder()
-                        .addSenderId("temporary.mail.for.programming@gmail.com")
-                        .addSenderPw("temporary.mail")
-                        .addSenderVisibleId("admin@eyebody.noreply.com") // 지메일에서 지원을 안한다 ㅠㅠ : https://stackoverflow.com/a/4189363/7354469
-                        .addReceiverId(pref_email)
+                val mailSender = SendGmailManager
+                        .Builder(senderId = "temporary.mail.for.programming@gmail.com",
+                                senderPw = "temporary.mail",
+                                subject = "<Eyebody> :: 비밀번호 수정을 위한 임시 키를 발급해드렸습니다.",
+                                body = "<a href='www.google.com'>비밀번호</a> 수정을 위한 임시 키는 $key 입니다.\n" +
+                                        "감사합니다.",
+                                bodyType = "text/html")
+                        .setSenderVisibleId("admin@eyebody.noreply.com") // 지메일에서 지원을 안한다 ㅠㅠ : https://stackoverflow.com/a/4189363/7354469
+                        .addReceiverId(/*TODO pref_email*/ "tiger940404@naver.com") // 현재 none으로 되어있어서 막아 놓음.
                         //.addCcReceiver("myenggeun44@naver.com") //참조
                         //.addBccReceiver("tiger940404@naver.com") //숨은 참조
-                        .addSubject("<Eyebody> :: 비밀번호 수정을 위한 임시 키를 발급해드렸습니다.")
-                        .addBody("<a href='www.google.com'>비밀번호</a> 수정을 위한 임시 키는 $key 입니다.\n감사합니다.")
-                        .addBodyType("text/html")
                         .build()
                 Log.d(TAG, "보내기 시도")
 
                 object : Thread() {
                     override fun run() {
-                        mailSender?.send()
+                        try {
+                            mailSender?.send()
+                            runOnUiThread{
+                                Toast.makeText(baseContext,"Mail sent.",Toast.LENGTH_SHORT).show()
+                            }
+                        } catch(e : Throwable){
+                            runOnUiThread{
+                                Toast.makeText(baseContext,"Mail send failed : ${e.localizedMessage}",Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     }
                 }.start()
 
@@ -78,9 +89,10 @@ class FindPasswordActivity : AppCompatActivity() {
             inputKeyButton.setOnClickListener {
                 val encryptInput = StringHashManager.encryptString(inputKey.text.toString())
 
+                //TODO 0000을 지워야 함. release 할 때.
                 if (encryptInput == initPref.getString(getString(R.string.email_auth_key), "None") || inputKey.text.toString() == "0000") {
 
-                    Toast.makeText(this, "맞았음. 이제 비밀번호 변경으로 가면 됨", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "비밀번호를 변경해주세요.", Toast.LENGTH_LONG).show()
 
                     class PasswordChangeDialog : DialogFragment() {
                         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
