@@ -21,12 +21,12 @@ class ImageSelectAdapter(var context: Context, var photoList: ArrayList<Photo>, 
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        (holder as Item).bindData(photoList[position], position, selectedIndexList, fragment as ImageSelectFragment, this)
+        (holder as Item).bindData(photoList[position], position, selectedIndexList, fragment as ImageSelectFragment)
     }
 
     class Item(itemView: View) : RecyclerView.ViewHolder(itemView) {
         //ImageSelectFragment에서 데이터 바인딩
-        fun bindData(photo: Photo, pos: Int, selectedIndexList: ArrayList<Int>, fragment: ImageSelectFragment, adapter: ImageSelectAdapter) {
+        fun bindData(photo: Photo, pos: Int, selectedIndexList: ArrayList<Int>, fragment: ImageSelectFragment) {
             itemView.imageView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
             var measuredWidth = itemView.imageView.measuredWidth
             var measuredHeight = itemView.imageView.measuredHeight
@@ -36,7 +36,15 @@ class ImageSelectAdapter(var context: Context, var photoList: ArrayList<Photo>, 
             fragment.setSelected(itemView, pos, selectedIndexList.contains(pos))
 
             itemView.setOnClickListener{
-                fragment.setSelected(itemView, pos, !selectedIndexList.contains(pos))   //없으면(false) 추가해줌(true)
+                var cnt = selectedIndexList.size + 1
+                var isSelected = selectedIndexList.contains(pos)
+
+                if(cnt > 5 && !isSelected){ //꽉 찼는데 더 추가하려고 할 때
+                    fragment.makeToast("5개 까지만 가능")
+                } else{
+                    fragment.setSelected(itemView, pos, !isSelected)   //없으면(false) 추가해줌(true)
+
+                }
             }
         }
     }

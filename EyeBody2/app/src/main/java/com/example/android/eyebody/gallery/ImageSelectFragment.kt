@@ -50,6 +50,7 @@ class ImageSelectFragment : Fragment() {
             R.id.action_edit_image -> {
                 //ImageEditFragment로 교체
                 var imageEditFragment = ImageEditFragment()
+                //var imageEditFragment = ImageCollageFragment()
 
                 fragmentManager
                         .beginTransaction()
@@ -62,17 +63,17 @@ class ImageSelectFragment : Fragment() {
     }
 
     fun setSelected(itemView: View, pos: Int, isSelected: Boolean){
-        var cnt = collage.selectedIndexList.size + 1
-
         if(isSelected){
-            if(cnt > 5){
-                Toast.makeText(activity, "5개까지만", Toast.LENGTH_SHORT).show()
-                return
-            }
-
             itemView.setBackgroundColor(Color.WHITE)
             itemView.date.setTextColor(R.color.gradientPurple)
-            itemView.numberTextView.text = cnt.toString()
+
+            var idx = collage.selectedIndexList.indexOf(pos)
+            if(idx < 0){
+                itemView.numberTextView.text = (collage.selectedIndexList.size + 1).toString()  //새로 선택하는 경우
+            }else{
+                itemView.numberTextView.text = (idx + 1).toString() //뒤로가기 했을 때(이미 값이 있는 경우)
+            }
+
             itemView.numberTextView.visibility = View.VISIBLE
 
             if(!collage.selectedIndexList.contains(pos)) collage.selectedIndexList.add(pos)  //없으면 추가
@@ -88,9 +89,13 @@ class ImageSelectFragment : Fragment() {
             collage.selectedIndexList.remove(pos)
 
             //선택 해제했을 때 번호 다시 매기기
-            for(cnt in collage.selectedIndexList.indices){
-                var idx = collage.selectedIndexList[cnt]
-                imageSelectView.findViewHolderForAdapterPosition(idx).itemView.numberTextView.text = (cnt + 1).toString()
+            try {
+                for (idx in collage.selectedIndexList.indices) {
+                    var sel = collage.selectedIndexList[idx]
+                    imageSelectView.findViewHolderForAdapterPosition(sel).itemView.numberTextView.text = (idx + 1).toString()
+                }
+            } catch(e: Exception){
+                //
             }
 
             if(collage.selectedIndexList.size == 0){    //선택한 이미지가 하나도 없을 때 이미지편집 메뉴 아이콘 숨기기
@@ -101,5 +106,9 @@ class ImageSelectFragment : Fragment() {
                 }
             }
         }
+    }
+
+    fun makeToast(str: String){
+        Toast.makeText(activity, str, Toast.LENGTH_SHORT).show()
     }
 }
