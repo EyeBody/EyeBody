@@ -95,7 +95,7 @@ class ImageSelectFragment : Fragment() {
                     imageSelectView.findViewHolderForAdapterPosition(sel).itemView.numberTextView.text = (idx + 1).toString()
                 }
             } catch(e: Exception){
-                //
+                //초기화되지 않은 경우
             }
 
             if(collage.selectedIndexList.size == 0){    //선택한 이미지가 하나도 없을 때 이미지편집 메뉴 아이콘 숨기기

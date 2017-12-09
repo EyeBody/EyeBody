@@ -21,6 +21,7 @@ class ImageEditFragment : Fragment() {
 
         collage = activity as CollageActivity
         selected = collage.selectedPhotoList
+        selected.clear()
 
         for(s in collage.selectedIndexList){
             selected.add(collage.photoList[s].copyToCacheDir(activity)) //임시 폴더로 복사
