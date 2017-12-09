@@ -87,11 +87,17 @@ class ImageSelectFragment : Fragment() {
 
             collage.selectedIndexList.remove(pos)
 
+            //선택 해제했을 때 번호 다시 매기기
+            for(cnt in collage.selectedIndexList.indices){
+                var idx = collage.selectedIndexList[cnt]
+                imageSelectView.findViewHolderForAdapterPosition(idx).itemView.numberTextView.text = (cnt + 1).toString()
+            }
+
             if(collage.selectedIndexList.size == 0){    //선택한 이미지가 하나도 없을 때 이미지편집 메뉴 아이콘 숨기기
                 try{
                     menu.findItem(R.id.action_edit_image).setVisible(false)
                 } catch (e: Exception) {
-                    //메뉴가 null일 때
+                    //메뉴가 null일 때(초기화가 안됐을 때)
                 }
             }
         }
