@@ -6,8 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.support.v4.os.CancellationSignal
 import android.support.v7.app.AppCompatActivity
@@ -17,11 +15,7 @@ import com.example.android.eyebody.management.ManagementActivity
 import com.example.android.eyebody.management.config.subcontent.callee.content.FindPasswordActivity
 import kotlinx.android.synthetic.main.activity_setting.*
 import java.security.*
-import java.security.spec.ECGenParameterSpec
-import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
-import android.security.keystore.KeyPermanentlyInvalidatedException
-import android.support.annotation.RequiresApi
+import com.example.android.eyebody.utility.MyFingerPrintManager
 
 
 // 임시 UI 만드는 곳
@@ -29,12 +23,21 @@ import android.support.annotation.RequiresApi
 class SettingActivity : AppCompatActivity() {
 
     val TAG = "mydbg_setting"
-    val KEY_NAME = "my_key"
+
+    val cancelSignal = CancellationSignal()
+
     //-------- 조금만 참아 ---------------------------------------
+    val KEY_NAME = "my_key"
     var mKeyStore: KeyStore? = null
     var mKeyPairGenerator: KeyPairGenerator? = null
     var mSignature: Signature? = null
     //-------- 조금만 참아 ---------------------------------------
+
+    override fun onStop() {
+        super.onStop()
+        if (!cancelSignal.isCanceled)
+            cancelSignal.cancel()
+    }
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,28 +67,27 @@ class SettingActivity : AppCompatActivity() {
             Log.d(TAG, "prePW : $sharedPref_hashedPW / PW : $hashedPW")
             if (hashedPW == sharedPref_hashedPW.toString()) {
                 val schedulerPage = Intent(this, ManagementActivity::class.java)
+                if (!cancelSignal.isCanceled)
+                    cancelSignal.cancel()
                 startActivity(schedulerPage)
                 finish()
             } else {
                 Toast.makeText(this, "관계자 외 출입금지~", Toast.LENGTH_LONG).show()
             }
-
             true
         }
 
         // password 찾기/수정 액티비티
         button_explore_password.setOnClickListener {
             Log.d(TAG, "explore password")
-
             val mIntent = Intent(this, FindPasswordActivity::class.java)
             startActivity(mIntent)
-
         }
 
         // 지문인식
         if (isUserSetCanFingerPrintAuth && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val fpManager = FingerprintManagerCompat.from(this)
-            if (fpManager.isHardwareDetected) {
+            val osFpManager = FingerprintManagerCompat.from(this)
+            if (osFpManager.isHardwareDetected) {
                 setting_image_fingerprint.setImageDrawable(getDrawable(R.drawable.icons8fingerprint))
                 setting_text_pw_guide.text = "지문 또는 비밀번호를 입력하세요."
 
@@ -185,48 +187,52 @@ class SettingActivity : AppCompatActivity() {
                 //createKeyPair()
                 if (true/*initSignature()*/) {
                     //val cryptObject = FingerprintManagerCompat.CryptoObject(mSignature)
-                    val cancelSignal = CancellationSignal()
+                    val myFpManager = object : MyFingerPrintManager(osFpManager, this, null, 0, cancelSignal, null) {
 
-                    val authCallback = object : FingerprintManagerCompat.AuthenticationCallback() {
                         override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult?) {
                             super.onAuthenticationSucceeded(result)
                             val schedulerPage = Intent(baseContext, ManagementActivity::class.java)
                             startActivity(schedulerPage)
                             finish()
-                            Toast.makeText(baseContext, "성공.", Toast.LENGTH_SHORT).show()
                         }
 
-                        override fun onAuthenticationFailed() {
-                            super.onAuthenticationFailed()
-                            Toast.makeText(baseContext, "실패.", Toast.LENGTH_SHORT).show()
-                            fpManager.authenticate(null, 0, cancelSignal, this, null)
+                        override fun afterLockout() {
+                            runOnUiThread {
+                                setting_image_fingerprint.setImageDrawable(getDrawable(R.drawable.icons8privacy))
+                                setting_text_pw_guide.text = "비밀번호를 입력하세요. (지문인식은 30초 뒤 접근 가능합니다.)"
+                            }
                         }
 
-                        override fun onAuthenticationError(errMsgId: Int, errString: CharSequence?) {
-                            super.onAuthenticationError(errMsgId, errString)
-                            if (!cancelSignal.isCanceled)
-                                Toast.makeText(baseContext, "에러 : $errMsgId : $errString", Toast.LENGTH_SHORT).show()
-                            else
-                                Toast.makeText(baseContext, "에러 cancel : $errMsgId : $errString", Toast.LENGTH_SHORT).show()
+                        override fun afterLockOutRelease() {
+                            runOnUiThread {
+                                setting_image_fingerprint.setImageDrawable(getDrawable(R.drawable.icons8fingerprint))
+                                setting_text_pw_guide.text = "지문 또는 비밀번호를 입력하세요."
+                            }
                         }
 
-                        override fun onAuthenticationHelp(helpMsgId: Int, helpString: CharSequence?) {
-                            super.onAuthenticationHelp(helpMsgId, helpString)
-                            if (!cancelSignal.isCanceled)
-                                Toast.makeText(baseContext, "헬프 : $helpMsgId : $helpString", Toast.LENGTH_SHORT).show()
-                            else
-                                Toast.makeText(baseContext, "헬프 cancel: $helpMsgId : $helpString", Toast.LENGTH_SHORT).show()
+                        override fun afterNoSpace() {
+                            runOnUiThread {
+                                setting_image_fingerprint.setImageDrawable(getDrawable(R.drawable.icons8privacy))
+                                setting_text_pw_guide.text = "비밀번호를 입력하세요. (저장공간이 부족하여 지문인식이 불가능합니다.)"
+                            }
+                        }
+
+                        override fun afterUnAvailableError() {
+                            runOnUiThread {
+                                setting_image_fingerprint.setImageDrawable(getDrawable(R.drawable.icons8privacy))
+                                setting_text_pw_guide.text = "비밀번호를 입력하세요."
+                            }
                         }
                     }
 
-                    fpManager.authenticate(null/*cryptoObject*/, 0, cancelSignal, authCallback, null)
+                    myFpManager.startAuthenticate()
                 }
 
             } else {
                 setting_image_fingerprint.setImageDrawable(getDrawable(R.drawable.icons8privacy))
-                if (fpManager.hasEnrolledFingerprints()) {
+                if (osFpManager.hasEnrolledFingerprints()) {
                     // 등록을 안함.
-                    setting_text_pw_guide.text = "비밀번호를 입력하세요.\n(지문을 등록하셔야 이용하실 수 있습니다.)"
+                    setting_text_pw_guide.text = "비밀번호를 입력하세요.\n(지문을 등록하지 않아 지문인식을 이용하실 수 없습니다.)"
                 } else {
                     // 디바이스 미지원
                     setting_text_pw_guide.text = "비밀번호를 입력하세요."

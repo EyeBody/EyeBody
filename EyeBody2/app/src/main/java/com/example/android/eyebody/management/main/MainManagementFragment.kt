@@ -1,19 +1,30 @@
 package com.example.android.eyebody.management.main
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import com.example.android.eyebody.R
 import com.example.android.eyebody.management.BasePageFragment
+import kotlinx.android.synthetic.main.fragment_management_main.*
 
 /**
  * Created by YOON on 2017-11-11
  */
 class MainManagementFragment : BasePageFragment() {
 
-    private var contents: Array<MainManagementContent>? = null
+    private val TAG = "mydbg_MainTabFrag"
+    private var contents: ArrayList<MainManagementContent>? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (arguments != null) {
+            pageNumber = arguments.getInt(ARG_PAGE_NUMBER)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // TODO 재사용같은거 할 수 있나 (나중에 memory 밖으로 벗어날때??)
@@ -21,19 +32,27 @@ class MainManagementFragment : BasePageFragment() {
 
         val listview: ListView = mView.findViewById(R.id.listview_main_management)
 
-        contents = getContentsFromDB()
-        if (contents != null)
+        contents = MainManagementContent.getMainManagementContents(context)
+        if (contents != null) {
             listview.adapter = MainManagementAdapter(context, contents!!)
-        else;
-            // TODO 빈 컨텐츠 일때 보여줘야 하는 무언가를 구성해줘야 함.
+
+            //for log
+            for(content in contents!!){
+                Log.d(TAG, "content : ${content.isInProgress} , ${content.startDate}, ${content.endDate}, ${content.startWeight}, ${content.endWeight}, ${content.DataList}")
+            }
+        }
+        else{
+            listview.adapter = MainManagementAdapter(context, arrayListOf())
+        }
 
         return mView
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            pageNumber = arguments.getInt(ARG_PAGE_NUMBER)
+    override fun onStart() {
+        super.onStart()
+        addButton.setOnClickListener {
+            val mInt = Intent(context, NewMainContentActivity::class.java)
+            startActivity(mInt)
         }
     }
 
@@ -66,20 +85,5 @@ class MainManagementFragment : BasePageFragment() {
         }
     }
 
-    fun getContentsFromDB(): Array<MainManagementContent> {
-        //TODO db에서 data 삽입 해야 함.
-        return arrayOf(
-                MainManagementContent(
-                        false,
-                        "",
-                        "",
-                        ""),
-                MainManagementContent(
-                        false,
-                        "",
-                        "",
-                        "")
-        )
-    }
 
 }// Required empty public constructor

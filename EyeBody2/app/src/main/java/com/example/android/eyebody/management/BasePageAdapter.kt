@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.BaseAdapter
 
 
-abstract class BasePageAdapter(val context: Context, val contents: Array<Any>) : BaseAdapter() {
+abstract class BasePageAdapter(val context: Context, val contents: ArrayList<Any>) : BaseAdapter() {
 
     override fun getItemId(position: Int): Long = position.toLong()
 

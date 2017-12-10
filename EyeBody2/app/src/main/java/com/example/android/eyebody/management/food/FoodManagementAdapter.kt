@@ -18,7 +18,7 @@ import com.example.android.eyebody.management.BasePageAdapter
 /**
  * Created by YOON on 2017-11-19
  */
-class FoodManagementAdapter(context: Context, contents: Array<FoodManagementContent>) : BasePageAdapter(context, contents as Array<Any>) {
+class FoodManagementAdapter(context: Context, contents: ArrayList<FoodManagementContent>) : BasePageAdapter(context, contents as ArrayList<Any>) {
 
     override fun getItem(position: Int):FoodManagementContent = contents[position] as FoodManagementContent
 

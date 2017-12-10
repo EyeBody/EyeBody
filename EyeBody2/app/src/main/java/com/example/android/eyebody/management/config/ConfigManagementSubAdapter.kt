@@ -22,8 +22,8 @@ import com.example.android.eyebody.management.config.subcontent.caller.FunctionC
  * Created by YOON on 2017-11-19
  */
 
-class ConfigManagementSubAdapter(val activity: Activity, contents: Array<CMBaseSubContent>) :
-        BasePageAdapter(activity.applicationContext, contents as Array<Any>) {
+class ConfigManagementSubAdapter(val activity: Activity, contents: ArrayList<CMBaseSubContent>) :
+        BasePageAdapter(activity.baseContext, contents as ArrayList<Any>) {
 
     val TAG = "mydbg_ConfigMNG_SubAdap"
 

@@ -11,8 +11,8 @@ import com.example.android.eyebody.management.BasePageAdapter
 /**
  * Created by Yoon on 2017-11-18
  */
-class ConfigManagementAdapter(val activity: Activity, contents: Array<ConfigManagementContent>) :
-        BasePageAdapter(activity.applicationContext, contents as Array<Any>) {
+class ConfigManagementAdapter(val activity: Activity, contents: ArrayList<ConfigManagementContent>) :
+        BasePageAdapter(activity.baseContext, contents as ArrayList<Any>) {
 
     val TAG = "mydbg_ConfigMngAdapter"
 

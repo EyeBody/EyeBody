@@ -3,6 +3,7 @@ package com.example.android.eyebody.management.main
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.content.Intent
 import android.support.constraint.ConstraintLayout
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.example.android.eyebody.R
 import com.example.android.eyebody.management.BasePageAdapter
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.GraphView
+import com.jjoe64.graphview.LegendRenderer
 import com.jjoe64.graphview.series.DataPoint
 
 
@@ -22,11 +24,12 @@ import com.jjoe64.graphview.series.DataPoint
  * graph opensource at
  * https://github.com/appsthatmatter/GraphView
  */
-class MainManagementAdapter(context: Context, contents: Array<MainManagementContent>) : BasePageAdapter(context, contents as Array<Any>) {
+class MainManagementAdapter(context: Context, contents: ArrayList<MainManagementContent>) : BasePageAdapter(context, contents as ArrayList<Any>) {
 
     override fun getItem(position: Int): MainManagementContent = contents[position] as MainManagementContent
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+
         // item을 가지고 어떻게 표시할 것이냐 -> layout에 있는 xml파일을 부른다음에 거기에 contents 아이템들을 넣고 반환
         // convertView = 재사용
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.list_main_management, parent, false)
@@ -41,11 +44,11 @@ class MainManagementAdapter(context: Context, contents: Array<MainManagementCont
         val contentTitleImageWeight: ImageButton = view.findViewById(R.id.imageButton3)
         val contentTitleImageFood: ImageButton = view.findViewById(R.id.imageButton4)
         val contentGraph: GraphView = view.findViewById(R.id.main_management_graph)
-        val contentDeleteOrFail: ImageButton = view.findViewById(R.id.imageButton)
-        val contentGoToGallery: ImageButton = view.findViewById(R.id.imageButton2)
+        val contentDeleteButton: ImageButton = view.findViewById(R.id.imageButton)
+        val contentGoToGalleryButton: ImageButton = view.findViewById(R.id.imageButton2)
 
 
-        val series = LineGraphSeries<DataPoint>(arrayOf<DataPoint>(
+        val series = LineGraphSeries<DataPoint>(arrayOf(
                 DataPoint(0.0, 1.0),
                 DataPoint(1.0, 5.0),
                 DataPoint(2.0, 3.0),
@@ -53,8 +56,34 @@ class MainManagementAdapter(context: Context, contents: Array<MainManagementCont
                 DataPoint(4.0, 6.0)
         ))
         contentGraph.addSeries(series)
+        series.setAnimated(true)
+
+        contentDeleteButton.setOnClickListener {
+            contents.removeAt(position)
+            // sharedPreference? fragment에서 호출하는 값을 실제로 지우거나 휴지통으로 넣는다.
+            val xx = contentBackground.x
+            contentBackground.animate()
+                    ?.x(-contentBackground.width.toFloat())
+                    ?.setDuration(350)
+                    ?.setListener(object : AnimatorListenerAdapter(){
+                        override fun onAnimationEnd(animation: Animator?) {
+                            super.onAnimationEnd(animation)
+                            contentBackground.x = xx
+                            notifyDataSetChanged()
+                        }
+                    })
+        }
 
         contentGraph.setOnClickListener {
+            val mInt = Intent(context, FullscreenGraphViewActivity::class.java)
+            // 데이터(현재상황, 목표, 이미지 uri) 넣어야댐
+            mInt.putExtra("series", DataPoint(0.0, 0.0))
+            // ...
+            context.startActivity(mInt)
+        }
+
+        /*
+            // 버튼 제어
             val buttonRange: ConstraintLayout? = parent?.rootView?.findViewById(R.id.constraintLayout7)
 
             if (buttonRange?.visibility == View.GONE) {
@@ -81,8 +110,7 @@ class MainManagementAdapter(context: Context, contents: Array<MainManagementCont
                             }
                         })
             }
-
-        }
+            */
 
         return view
     }

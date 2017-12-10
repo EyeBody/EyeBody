@@ -37,7 +37,7 @@ class FindPasswordActivity : AppCompatActivity() {
         val inputKey = input_temporary_key
         val inputKeyButton = validation_temporary_key
 
-        val initPref = applicationContext.getSharedPreferences(getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
+        val initPref = baseContext.getSharedPreferences(getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
         val pref_email = initPref.getString(getString(R.string.sharedPreference_email), "None")
         val pref_email_auth = initPref.getString(getString(R.string.sharedPreference_email_auth_status), "None")
 

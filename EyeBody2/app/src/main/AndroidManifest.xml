@@ -81,6 +81,18 @@
             android:name=".management.ManagementActivity"
             android:hardwareAccelerated="true"
             android:label="관리"/>
+        <activity
+            android:name=".management.main.FullscreenGraphViewActivity"
+            android:hardwareAccelerated="true"
+            android:label="그래프 풀스크린"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.disable_actionbar"
+            />
+        <activity
+            android:name=".management.main.NewMainContentActivity"
+            android:label="목표 설정하기"
+            android:screenOrientation="portrait"
+            />
         <receiver android:name=".exercise.SMSReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />

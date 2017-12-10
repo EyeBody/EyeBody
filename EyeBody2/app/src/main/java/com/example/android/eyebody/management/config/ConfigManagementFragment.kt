@@ -37,12 +37,12 @@ class ConfigManagementFragment : BasePageFragment() {
         val listview = mView.findViewById<ListView>(R.id.listview_config_management)
 
         listview.adapter = ConfigManagementAdapter(activity,
-                arrayOf(
+                arrayListOf(
                         ConfigManagementContent(
                                 context.resources.getDrawable(R.drawable.icons8maintenance, null),
                                 "Example",
                                 "Example for sub text",
-                                arrayOf(
+                                arrayListOf(
                                         SwitchableSubContent(
                                                 "연습하기",
                                                 "nullable1",
@@ -66,7 +66,7 @@ class ConfigManagementFragment : BasePageFragment() {
                                 context.resources.getDrawable(R.drawable.icons8uploadtocloud, null),
                                 "백업 설정",
                                 "백업에 대한 설정을 바꿀 수 있습니다.",
-                                arrayOf(
+                                arrayListOf(
                                         FunctionCallerSubContent(
                                                 "구글 드라이브 로그인",
                                                 getString(R.string.sharedPreference_GoogleLogin_Status),
@@ -114,7 +114,7 @@ class ConfigManagementFragment : BasePageFragment() {
                                 context.resources.getDrawable(R.drawable.icons8plus, null),
                                 "보안",
                                 "보안에 대한 설정을 바꿀 수 있습니다.",
-                                arrayOf(
+                                arrayListOf(
                                         DialogCallerSubContent(
                                                 "지문인식 사용",
                                                 getString(R.string.sharedPreference_Security_Use_Fingerprint),
