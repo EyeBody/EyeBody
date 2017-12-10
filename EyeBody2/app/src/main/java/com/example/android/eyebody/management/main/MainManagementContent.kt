@@ -13,79 +13,134 @@ val TAG = "mydbg_MainContent.kt"
 /**
  * date format must : "yyyyMMddHHmmss"
  */
-class DateData(val date: String, val weight: Double?, val imageUri: List<String>?)
+class DateData(val date: String, var weight: Double?, val imageUri: ArrayList<String>)
 
 /**
  * date format must : "yyyyMMddHHmmss"
- * https://github.com/google/gson
- * "json data~~" = Gson().toJson(contents)
- * Gson().fromJson("json data~~", 클래스::class.java)
+ * json 포맷 : https://github.com/google/gson
  */
+@SuppressLint("ApplySharedPref")
 class MainManagementContent(var isInProgress: Boolean,
                             val startDate: String, val endDate: String,
                             val startWeight: Double, val endWeight: Double,
-                            val DataList: List<DateData>) {
+                            val dateDataList: ArrayList<DateData>) {
+
     companion object {
 
-        @SuppressLint("ApplySharedPref")
-        fun putMainManagementContent(context: Context, content: MainManagementContent) {
+        private fun initPref(context: Context)
+                = context.getSharedPreferences(context.getString(R.string.getSharedPreference_initSetting), AppCompatActivity.MODE_PRIVATE)
 
-
-            val jsonContent = Gson().toJson(content)
-            val initPref = context.getSharedPreferences(context.getString(R.string.getSharedPreference_initSetting), AppCompatActivity.MODE_PRIVATE)
-            val fillInfo_json = initPref.getString(context.getString(R.string.sharedPreference_MainManagementContent_Fill_Information_Json_ArrayListOfString), null)
-            if (fillInfo_json == null) {
-                initPref.edit()
-                        .putString(context.getString(R.string.sharedPreference_MainManagementContent_Fill_Information_Json_ArrayListOfString), Gson().toJson(arrayListOf("0")))
-                        .putString(context.getString(R.string.sharedPreference_MainManagementContent) + "0", jsonContent)
-                        .commit()
-            } else {
-                val type = object : TypeToken<java.util.ArrayList<String>>() {}.type
-                val fillInfo: java.util.ArrayList<String> = Gson().fromJson(fillInfo_json, type)
-
-                var position = 0
-                while (true) {
-                    if (fillInfo.contains("$position")) {
-                        Log.d(TAG, "$position 자리는 차있습니다.")
-                        position += 1
-                    } else
-                        break
-                }
-                fillInfo.add("$position")
-                val changedFillInfo_json = Gson().toJson(fillInfo)
-                initPref.edit()
-                        .putString(context.getString(R.string.sharedPreference_MainManagementContent_Fill_Information_Json_ArrayListOfString), changedFillInfo_json)
-                        .putString(context.getString(R.string.sharedPreference_MainManagementContent) + "$position", jsonContent)
-                        .commit()
-            }
-
+        private fun getMainManagementContentArrayList(context: Context): ArrayList<MainManagementContent> {
+            val type = object : TypeToken<ArrayList<MainManagementContent>>() {}.type
+            val jsonContents = initPref(context).getString(context.getString(R.string.sharedPreference_MainManagementContents), null)
+            val contents =
+                    if (jsonContents == null)
+                        arrayListOf<MainManagementContent>()
+                    else
+                        Gson().fromJson(jsonContents, type)
+            return contents
         }
 
-        fun getMainManagementContents(context: Context): ArrayList<MainManagementContent> {
-            val contents = arrayListOf<MainManagementContent>()
+        private fun putMainManagementContentArrayList(context: Context, contents: ArrayList<MainManagementContent>) {
+            val jsonContents = Gson().toJson(contents)
+            initPref(context).edit()
+                    .putString(context.getString(R.string.sharedPreference_MainManagementContents), jsonContents)
+                    .commit()
+        }
 
-            val initSharedPref = context.getSharedPreferences(context.getString(R.string.getSharedPreference_initSetting), Context.MODE_PRIVATE)
-            val fillInfo_json = initSharedPref.getString(context.getString(R.string.sharedPreference_MainManagementContent_Fill_Information_Json_ArrayListOfString), null)
-            if (fillInfo_json == null) {
-                // 아무 데이터도 없다. 냅둠. 위에 비어있는거 선언해서.
-            } else {
-                val type = object : TypeToken<ArrayList<String>>() {}.type
-                val fillInfo: ArrayList<String> = Gson().fromJson(fillInfo_json, type)
-                for (item in fillInfo) {
-                    val content_json = initSharedPref.getString(context.getString(R.string.sharedPreference_MainManagementContent) + item, null)
-                    if (content_json == null) {
-                        // 아무것도 없다? 냅둠.
-                    } else {
-                        val content = Gson().fromJson(content_json, MainManagementContent::class.java)
-                        contents.add(content)
+        private fun sortedMainManagementContent(contents: ArrayList<MainManagementContent>): ArrayList<MainManagementContent>
+                = ArrayList(contents.sortedWith(compareBy<MainManagementContent>{it.startDate}.thenBy{it.endDate}))
+
+        fun getMainManagementContentArrayListForAdapter(context: Context): ArrayList<MainManagementContent>
+        = ArrayList(getMainManagementContentArrayList(context)
+                .sortedWith(compareBy<MainManagementContent>{
+                    !it.isInProgress
+                }.thenByDescending{
+                    it.startDate
+                }.thenByDescending{
+                    it.endDate
+                }))
+
+        fun deleteMainManagementContent(context: Context, position: Int) {
+            val contents = getMainManagementContentArrayList(context)
+            contents.removeAt(position)
+            val sortedContents = sortedMainManagementContent(contents)
+            putMainManagementContentArrayList(context, sortedContents)
+        }
+
+        fun putMainManagementContent(context: Context, content: MainManagementContent) {
+            val contents = getMainManagementContentArrayList(context)
+            if(content.isInProgress){
+                val progress = progressPosition(contents)
+                if(progress != null)
+                    contents[progress].isInProgress = false
+            }
+            contents.add(content)
+            val sortedContents = sortedMainManagementContent(contents)
+            putMainManagementContentArrayList(context, sortedContents)
+        }
+
+        private fun progressPosition(contents: ArrayList<MainManagementContent>): Int?
+                = contents
+                .firstOrNull { it.isInProgress }
+                ?.let { contents.indexOf(it) }
+
+        fun addDateDataToProgressContent(context: Context, date: String) {
+            val contents = getMainManagementContentArrayList(context)
+            val progress = progressPosition(contents)
+            if(progress != null)
+                contents[progress].dateDataList.add(DateData(date,null,arrayListOf()))
+            putMainManagementContentArrayList(context, contents)
+        }
+
+        private fun findDateDataFromString(content: MainManagementContent, date: String): DateData
+                = content.dateDataList
+                .firstOrNull { it.date == date }
+                .let {
+                    if(it == null){
+                        content.dateDataList.add(DateData(date, null, arrayListOf()))
+                        content.dateDataList[0]
+                    }else{
+                        it
                     }
                 }
-            }
 
-            // TODO 이미지 uri 검색해서 반환할 수 있어야 함.
+        fun setWeightToProgressContent(context: Context, date: String, weight: Double) {
+            val contents = getMainManagementContentArrayList(context)
+            val progress = progressPosition(contents)
+            if(progress != null)
+                findDateDataFromString(contents[progress], date).weight = weight
+            putMainManagementContentArrayList(context, contents)
+        }
 
-            /*
-            val filePath = activity.getExternalFilesDir(null).toString() + "/gallery_body/"
+        fun addUriToProgressContent(context: Context, date: String, uri: String) {
+            val contents = getMainManagementContentArrayList(context)
+            val progress = progressPosition(contents)
+            if(progress != null)
+                findDateDataFromString(contents[progress], date).imageUri.add(uri)
+            putMainManagementContentArrayList(context, contents)
+        }
+
+
+        /*
+         * deprecated.
+         *
+         * 목표를 생성하면 무조건 fragment로 오기때문에 adapter를 연결하는 과정에서 get을 호출할 수 밖에 없다.
+         * 그러므로 이미지uri 검색은 현재 활성화된 것에 한해서만 검색하면 된다.
+         * (활성화된 목표는 1개밖에 없고 끝난 목표들에 대해 사진을 표현해 줄 필요가 없기 때문) - 표현 해주면 안 됨
+         *
+        fun getMainManagementContentArrayListWithImageDataSearch(context: Context): ArrayList<MainManagementContent> {
+            val contents = getMainManagementContentArrayList(context)
+
+            val progress = progressPosition(contents)
+            // 이미지 uri 검색해서 반환함.
+            // get할때 uri를 왜 계속 검색해야 하냐면 데이터는 수시로 바뀌기 때문. (insert, delete 할 때 안 넣는 이유)
+
+
+            contents[progress].dateDataList = listOf(DateData("", 3.0, listOf()))
+
+
+            val filePath = context.getExternalFilesDir(null).toString() + "/gallery_body/"
             val availableStartFileName = listOf("front_", "side_")
 
             val dbDate = listOf("20171201", "20171205", "20171208", "20171209", "20171211")
@@ -96,7 +151,7 @@ class MainManagementContent(var isInProgress: Boolean,
             val dateDataList = ArrayList<DateData>(0)
             val date2imageMap = mutableMapOf<String, ArrayList<String>>()
 
-            activity.getExternalFilesDir(null).listFiles { folder ->
+            context.getExternalFilesDir(null).listFiles { folder ->
                 if (folder.isDirectory && folder.endsWith("gallery_body")) {
                     folder.listFiles { file ->
                         (0 until dbDate.size).forEach {
@@ -121,21 +176,8 @@ class MainManagementContent(var isInProgress: Boolean,
                 Log.d(TAG, "${it.date} : ${it.weight} :  ${it.imageUri}")
             }
 
-            val contents = arrayListOf(
-                    MainManagementContent(false,
-                            "20171201", "20171230",
-                            80.0, 70.0,
-                            dateDataList
-                    ),
-                    MainManagementContent(false,
-                            "20171201", "20171230",
-                            80.0, 70.0,
-                            listOf(DateData("20171220", null, List(0, { "" })))
-                    ))
-
-            return contents
-            */
             return contents
         }
+        */
     }
 }

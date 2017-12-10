@@ -32,13 +32,13 @@ class MainManagementFragment : BasePageFragment() {
 
         val listview: ListView = mView.findViewById(R.id.listview_main_management)
 
-        contents = MainManagementContent.getMainManagementContents(context)
+        contents = MainManagementContent.getMainManagementContentArrayListForAdapter(context)
         if (contents != null) {
             listview.adapter = MainManagementAdapter(context, contents!!)
 
             //for log
             for(content in contents!!){
-                Log.d(TAG, "content : ${content.isInProgress} , ${content.startDate}, ${content.endDate}, ${content.startWeight}, ${content.endWeight}, ${content.DataList}")
+                Log.d(TAG, "content : ${content.isInProgress} , ${content.startDate}, ${content.endDate}, ${content.startWeight}, ${content.endWeight}, ${content.dateDataList}")
             }
         }
         else{

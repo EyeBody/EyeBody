@@ -47,6 +47,35 @@ class MainManagementAdapter(context: Context, contents: ArrayList<MainManagement
         val contentDeleteButton: ImageButton = view.findViewById(R.id.imageButton)
         val contentGoToGalleryButton: ImageButton = view.findViewById(R.id.imageButton2)
 
+        val item = getItem(position)
+
+        if (item.isInProgress) {
+            contentTitleText.text = "진행중인 목표"
+            contentDeleteButton.setOnClickListener {
+                item.isInProgress=false
+                notifyDataSetChanged()
+            }
+        } else {
+            contentTitleText.text = "종료된 목표"
+            contentDeleteButton.setOnClickListener {
+                // 데이터상에서 삭제
+                MainManagementContent.deleteMainManagementContent(context, position)
+                // 다시 불러와야 하지만 성능을 위해 화면에서만 지움.
+                contents.removeAt(position)
+
+                val xx = contentBackground.x
+                contentBackground.animate()
+                        ?.x(-contentBackground.width.toFloat())
+                        ?.setDuration(350)
+                        ?.setListener(object : AnimatorListenerAdapter() {
+                            override fun onAnimationEnd(animation: Animator?) {
+                                super.onAnimationEnd(animation)
+                                contentBackground.x = xx
+                                notifyDataSetChanged()
+                            }
+                        })
+            }
+        }
 
         val series = LineGraphSeries<DataPoint>(arrayOf(
                 DataPoint(0.0, 1.0),
@@ -57,22 +86,6 @@ class MainManagementAdapter(context: Context, contents: ArrayList<MainManagement
         ))
         contentGraph.addSeries(series)
         series.setAnimated(true)
-
-        contentDeleteButton.setOnClickListener {
-            contents.removeAt(position)
-            // sharedPreference? fragment에서 호출하는 값을 실제로 지우거나 휴지통으로 넣는다.
-            val xx = contentBackground.x
-            contentBackground.animate()
-                    ?.x(-contentBackground.width.toFloat())
-                    ?.setDuration(350)
-                    ?.setListener(object : AnimatorListenerAdapter(){
-                        override fun onAnimationEnd(animation: Animator?) {
-                            super.onAnimationEnd(animation)
-                            contentBackground.x = xx
-                            notifyDataSetChanged()
-                        }
-                    })
-        }
 
         contentGraph.setOnClickListener {
             val mInt = Intent(context, FullscreenGraphViewActivity::class.java)

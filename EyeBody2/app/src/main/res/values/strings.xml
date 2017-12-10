@@ -10,12 +10,7 @@
     <string name="sharedPreference_hashedPW">hashedPW</string>
     <string name="sharedPreference_targetWeight">targetWeight</string>
     <string name="sharedPreference_targetDate">targetDate</string>
-    <string name="sharedPreference_MainManagementContent">MainManagementContent
-        (MainManagementContent_Fill_Information_Json_ArrayListOfString으로 구해진 리스트 중에 0부터 차례대로 매핑된 데이터들. 불러올땐 이 string과 함께 +"0" 등 매핑되는 숫자를 적어서 preference를 구한다.)
-    </string>
-    <string name="sharedPreference_MainManagementContent_Fill_Information_Json_ArrayListOfString">MainManagementContent_Fill_Info
-        (0부터 차례대로 숫자가 들어감. 삭제될 경우 그냥 비워짐. 해싱은 안함. 다시 거길 채움 다음 데이터가. arraylist>string> 으로 이루어진 json파일. gson으로 구한다.)
-    </string>
+    <string name="sharedPreference_MainManagementContents">MainManagementContents ArrayList</string>
     <string name="sharedPreference_email">email</string>
     <string name="sharedPreference_email_auth_status">auth</string>
     <string name="sharedPreference_email_auth_ok">email_authentication_ok</string>

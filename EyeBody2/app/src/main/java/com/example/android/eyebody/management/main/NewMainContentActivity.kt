@@ -26,24 +26,27 @@ class NewMainContentActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val nowDate = GregorianCalendar()
+        val nowYear = nowDate.get(GregorianCalendar.YEAR)
+        val nowMonth = nowDate.get(GregorianCalendar.MONTH)+1
+        val nowDay = nowDate.get(GregorianCalendar.DATE)
 
-        numberpicker_start_year.minValue = nowDate.get(GregorianCalendar.YEAR)
-        numberpicker_start_year.maxValue = 2100
-        numberpicker_start_year.value = nowDate.get(GregorianCalendar.YEAR)
+        numberpicker_start_year.minValue = nowYear
+        numberpicker_start_year.maxValue = nowYear
+        numberpicker_start_year.value = nowYear
         numberpicker_start_year.wrapSelectorWheel = false
 
-        numberpicker_start_month.minValue = 1
-        numberpicker_start_month.maxValue = 12
-        numberpicker_start_month.value = nowDate.get(GregorianCalendar.MONTH)+1
+        numberpicker_start_month.minValue = nowMonth
+        numberpicker_start_month.maxValue = nowMonth
+        numberpicker_start_month.value = nowMonth
 
-        numberpicker_start_day.minValue = 1
-        numberpicker_start_day.maxValue = 31
-        numberpicker_start_day.value = nowDate.get(GregorianCalendar.DATE)
+        numberpicker_start_day.minValue = nowDay
+        numberpicker_start_day.maxValue = nowDay
+        numberpicker_start_day.value = nowDay
 
 
-        numberpicker_end_year.minValue = nowDate.get(GregorianCalendar.YEAR)
+        numberpicker_end_year.minValue = nowYear
+        numberpicker_end_year.maxValue = nowYear+10
         nowDate.add(GregorianCalendar.MONTH, 1)
-        numberpicker_end_year.maxValue = 2100
         numberpicker_end_year.value = nowDate.get(GregorianCalendar.YEAR)
         numberpicker_end_year.wrapSelectorWheel = false
 
@@ -67,23 +70,6 @@ class NewMainContentActivity : AppCompatActivity() {
         numberpicker_end_weight.wrapSelectorWheel = false
 
 
-        numberpicker_start_month.setOnValueChangedListener { numberPicker, oldVal, newVal ->
-            when (newVal) {
-                2 -> {
-                    val year = numberpicker_start_year.value
-                    if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))
-                        numberpicker_start_day.maxValue = 29
-                    numberpicker_start_day.maxValue = 28
-                }
-                1, 3, 5, 7, 8, 10, 12 -> numberpicker_start_day.maxValue = 31
-                else -> numberpicker_start_day.maxValue = 30
-            }
-            if (oldVal == 12 && newVal == 1) {
-                numberpicker_start_year.value += 1
-            } else if (oldVal == 1 && newVal == 12) {
-                numberpicker_start_year.value -= 1
-            }
-        }
         numberpicker_end_month.setOnValueChangedListener { numberPicker, oldVal, newVal ->
             when (newVal) {
                 2 -> {
@@ -99,13 +85,6 @@ class NewMainContentActivity : AppCompatActivity() {
                 numberpicker_end_year.value += 1
             } else if (oldVal == 1 && newVal == numberPicker.maxValue) {
                 numberpicker_end_year.value -= 1
-            }
-        }
-        numberpicker_start_day.setOnValueChangedListener { numberPicker, oldVal, newVal ->
-            if (oldVal == numberPicker.maxValue && newVal == 1) {
-                numberpicker_start_month.value += 1
-            } else if (oldVal == 1 && newVal == numberPicker.maxValue) {
-                numberpicker_start_month.value -= 1
             }
         }
         numberpicker_end_day.setOnValueChangedListener { numberPicker, oldVal, newVal ->
