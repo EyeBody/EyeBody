@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.NumberPicker
 import android.widget.Toast
 import com.example.android.eyebody.R
@@ -113,8 +114,11 @@ class NewMainContentActivity : AppCompatActivity() {
         button_end_weight_double_down.setOnClickListener { weightChange(numberpicker_end_weight, -20) }
 
         button_submit.setOnClickListener {
-            val startDate = GregorianCalendar(numberpicker_start_year.value, numberpicker_start_month.value, numberpicker_start_day.value)
-            val endDate = GregorianCalendar(numberpicker_end_year.value, numberpicker_end_month.value, numberpicker_start_day.value)
+
+            // 왜 month 저거 저딴식으로 만들어가지고 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            val startDate = GregorianCalendar(numberpicker_start_year.value, numberpicker_start_month.value-1, numberpicker_start_day.value)
+            val endDate = GregorianCalendar(numberpicker_end_year.value, numberpicker_end_month.value-1, numberpicker_start_day.value)
+
             if (edittext_goal_name.text.isEmpty()) {
                 Toast.makeText(this, "목표 이름을 설정해주세요.", Toast.LENGTH_SHORT).show()
             } else if (startDate > endDate) {
@@ -131,7 +135,7 @@ class NewMainContentActivity : AppCompatActivity() {
                         arrayListOf()
                 )
 
-                MainManagementContent.putMainManagementContent(baseContext, content)
+                MainManagementContent.insertMainManagementContent(baseContext, content)
 
                 val toMainWithActivityStackClear = Intent(applicationContext, ManagementActivity::class.java)
                 toMainWithActivityStackClear.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

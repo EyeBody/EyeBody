@@ -32,16 +32,26 @@ class MainManagementFragment : BasePageFragment() {
 
         val listview: ListView = mView.findViewById(R.id.listview_main_management)
 
-        contents = MainManagementContent.getMainManagementContentArrayListForAdapter(context)
+        // for the test
+        MainManagementContent.addDateDataToProgressContent(context, "20180101")
+        MainManagementContent.setWeightToProgressContent(context, "20180101", 80.0)
+        MainManagementContent.addDateDataToProgressContent(context, "20180105")
+        MainManagementContent.setWeightToProgressContent(context, "20180105", 75.0)
+        MainManagementContent.addDateDataToProgressContent(context, "20180108")
+        MainManagementContent.setWeightToProgressContent(context, "20180108", 73.0)
+        MainManagementContent.addDateDataToProgressContent(context, "20180109")
+        MainManagementContent.setWeightToProgressContent(context, "20180109", 74.0)
+        MainManagementContent.addDateDataToProgressContent(context, "20180110")
+        MainManagementContent.setWeightToProgressContent(context, "20180110", 72.0)
+        // for the test
+
+        contents = MainManagementContent.getMainManagementContentArrayListForAdapterFromJson(context)
         if (contents != null) {
             listview.adapter = MainManagementAdapter(context, contents!!)
 
             //for log
-            for(content in contents!!){
-                Log.d(TAG, "content : ${content.isInProgress} , ${content.startDate}, ${content.endDate}, ${content.startWeight}, ${content.endWeight}, ${content.dateDataList}")
-            }
-        }
-        else{
+            for (content in contents!!) Log.d(TAG, "content : ${content.isInProgress} , ${content.startDate}, ${content.desireDate}, ${content.startWeight}, ${content.desireWeight}, ${content.dateDataList}")
+        } else {
             listview.adapter = MainManagementAdapter(context, arrayListOf())
         }
 

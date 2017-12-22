@@ -1,9 +1,13 @@
 package com.example.android.eyebody.management.config
 
 import android.app.Activity
+import android.content.Context
+import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.*
 import com.example.android.eyebody.R
 import com.example.android.eyebody.management.BasePageAdapter
@@ -33,7 +37,30 @@ class ConfigManagementAdapter(val activity: Activity, contents: ArrayList<Config
 
         val subListView: ListView = view.findViewById(R.id.listview_sub_config_management)
         subListView.adapter = ConfigManagementSubAdapter(activity, item.subContent)
+        setHeightWrapContent(subListView)
 
         return view
+    }
+
+
+    fun setHeightWrapContent(lv: ListView) {
+        val adapter = lv.adapter
+        if (adapter != null) {
+            /*var childHeightSum = 0
+            val lvDesireWidth = View.MeasureSpec.makeMeasureSpec(lv.width, View.MeasureSpec.AT_MOST)
+            for (i in 0 until adapter.count) {
+                val child = adapter.getView(i, null, lv)
+                child.measure(lvDesireWidth, View.MeasureSpec.UNSPECIFIED)
+                childHeightSum += child.measuredHeight
+                Log.d(TAG, "add ${child.measuredHeight}")
+            }*/
+            val params = lv.layoutParams
+            val dp = DisplayMetrics()
+            (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.getMetrics(dp)
+            params.height = (58*dp.density*adapter.count + lv.dividerHeight * (adapter.count - 1)).toInt()
+            //params.height = childHeightSum
+            lv.layoutParams = params
+            lv.requestLayout()
+        }
     }
 }

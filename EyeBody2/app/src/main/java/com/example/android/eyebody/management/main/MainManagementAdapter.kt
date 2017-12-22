@@ -2,6 +2,7 @@ package com.example.android.eyebody.management.main
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.support.constraint.ConstraintLayout
@@ -15,7 +16,10 @@ import com.example.android.eyebody.management.BasePageAdapter
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.LegendRenderer
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter
 import com.jjoe64.graphview.series.DataPoint
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -28,6 +32,7 @@ class MainManagementAdapter(context: Context, contents: ArrayList<MainManagement
 
     override fun getItem(position: Int): MainManagementContent = contents[position] as MainManagementContent
 
+    @SuppressLint("SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
         // item을 가지고 어떻게 표시할 것이냐 -> layout에 있는 xml파일을 부른다음에 거기에 contents 아이템들을 넣고 반환
@@ -48,6 +53,8 @@ class MainManagementAdapter(context: Context, contents: ArrayList<MainManagement
         val contentGoToGalleryButton: ImageButton = view.findViewById(R.id.imageButton2)
 
         val item = getItem(position)
+
+        contentDate.text = item.startDate+"~"+item.desireDate+" (desire : ${item.desireWeight} kg)"
 
         if (item.isInProgress) {
             contentTitleText.text = "진행중인 목표"
@@ -77,21 +84,41 @@ class MainManagementAdapter(context: Context, contents: ArrayList<MainManagement
             }
         }
 
-        val series = LineGraphSeries<DataPoint>(arrayOf(
-                DataPoint(0.0, 1.0),
-                DataPoint(1.0, 5.0),
-                DataPoint(2.0, 3.0),
-                DataPoint(3.0, 2.0),
-                DataPoint(4.0, 6.0)
-        ))
+        val arr = arrayListOf<DataPoint>()
+        val calendar = Calendar.getInstance()
+        for (i in item.dateDataList){
+            if(i.date.length == 8){
+                val xYear = i.date.substring(0,4).toIntOrNull()
+                val xMonth = i.date.substring(4,6).toIntOrNull()
+                val xDay = i.date.substring(6,8).toIntOrNull()
+                val y = i.weight
+                val uri = i.imageUri
+                if(xYear != null && xMonth != null && xDay != null && y!=null) {
+                    calendar.set(xYear, xMonth, xDay)
+                    arr.add(DataPoint(calendar.time,y))
+                }
+            }
+        }
+        val series = LineGraphSeries<DataPoint>(arr.toTypedArray())
         contentGraph.addSeries(series)
-        series.setAnimated(true)
+
+        contentGraph.gridLabelRenderer.labelFormatter = DateAsXAxisLabelFormatter(context)
+        contentGraph.gridLabelRenderer.numHorizontalLabels = 4
+
+        calendar.set(2017,12,23) //이전날짜
+        contentGraph.viewport.setMinX(calendar.time.time.toDouble())
+        calendar.set(2018, 1, 23) //도달날짜.
+        contentGraph.viewport.setMaxX(calendar.time.time.toDouble())
+        contentGraph.viewport.setMinY(30.0) //최소에서 +10으로 바까야함
+        contentGraph.viewport.setMaxY(100.0) //최대에서
+        contentGraph.viewport.isXAxisBoundsManual = true
+        contentGraph.viewport.isYAxisBoundsManual = true
+
+        contentGraph.gridLabelRenderer.isHumanRounding = false
 
         contentGraph.setOnClickListener {
             val mInt = Intent(context, FullscreenGraphViewActivity::class.java)
-            // 데이터(현재상황, 목표, 이미지 uri) 넣어야댐
-            mInt.putExtra("series", DataPoint(0.0, 0.0))
-            // ...
+            mInt.putExtra("item",item)
             context.startActivity(mInt)
         }
 
