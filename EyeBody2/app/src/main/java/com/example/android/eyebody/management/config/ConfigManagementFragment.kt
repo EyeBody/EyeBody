@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.Toast
+
 import com.example.android.eyebody.R
 import com.example.android.eyebody.management.BasePageFragment
 import com.example.android.eyebody.management.config.subcontent.SwitchableSubContent
