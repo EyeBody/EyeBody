@@ -14,6 +14,8 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -27,7 +29,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".MainActivity"
             android:label="메인" />
@@ -45,21 +46,26 @@
             android:label="@string/category_exercise" />
         <activity
             android:name=".init.InitActivity"
-            android:label="@string/category_init">
+            android:label="@string/category_init"/>
+
+        <activity android:name=".SplashActivity"
+            android:theme="@style/NoTitle">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <data
                     android:host="@string/kakaolink_host"
                     android:scheme="@string/kakao_scheme" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".management.config.FindPasswordActivity" />
+        <activity android:name=".management.config.subcontent.callee.content.FindPasswordActivity" />
         <activity android:name=".camera.ConfirmActivity" />
 
         <meta-data
@@ -72,25 +78,33 @@
         <activity android:name=".camera.StickerActivity" />
         <activity
             android:name=".SettingActivity"
-            android:windowSoftInputMode="stateAlwaysVisible"
-            android:label="@string/category_setting" />
+            android:label="@string/category_setting"
+            android:windowSoftInputMode="stateAlwaysVisible" />
         <activity
-            android:hardwareAccelerated="true"
             android:name=".management.ManagementActivity"
+            android:hardwareAccelerated="true"
             android:label="관리"/>
-        <receiver android:name=".exercise.SMSReceiver">
+        <activity
+            android:name=".management.main.FullscreenGraphViewActivity"
+            android:hardwareAccelerated="true"
+            android:label="그래프 풀스크린"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.disable_actionbar"
+            />
+        <activity
+            android:name=".management.main.NewMainContentActivity"
+            android:label="목표 설정하기"
+            android:screenOrientation="portrait"
+            />
+        <receiver android:name=".management.food.SMSReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".exercise.ActionReceiver">
-            <intent-filter>
-                <action android:name="DESSERT"/>
-                <action android:name="BEVERAGE"/>
-                <action android:name="MEAL"/>
-                <action android:name="CANCEL"/>
-            </intent-filter>
+
+        <receiver android:name=".management.food.ActionReceiver">
         </receiver>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

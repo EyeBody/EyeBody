@@ -134,8 +134,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         buttonToFood.setOnClickListener(buttonToPageChangeListener)
         buttonToConfig.setOnClickListener(buttonToPageChangeListener)
 
-
-        // getItem : currentItem에 따라서 반환하는 Fragment를 각각 지정해줌.
+        // getStoredInt : currentItem에 따라서 반환하는 Fragment를 각각 지정해줌.
         // getCount : 4개의 아이템만 사용할 것임.
         viewpager.adapter =
                 object : FragmentStatePagerAdapter(supportFragmentManager) {
@@ -147,7 +146,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
                                 BUTTON_TAG_CONFIG -> ConfigManagementFragment.newInstance(BUTTON_TAG_CONFIG)
                                 else -> {
                                     // TODO - 이 에러메시지는 getItem이 아닌 보이는 뷰에 대해서 해야함. 로딩은 좌우 둘다 하므로 (현재는 모든 화면 로딩 상태)
-                                    Log.e(TAG, "getItem in FragmentStatePageAdapter return not in 0,1,2,3 !!")
+                                    Log.e(TAG, "getStoredInt in FragmentStatePageAdapter return not in 0,1,2,3 !!")
                                     Toast.makeText(applicationContext, "something wrong in viewpager.adapter", Toast.LENGTH_LONG).show()
                                     MainManagementFragment.newInstance(BUTTON_TAG_MAIN)
                                 }

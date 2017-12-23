@@ -77,6 +77,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         var layoutParamsControl = LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT)
         this.addContentView(viewControl, layoutParamsControl)
     }//이미지 가이드 변경 함수
+    //TODO : 이미지 위에 올리는 가이드를 전에 찍은 사진으로 한다.
 
     //TODO : 이미지 위에 올리는 가이드를 사진으로 한다.
     private fun shutterButtonClicked() {
@@ -157,7 +158,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     private fun showPreview(){
         image_preview.setImageURI(frontImageUri)
     }
-
+    //TODO : 전에 찍은 이미지가 올라와야 한다.
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
         if (previewing) {
             camera?.stopPreview()
@@ -180,7 +181,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         try{
             var width:Int?=0
             var height:Int?=0
-            var rotation:Int=0
+            var rotation:Int=90
             width=camera?.parameters?.pictureSize?.width
             height=camera?.parameters?.pictureSize?.height
             val parameters=camera?.parameters

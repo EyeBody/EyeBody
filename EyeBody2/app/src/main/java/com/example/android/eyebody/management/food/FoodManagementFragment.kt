@@ -29,7 +29,7 @@ class FoodManagementFragment : BasePageFragment() {
         val mView = inflater!!.inflate(R.layout.fragment_management_food, container, false)
 
         val listview : ListView = mView.findViewById(R.id.listview_food_management)
-        listview.adapter = FoodManagementAdapter(context, arrayOf(
+        listview.adapter = FoodManagementAdapter(context, arrayListOf(
                 FoodManagementContent(), FoodManagementContent()
         ))
 
