@@ -31,10 +31,9 @@ class StickerActivity : AppCompatActivity() {
         items.add("4")
         items.add("5")
 
-       // var adapter=StickerAdapter(this,0,items)
-       // listView?.adapter=adapter
+        // var adapter=StickerAdapter(this,0,items)
+        // listView?.adapter=adapter
 
         //
     }
 }
-

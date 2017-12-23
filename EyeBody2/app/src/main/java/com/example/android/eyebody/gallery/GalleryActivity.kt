@@ -1,4 +1,4 @@
-﻿package com.example.android.eyebody.gallery
+package com.example.android.eyebody.gallery
 
 import android.content.Intent
 import android.content.res.AssetManager
@@ -20,9 +20,10 @@ import java.io.OutputStream
 
 class GalleryActivity : AppCompatActivity() {
     private val TAG = "mydbg_gallery"
-    var photoList = ArrayList<Photo>()
     var googleDriveManager: GoogleDriveManager? = null
     var toggleItem: MenuItem? = null
+
+    var photoList = ArrayList<Photo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +41,11 @@ class GalleryActivity : AppCompatActivity() {
                 }
             }
         }
+
+        //(이미지 리사이징)뷰가 그려지기 전이라서 width, height를 측정해서 가져옴
+        selectedImage_gallery.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        var measuredWidth = selectedImage_gallery.measuredWidth
+        var measuredHeight = selectedImage_gallery.measuredHeight
 
         //이미지 불러오기
         var state: String = Environment.getExternalStorageState()   //외부저장소(SD카드)가 마운트되었는지 확인
@@ -61,17 +67,45 @@ class GalleryActivity : AppCompatActivity() {
                 photoList.add(Photo(f))
             }
 
-            if (photoList.size != 0) {    //이미지가 하나도 없는 경우에는 selectedImage를 세팅하지 않음
-                selectedImage.setImageBitmap(photoList[0].getImage())
-                selectedImage.tag=0
+            if(photoList.size != 0){    //이미지가 하나도 없는 경우에는 selectedImage를 세팅하지 않음
+                selectedImage_gallery.setImageBitmap(photoList[0].getBitmap(measuredWidth, measuredHeight))
+                selectedImage_gallery.setTag(0)
             }
-        } else {
+            if(photoList.size > 1){ //이미지가 2개 이상일 때 오른쪽 버튼 보이기
+                rightButton_gallery.visibility = View.VISIBLE
+            }
+        } else{
             //EXCEPTION 외부저장소가 마운트되지 않아서 파일을 읽고 쓸 수 없음
         }
 
         //RecyclerView
         galleryView.hasFixedSize()
         galleryView.adapter = GalleryAdapter(this, photoList)
+
+        //button onclick listener
+        leftButton_gallery.setOnClickListener {
+            rightButton_gallery.visibility = View.VISIBLE
+
+            var prePosition: Int = (selectedImage_gallery.getTag() as Int) - 1
+            if(prePosition == 0){   //이전 사진이 없는 경우
+                leftButton_gallery.visibility = View.INVISIBLE
+            }
+
+            selectedImage_gallery.setImageBitmap(photoList[prePosition].getBitmap(measuredWidth, measuredHeight))
+            selectedImage_gallery.setTag(prePosition)
+        }
+
+        rightButton_gallery.setOnClickListener {
+            leftButton_gallery.visibility = View.VISIBLE
+
+            var nextPosition: Int = (selectedImage_gallery.getTag() as Int) + 1
+            if(nextPosition == photoList.size - 1){  //이후 사진이 없는 경우
+                rightButton_gallery.visibility = View.INVISIBLE
+            }
+
+            selectedImage_gallery.setImageBitmap(photoList[nextPosition].getBitmap(measuredWidth, measuredHeight))
+            selectedImage_gallery.setTag(nextPosition)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -111,22 +145,22 @@ class GalleryActivity : AppCompatActivity() {
                 }
             }
 
-            /*
-            TODO 와이파이가 되있는지 안되어있는지 확인 여부
-                > wifi / lte
-            TODO 자동저장을 위한 코딩
-                > 자동 저장 on 하면 바로 하는 함수 {
-                        내부Query 결과와 현재 리소스파일 전체가 일치하는지 확인
-                        일치하지 않는다면 그 차이를 가지고 update(upload and download)
-                    }
-                = 접속할 때 마다 동기화가 되어있는지 파악 {
-                        내부Query 결과와 현재 리소스파일 전체가 일치하는지 확인
-                        일치하지 않는다면 그 차이를 가지고 update
-                    }
-                > 촬영해서 저장할 때 마다 저장 / 선택해서 삭제할 때 마다 삭제 {
-                        단일 파일 저장/불러오기 함수 만들기
-                    }
-             */
+        /*
+        TODO 와이파이가 되있는지 안되어있는지 확인 여부
+            > wifi / lte
+        TODO 자동저장을 위한 코딩
+            > 자동 저장 on 하면 바로 하는 함수 {
+                    내부Query 결과와 현재 리소스파일 전체가 일치하는지 확인
+                    일치하지 않는다면 그 차이를 가지고 update(upload and download)
+                }
+            = 접속할 때 마다 동기화가 되어있는지 파악 {
+                    내부Query 결과와 현재 리소스파일 전체가 일치하는지 확인
+                    일치하지 않는다면 그 차이를 가지고 update
+                }
+            > 촬영해서 저장할 때 마다 저장 / 선택해서 삭제할 때 마다 삭제 {
+                    단일 파일 저장/불러오기 함수 만들기
+                }
+         */
 
             R.id.action_googleDrive_manualSave -> { //구글드라이브 수동 저장
                 object : Thread() {
@@ -161,24 +195,14 @@ class GalleryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun showPreviousImage(v: View) {
-        try {
-            var prePosition: Int = (selectedImage.getTag() as Int) - 1
-            selectedImage.setImageBitmap(photoList[prePosition].getImage())
-            selectedImage.setTag(prePosition)
-        } catch (e: Exception) {
-            //Toast.makeText(this, "앞이 없음", Toast.LENGTH_SHORT).show()
-        }
+    override fun onStart() {
+        super.onStart()
+        //TODO 비트맵 메모리 반환: 이미지 다시 불러오기
     }
 
-    fun showNextImage(v: View) {
-        try {
-            var nextPosition: Int = (selectedImage.getTag() as Int) + 1
-            selectedImage.setImageBitmap(photoList[nextPosition].getImage())
-            selectedImage.setTag(nextPosition)
-        } catch (e: Exception) {
-            //Toast.makeText(this, "뒤가 없음", Toast.LENGTH_SHORT).show()
-        }
+    override fun onStop() {
+        super.onStop()
+        //TODO 비트맵 메모리 반환: 하드웨어 가속 끄고 비트맵 반환
     }
 
     fun assetsToExternalStorage() {

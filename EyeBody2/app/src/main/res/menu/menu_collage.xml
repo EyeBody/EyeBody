@@ -8,7 +8,7 @@
     <item
         android:id="@+id/action_editImage"
         android:icon="@drawable/icon_magic"
-        android:title="@string/editImage"/>
+        android:title="@string/edit_image"/>
 
     <item
         android:id="@+id/action_share"

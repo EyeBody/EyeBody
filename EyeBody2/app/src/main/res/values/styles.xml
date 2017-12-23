@@ -20,6 +20,11 @@
     <style name="actionbar_image2" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:src">@drawable/imagebutton_setting</item>
     </style>
+    <style name="NoTitle" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 
     <style name="AppTheme.disable_actionbar">
         <item name="windowActionBar">false</item>

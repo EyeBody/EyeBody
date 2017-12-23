@@ -86,6 +86,7 @@ class ConfirmActivity : AppCompatActivity() {
             alertDilog.show()
         }
     }
+
     private fun editButtonClicked(){
         button_sticker.setOnClickListener {
             var stickerIntent=Intent(this,StickerActivity::class.java)

@@ -7,10 +7,14 @@ import android.view.Menu
 import android.view.MenuItem
 import com.kakao.kakaolink.KakaoLink
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder
+import java.io.File
 
 class CollageActivity : AppCompatActivity() {
     var photoList: ArrayList<Photo> = ArrayList<Photo>()
-    var selectedPhotoList: ArrayList<Int> = ArrayList<Int>()
+    var selectedIndexList: ArrayList<Int> = ArrayList<Int>()
+    var selectedPhotoList: ArrayList<Photo> = ArrayList<Photo>()
+
+    lateinit var menu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,15 +35,14 @@ class CollageActivity : AppCompatActivity() {
         if(count == 0){ //스택에 프래그먼트가 없으면 액티비티 뒤로가기
             super.onBackPressed()
         } else {    //이전 프래그먼트 불러오기
-            //TODO 뒤로가기 해도 선택한 이미지 보존
-            selectedPhotoList.clear()
             fragmentManager.popBackStack()
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.menu_collage, menu)
+        menuInflater.inflate(R.menu.menu_image_select, menu)
+        this.menu = menu
         return true
     }
 
@@ -50,5 +53,30 @@ class CollageActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        clearApplicationCache(null)
+    }
+
+    fun clearApplicationCache(file: File?){
+        //캐시 파일 삭제
+        var dir: File
+
+        if(file == null) dir = cacheDir
+        else dir = file
+
+        if(dir == null) return
+
+        var children = dir.listFiles()
+        try{
+            for(child in children){
+                if(child.isDirectory) clearApplicationCache(child)
+                else child.delete()
+            }
+        } catch(e: Exception){
+
+        }
     }
 }
