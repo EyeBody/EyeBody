@@ -133,7 +133,6 @@ class ImageSaveFragment : Fragment() {
     }
 
     fun combineImage(photos: ArrayList<Photo>, COLUMNS: Int = 0): Bitmap{
-        //TODO 임시폴더에 저장
         //열이 columns개인 바둑판 모양으로 이미지 콜라주
         //이미지는 모두 가로세로 크기가 같음
         //colums가 0 이하 이면 가로로만 이어붙임, 1이면 세로로만 이어붙임(열이 1개)
