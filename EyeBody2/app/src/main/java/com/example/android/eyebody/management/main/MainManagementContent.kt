@@ -15,25 +15,19 @@ val TAG = "mydbg_MainContent.kt"
 /**
  * date format must : "yyyyMMddHHmmss"
  */
-class DateData(val date: String, var weight: Double?) : Parcelable {
-
-    val imageUri = arrayListOf<String>()
-
-    constructor(date: String, weight: Double?, imageUri: ArrayList<String>)
-            : this(date, weight) {
-        this.imageUri.addAll(imageUri)
-    }
+class DateData(val date: String, var weight: Double?, val imageUri: ArrayList<String>) : Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),
-            parcel.readValue(Double::class.java.classLoader) as? Double){
-        parcel.readStringArray(imageUri.toTypedArray())
-    }
+            parcel.readValue(Double::class.java.classLoader) as? Double,
+            arrayListOf<String>().apply {
+                parcel.readStringList(this)
+            })
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(date)
         parcel.writeValue(weight)
-        parcel.writeStringArray(imageUri.toTypedArray())
+        parcel.writeStringList(imageUri)
     }
 
     override fun describeContents(): Int = 0
@@ -52,27 +46,18 @@ class DateData(val date: String, var weight: Double?) : Parcelable {
 @SuppressLint("ApplySharedPref")
 class MainManagementContent(var isInProgress: Boolean,
                             val startDate: String, val desireDate: String,
-                            var startWeight: Double, var desireWeight: Double) : Parcelable {
-
-    val dateDataList = arrayListOf<DateData>()
-
-    constructor(isInProgress: Boolean,
-                startDate: String, desireDate: String,
-                startWeight: Double, desireWeight: Double,
-                dateDataList: ArrayList<DateData>) : this(isInProgress, startDate, desireDate, startWeight, desireWeight) {
-        this.dateDataList.addAll(dateDataList)
-    }
+                            var startWeight: Double, var desireWeight: Double,
+                            val dateDataList: ArrayList<DateData>) : Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readByte() != 0.toByte(),
             parcel.readString(),
             parcel.readString(),
             parcel.readDouble(),
-            parcel.readDouble()) {
-        val list = listOf(DateData)
-        parcel.readList(list, DateData::class.java.classLoader)
-        // TODO 어렵다..
-    }
+            parcel.readDouble(),
+            arrayListOf<DateData>().apply{
+                parcel.readList(this, DateData::class.java.classLoader)
+            })
 
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -81,8 +66,7 @@ class MainManagementContent(var isInProgress: Boolean,
         parcel.writeString(desireDate)
         parcel.writeDouble(startWeight)
         parcel.writeDouble(desireWeight)
-        parcel.writeList(dateDataList.toList())
-        //parcel.writeTypedArray<DateData>(dateDataList.toTypedArray(), Parcelable.PARCELABLE_WRITE_RETURN_VALUE)
+        parcel.writeList(dateDataList)
     }
 
     override fun describeContents(): Int = 0
