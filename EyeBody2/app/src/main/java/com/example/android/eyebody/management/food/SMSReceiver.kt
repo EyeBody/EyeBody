@@ -97,7 +97,6 @@ class SMSReceiver : BroadcastReceiver() {
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         mNotificationManager.notify(1, mBuilder.build())
-
     }//노티 생성
 
     private fun setAttributesInNotificationLayout(context: Context, remoteViews: RemoteViews, price: Int, time: String): RemoteViews {

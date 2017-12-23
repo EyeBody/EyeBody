@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.support.constraint.ConstraintLayout
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -14,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.fragment_management_food.view.*
 
@@ -27,12 +25,12 @@ class FoodManagementAdapter(val context: Context, val contents: ArrayList<FoodMa
         val mView = convertView ?: LayoutInflater.from(context).inflate(R.layout.list_food_management, parent, false)
 
         val date: TextView = mView.findViewById(R.id.textview_date_list_food_management)
-        val simpleText : TextView = mView.findViewById(R.id.textview_simplecontent_list_food_management)
+        //val simpleText : TextView = mView.findViewById(R.id.textview_simplecontent_list_food_management)
         val expandableButton: ImageButton = mView.findViewById(R.id.imagebutton_expandable_list_food_management)
         val constraintExpandableContent: ConstraintLayout = mView.findViewById(R.id.constraint_expandable_content_list_food_management)
 
-        date.text=contents[item].date
-        simpleText.text=contents[item].menu
+
+        date.text = "2017. 11. 20 당신이 먹은 것을 알고 있다!!"
 
         expandableButton.setOnClickListener {
             when (constraintExpandableContent.visibility) {

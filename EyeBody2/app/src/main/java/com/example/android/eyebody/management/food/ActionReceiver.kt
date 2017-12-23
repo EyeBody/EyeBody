@@ -1,6 +1,5 @@
 package com.example.android.eyebody.management.food
 
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -11,6 +10,7 @@ import android.widget.Toast.LENGTH_SHORT
  * Created by ytw11 on 2017-11-19.
  */
 class ActionReceiver : BroadcastReceiver() {
+
     var menu:String=""
     override fun onReceive(context:Context ,  intent:Intent) {
         val dbHelper = DbHelper(context, "bill.db", null, 1)
@@ -23,7 +23,7 @@ class ActionReceiver : BroadcastReceiver() {
             "dessert" -> dessertClicked(context)
             "cancel" ->cancelClicked(context)
         }
-        putValuesInDb(context,dbHelper,time,menu,price)
+        putValuesInDb(dbHelper,time,menu,price)
     }
     private fun mealClicked(context: Context) {
         menu="meal"
@@ -41,7 +41,7 @@ class ActionReceiver : BroadcastReceiver() {
         menu="cancel"
         Toast.makeText(context,menu, LENGTH_SHORT).show()
     }
-    private fun putValuesInDb(context: Context,dbHelper: DbHelper, time:String, menu:String, price:Int){
+    private fun putValuesInDb(dbHelper: DbHelper, time:String, menu:String, price:Int){
         if(menu!="cancel"){
             dbHelper.insert(time,menu,price)
         }

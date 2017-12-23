@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -25,8 +24,7 @@ import com.example.android.eyebody.R
 @SuppressLint("ApplySharedPref")
 class Init2Fragment : Fragment() {
 
-    var imm: InputMethodManager? = null
-    var viewPassword:EditText?=null
+
     // 비밀번호를 hash로 변환(md5, unicode)하여 저장
     // TODO ----> 비밀번호 검증 : hash / 이미지 암호화 : AES n-bit (key = hash) / 백업 : hash
     // 유저가 비밀번호를 치면 hash값으로 변환 후 이 값을 이용하여 암호화/복호화
@@ -36,19 +34,16 @@ class Init2Fragment : Fragment() {
         val v = inflater!!.inflate(R.layout.fragment_init2, container, false)
         Log.d("mydbg_init2", "[ init2 진입 ]")
 
-        viewPassword = v.findViewById<EditText>(R.id.EditText_input_password)
+        val viewPassword = v.findViewById<EditText>(R.id.EditText_input_password)
         val viewPasswordSubmit = v.findViewById<Button>(R.id.Button_submit_password)
-        imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-
-        viewPassword!!.setOnEditorActionListener { textView, i, keyEvent ->
+        viewPassword.setOnEditorActionListener { textView, i, keyEvent ->
             viewPasswordSubmit.callOnClick()
         }
 
 
         viewPasswordSubmit.setOnClickListener { view ->
-            hideKeyboard()
-            val strPW = viewPassword!!.text
+            val strPW = viewPassword.text
             Log.d("mydbg_init2", "password >>> $strPW")
 
             if (strPW.isNotEmpty()) {
@@ -80,10 +75,10 @@ class Init2Fragment : Fragment() {
                 Toast.makeText(activity, "password를 입력해주세요 (1자 이상)", Toast.LENGTH_LONG).show()
             }
         }
+
+
         return v
     }
-    private fun hideKeyboard()
-    {
-        imm!!.hideSoftInputFromWindow(viewPassword!!.windowToken, 0);
-    }
+
+
 }

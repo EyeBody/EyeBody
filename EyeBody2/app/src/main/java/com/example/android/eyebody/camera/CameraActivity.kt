@@ -178,10 +178,15 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         camera = Camera.open()
         camera!!.setDisplayOrientation(90)
         try{
-            var width=640
-            var height=480
-            var rotation=90
+            var width:Int?=0
+            var height:Int?=0
+            var rotation:Int=90
+            width=camera?.parameters?.pictureSize?.width
+            height=camera?.parameters?.pictureSize?.height
             val parameters=camera?.parameters
+
+            width=640
+            height=480
 
             parameters?.setPictureSize(width,height)
             parameters?.setRotation(rotation)
