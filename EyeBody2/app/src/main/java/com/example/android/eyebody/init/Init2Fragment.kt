@@ -66,7 +66,6 @@ class Init2Fragment : Fragment() {
                 // TODO ----- MD5 에서 SHA-3 (KECCAK) or SHA128 로 알고리즘 개선
                 // MIT license code : https://github.com/walleth/keccak/blob/master/keccak/src/main/kotlin/org/walleth/keccak/Keccak.kt
                 val hashedPW = StringHashManager.encryptString(strPW.toString())
-
                 val pwByte = strPW.toString().toByteArray(charset("unicode"))
                 Log.d("mydbg_init2", " 평문 pw >>> ${pwByte.toString(charset("unicode"))}")
                 Log.d("mydbg_init2", "  MD5 pw >>> $hashedPW")

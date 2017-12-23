@@ -3,6 +3,7 @@
     <color name="colorPrimary">#dd0000</color>
     <color name="colorAccent">#00dd00</color>
 
+    <color name="transparent">#00000000</color>
     <color name="transparentBlack30">#30000000</color>
     <color name="transparentBlack40">#40000000</color>
     <color name="transparentBlack7f">#7f000000</color>

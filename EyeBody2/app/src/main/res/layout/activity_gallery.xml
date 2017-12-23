@@ -11,36 +11,40 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6"
+        android:layout_marginVertical="15dp"
+        android:layout_weight="7"
         android:orientation="horizontal">
 
-        <Button
+        <ImageView
             android:id="@+id/leftButton_gallery"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:visibility="invisible"
-            android:text="◀" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_chevron_left_white_48dp"
+            android:visibility="invisible"/>
 
         <ImageView
             android:id="@+id/selectedImage_gallery"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:scaleType="fitCenter"
             app:srcCompat="@mipmap/ic_launcher" />
 
-        <Button
+        <ImageView
             android:id="@+id/rightButton_gallery"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:visibility="invisible"
-            android:text="▶" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_chevron_right_white_48dp"
+            android:visibility="invisible"/>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/galleryView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
+        android:layout_weight="3"
         app:layoutManager="LinearLayoutManager"
         android:orientation="horizontal" />
 </LinearLayout>

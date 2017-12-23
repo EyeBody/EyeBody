@@ -1,36 +1,36 @@
 package com.example.android.eyebody.gallery
 
+import android.Manifest
+import android.os.Bundle
 import android.app.Fragment
+import android.content.pm.PackageManager
+import com.example.android.eyebody.R
+import kotlinx.android.synthetic.main.fragment_image_save.*
 import android.graphics.Bitmap
+import android.os.Environment
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.widget.Toast
+import java.io.*
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
-import android.os.Bundle
-import android.os.Environment
 import android.view.*
-import android.widget.Toast
-import com.example.android.eyebody.R
-import java.io.*
 
-/**
- * Created by Yeji on 2017-12-09.
- */
-class ImageCollageFragment : Fragment() {
+class ImageSaveFragment : Fragment() {
     lateinit var collage: CollageActivity
+    lateinit var selected: ArrayList<Photo>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
         collage = activity as CollageActivity
+        selected = collage.selectedPhotoList
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_image_collage, container, false)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        return inflater.inflate(R.layout.fragment_image_save, container, false)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -41,10 +41,41 @@ class ImageCollageFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_image_save -> {
-                //이미지 저장하기
+                //이미지 저장
+                Toast.makeText(activity, "저장저장", Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //WRITE_EXTERNAL_STORAGE 권한 요청
+        //TODO 권한 거부할 때 예외처리
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+        }
+
+        makeGifButton.setOnClickListener {
+            saveGif(makeGif())
+        }
+
+        horizentalMakeCollageButton.setOnClickListener {
+            sampleImageView.setImageBitmap(combineImage(selected, 0))
+        }
+
+        verticalMakeCollageButton.setOnClickListener {
+            sampleImageView.setImageBitmap(combineImage(selected, 1))
+        }
+
+        twoMakeCollageButton.setOnClickListener {
+            sampleImageView.setImageBitmap(combineImage(selected, 2))
+        }
+
+        threeMakeCollageButton.setOnClickListener {
+            sampleImageView.setImageBitmap(combineImage(selected, 3))
+        }
     }
 
     fun makeGif(delay: Int = 500): ByteArrayOutputStream?{
@@ -55,7 +86,7 @@ class ImageCollageFragment : Fragment() {
         encoder.start(bos)
 
         try {
-            for(photo in collage.selectedPhotoList){
+            for(photo in selected){
                 val bmp: Bitmap = BitmapFactory.decodeStream(FileInputStream(photo.fileUrl))
                 encoder.addFrame(bmp)
                 bmp.recycle()
@@ -101,7 +132,7 @@ class ImageCollageFragment : Fragment() {
         Toast.makeText(activity, "GIF 이미지를 저장하였습니다", Toast.LENGTH_SHORT).show()
     }
 
-    fun combineImage(photos: ArrayList<Photo>, COLUMNS: Int = 0): Bitmap {
+    fun combineImage(photos: ArrayList<Photo>, COLUMNS: Int = 0): Bitmap{
         //열이 columns개인 바둑판 모양으로 이미지 콜라주
         //이미지는 모두 가로세로 크기가 같음
         //colums가 0 이하 이면 가로로만 이어붙임, 1이면 세로로만 이어붙임(열이 1개)

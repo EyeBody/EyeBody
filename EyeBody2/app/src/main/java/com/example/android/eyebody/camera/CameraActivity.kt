@@ -79,6 +79,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     }//이미지 가이드 변경 함수
     //TODO : 이미지 위에 올리는 가이드를 전에 찍은 사진으로 한다.
 
+    //TODO : 이미지 위에 올리는 가이드를 사진으로 한다.
     private fun shutterButtonClicked() {
         btn_shutter.setOnClickListener {
             try {

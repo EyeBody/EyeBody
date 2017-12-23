@@ -34,8 +34,10 @@ class CollageActivity : AppCompatActivity() {
 
         if(count == 0){ //스택에 프래그먼트가 없으면 액티비티 뒤로가기
             super.onBackPressed()
-        } else {    //이전 프래그먼트 불러오기
-            fragmentManager.popBackStack()
+        } else {
+            if(count == 1)  //ImageSelectFragment로 돌아올 땐 캐시파일 삭제
+                clearApplicationCache(null)
+            fragmentManager.popBackStack()  //이전 프래그먼트 불러오기
         }
     }
 

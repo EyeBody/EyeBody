@@ -17,13 +17,11 @@ import kotlinx.android.synthetic.main.activity_setting.*
 import java.security.*
 import com.example.android.eyebody.utility.MyFingerPrintManager
 
-
 // 임시 UI 만드는 곳
 // 비번입력하고 SchedulerActivity로 넘어감.
 class SettingActivity : AppCompatActivity() {
 
     val TAG = "mydbg_setting"
-
     val cancelSignal = CancellationSignal()
 
     //-------- 조금만 참아 ---------------------------------------

@@ -35,7 +35,7 @@ class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
             var measuredHeight = itemView.imageView.getMeasuredHeight();
 
             itemView.imageView.setImageBitmap(photo.getBitmap(measuredWidth, measuredHeight))
-            itemView.date.text = photo.getMemo()
+            itemView.date.text = photo.getDate()
 
             itemView.setOnClickListener{
                 var imgView = (itemView.context as GalleryActivity).selectedImage_gallery

@@ -1,4 +1,5 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -6,46 +7,61 @@
     android:orientation="vertical"
     tools:context="com.example.android.eyebody.gallery.ImageCollageFragment">
 
-    <Button
-        android:id="@+id/makeGifButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="make gif"/>
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:columnCount="2"
+        android:rowCount="2"
+        android:background="#ff0000">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:src="@mipmap/ic_launcher_round" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_row="0"
+            android:src="@mipmap/ic_launcher_round" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_row="1"
+            android:src="@mipmap/ic_launcher_round" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_row="1"
+            android:src="@mipmap/ic_launcher_round" />
+    </GridLayout>
 
     <LinearLayout
+        android:id="@+id/ratioLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/horizentalMakeCollageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="가로로 콜라주" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:background="#00ff00">
 
-        <Button
-            android:id="@+id/verticalMakeCollageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="세로로 콜라주" />
-
-        <Button
-            android:id="@+id/twoMakeCollageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2개" />
-
-        <Button
-            android:id="@+id/threeMakeCollageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3개" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/sampleImageView"
+    <LinearLayout
+        android:id="@+id/layoutLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffff00"
-        android:scaleType="fitCenter"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:background="#0000ff">
 
-</LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.LinearLayoutCompat>
