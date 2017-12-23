@@ -104,7 +104,6 @@ class MainActivity : PermissionsActivity() {
         }
 
         btn_activity_func1.setOnClickListener {
-
             startActivity(exercisePage)
         }
 

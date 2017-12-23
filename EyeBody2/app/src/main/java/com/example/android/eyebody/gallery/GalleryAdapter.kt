@@ -31,8 +31,8 @@ class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
     class Item(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindData(photo: Photo, pos: Int) {
             itemView.imageView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            var measuredWidth = itemView.imageView.getMeasuredWidth();
-            var measuredHeight = itemView.imageView.getMeasuredHeight();
+            var measuredWidth = itemView.imageView.measuredWidth
+            var measuredHeight = itemView.imageView.measuredHeight
 
             itemView.imageView.setImageBitmap(photo.getBitmap(measuredWidth, measuredHeight))
             itemView.date.text = photo.getMemo()
@@ -40,11 +40,11 @@ class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
             itemView.setOnClickListener{
                 var imgView = (itemView.context as GalleryActivity).selectedImage_gallery
                 itemView.imageView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                var measuredWidth = itemView.imageView.getMeasuredWidth();
-                var measuredHeight = itemView.imageView.getMeasuredHeight();
+                var measuredWidth = itemView.imageView.measuredWidth
+                var measuredHeight = itemView.imageView.measuredHeight
 
                 imgView.setImageBitmap(photo.getBitmap(measuredWidth, measuredHeight))
-                imgView.setTag(pos)
+                imgView.tag = pos
 
                 //좌우 넘기기 버튼 visibility
                 (itemView.context as GalleryActivity).leftButton_gallery.visibility = View.VISIBLE

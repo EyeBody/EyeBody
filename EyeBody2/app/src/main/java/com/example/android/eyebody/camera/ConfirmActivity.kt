@@ -22,7 +22,6 @@ class ConfirmActivity : AppCompatActivity() {
         showImage()
         saveButtonClicked()
         deleteButtonClicked()
-        editButtonClicked()
     }
 
     //찍은 이미지를 화면에 뿌려주는 역할
@@ -87,11 +86,5 @@ class ConfirmActivity : AppCompatActivity() {
         }
     }
 
-    private fun editButtonClicked(){
-        button_sticker.setOnClickListener {
-            var stickerIntent=Intent(this,StickerActivity::class.java)
-            startActivity(stickerIntent)
-        }
-    }
 }
 

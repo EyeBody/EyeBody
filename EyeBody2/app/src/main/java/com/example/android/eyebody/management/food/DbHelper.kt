@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 /**
  * Created by ytw11 on 2017-11-15.
  */
-class DbHelper(var context: Context, var name:String, private var factory: SQLiteDatabase.CursorFactory?, var version:Int) : SQLiteOpenHelper(context,name,factory,version ) {
+class DbHelper(var context: Context, var name:String, factory: SQLiteDatabase.CursorFactory?, var version:Int) : SQLiteOpenHelper(context,name,factory,version ) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE BILL (_id INTEGER PRIMARY KEY AUTOINCREMENT,menu STRING,price INTEGER,create_at TEXT);)")
     }
@@ -40,10 +40,9 @@ class DbHelper(var context: Context, var name:String, private var factory: SQLit
         for(x in 1..count){
             cursor.moveToNext()
         }
-        var date=cursor.getString(0)
+        var date=cursor.getString(3)
         var menu=cursor.getString(1)
         var price=cursor.getInt(2).toString()
-        cursor.getInt(2)
         result.add(date)//date
         result.add(menu)//menu
         result.add(price)//price
