@@ -134,6 +134,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         buttonToFood.setOnClickListener(buttonToPageChangeListener)
         buttonToConfig.setOnClickListener(buttonToPageChangeListener)
 
+
         // getStoredInt : currentItem에 따라서 반환하는 Fragment를 각각 지정해줌.
         // getCount : 4개의 아이템만 사용할 것임.
         viewpager.adapter =

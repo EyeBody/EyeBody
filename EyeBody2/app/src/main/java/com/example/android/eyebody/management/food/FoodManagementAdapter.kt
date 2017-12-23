@@ -65,4 +65,5 @@ class FoodManagementAdapter(context: Context, contents: ArrayList<FoodManagement
 
         return mView
     }
+
 }

@@ -29,6 +29,7 @@ class ConfigManagementAdapter(val activity: Activity, contents: ArrayList<Config
         val icon: ImageView = view.findViewById(R.id.icon_list_config_management)
         val mainText: TextView = view.findViewById(R.id.main_textview_list_config_management)
         val subText: TextView = view.findViewById(R.id.sub_textview_list_config_management)
+
         val item = getItem(position)
         icon.setImageDrawable(item.drawable)
         mainText.text = item.text
@@ -40,6 +41,7 @@ class ConfigManagementAdapter(val activity: Activity, contents: ArrayList<Config
 
         return view
     }
+
 
     fun setHeightWrapContent(lv: ListView) {
         val adapter = lv.adapter
