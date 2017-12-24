@@ -14,6 +14,7 @@ import android.view.View
 import android.view.Window
 import android.widget.ImageView
 import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import com.example.android.eyebody.R
 import com.example.android.eyebody.camera.CameraActivity
 import com.example.android.eyebody.gallery.GalleryActivity
@@ -22,6 +23,7 @@ import com.example.android.eyebody.management.exercise.ExerciseManagementFragmen
 import com.example.android.eyebody.management.food.FoodManagementFragment
 import com.example.android.eyebody.management.main.MainManagementFragment
 import kotlinx.android.synthetic.main.activity_management.*
+import kotlinx.android.synthetic.main.list_config_management.*
 
 /**
  * Created by YOON on 2017-11-10
@@ -29,6 +31,10 @@ import kotlinx.android.synthetic.main.activity_management.*
 class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInteractionListener {
 
     private val TAG = "mydbg_manage"
+    var mLastPage: Int = 0
+    var isGoingToLeftPage: Boolean = false
+    var isNavigated = true
+    var dragging: Int = 0
 
     private val buttonToMain by lazy { management_button_main_management }
     private val buttonToExercise by lazy { management_button_exercise_management }
@@ -44,8 +50,15 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         Toast.makeText(this, "$uri", Toast.LENGTH_LONG).show()
     }
 
+    fun navigateToLoginScreen() {
+        isNavigated = false
+        var intent = Intent(this, CameraActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
+        when (item?.itemId) {
             android.R.id.home -> Toast.makeText(this, "home button clicked", Toast.LENGTH_LONG).show()
         }
         return true
@@ -68,15 +81,15 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         actionbar?.setDisplayUseLogoEnabled(false)
         actionbar?.setCustomView(R.layout.actionbar_management)
         val customView = actionbar?.customView
-        if(customView?.parent is Toolbar?) {
+        if (customView?.parent is Toolbar?) {
             val toolbar: Toolbar? = customView?.parent as Toolbar?
             toolbar?.setContentInsetsAbsolute(0, 0)
-        } else if (customView?.parent is android.widget.Toolbar?){
+        } else if (customView?.parent is android.widget.Toolbar?) {
             val toolbar: android.widget.Toolbar? = customView?.parent as android.widget.Toolbar?
             toolbar?.setContentInsetsAbsolute(0, 0)
         }
         customView?.findViewById<ImageView>(R.id.goto_camera)?.setOnClickListener {
-            val mIntent = Intent(this,CameraActivity::class.java)
+            val mIntent = Intent(this, CameraActivity::class.java)
             startActivity(mIntent)
         }
         customView?.findViewById<ImageView>(R.id.goto_gallery)?.setOnClickListener {
@@ -109,6 +122,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
 
         viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
+                dragging = state
                 /*
                 state
                  0 -> idle
@@ -117,10 +131,21 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
                 */
             }
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                /* */
+                if (isGoingToLeftPage && dragging == ViewPager.SCROLL_STATE_DRAGGING) {
+                    if (mLastPage == position)
+                        navigateToLoginScreen()
+                } else {
+                    //do nothing
+                }
             }
+
             override fun onPageSelected(position: Int) {
-                mappingButtonSelected(position)
+                if (position == 0) {
+                    isGoingToLeftPage = true
+                } else {
+                    isGoingToLeftPage = false
+                }
+                mLastPage = position
             }
         })
 

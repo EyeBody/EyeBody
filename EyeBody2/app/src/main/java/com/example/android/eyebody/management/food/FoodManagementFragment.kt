@@ -1,6 +1,5 @@
 package com.example.android.eyebody.management.food
 
-import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +8,7 @@ import android.widget.ListView
 
 import com.example.android.eyebody.R
 import com.example.android.eyebody.management.BasePageFragment
+import com.example.android.eyebody.utility.DbHelper
 
 /**
  * Created by YOON on 2017-11-11

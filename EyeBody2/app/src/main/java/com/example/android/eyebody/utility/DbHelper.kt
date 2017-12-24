@@ -1,4 +1,4 @@
-package com.example.android.eyebody.management.food
+package com.example.android.eyebody.utility
 
 import android.content.Context
 import android.database.Cursor
@@ -7,7 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper
 
 /**
  * Created by ytw11 on 2017-11-15.
+ * db 이름 : bill.db
+ * 테이블 칼럼 : 고유키 0부터 1까지 증가, 메뉴 , 가격, 날짜(yyyymmdd)
  */
+
 class DbHelper(var context: Context, var name:String, private var factory: SQLiteDatabase.CursorFactory?, var version:Int) : SQLiteOpenHelper(context,name,factory,version ) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE BILL (_id INTEGER PRIMARY KEY AUTOINCREMENT,menu STRING,price INTEGER,create_at TEXT);)")

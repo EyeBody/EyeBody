@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewManager
 import android.widget.Toast
+import com.example.android.eyebody.MainActivity
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.File
@@ -42,6 +43,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     private var sideImageName: String? = null
     private var controlInflater: LayoutInflater? = null
     private var viewControl: View ?=null
+    var timeStamp:String=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,6 +97,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         confirmIntent.putExtra("sideUri", sideImageUri.toString())
         confirmIntent.putExtra("frontName", frontImageName)
         confirmIntent.putExtra("sideName", sideImageName)
+        confirmIntent.putExtra("time",timeStamp)
         startActivity(confirmIntent)
     }//확인창으로 넘어가는 함수
 
@@ -113,7 +116,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         changeImage()//가이드 이미지 변경
         //TODO : 여기에 preview 들어가야함
         setTextView()//위 문구 변경
-        var timeStamp: String = java.text.SimpleDateFormat("yyyyMMddHHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
+        timeStamp= java.text.SimpleDateFormat("yyyyMMddHHmmss").format(Date())//파일 이름 년월날시간분초로 설정하기 위한 변수
 
         var fileName: String? = null//파일 이름 설정
 
@@ -180,9 +183,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         try{
             var width:Int?=0
             var height:Int?=0
-            var rotation:Int=90
-            width=camera?.parameters?.pictureSize?.width
-            height=camera?.parameters?.pictureSize?.height
+            var rotation=90
             val parameters=camera?.parameters
 
             width=640
@@ -203,9 +204,17 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         camera = null
         previewing = false
     }
-
+    fun gobackHomeActivity()
+    {
+        var homeIntent = Intent(this, MainActivity::class.java)
+        startActivity(homeIntent)
+    }
     override fun onDestroy() {
 
         super.onDestroy()
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        gobackHomeActivity()
     }
 }
