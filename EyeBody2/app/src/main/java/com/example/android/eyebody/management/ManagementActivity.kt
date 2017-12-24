@@ -8,17 +8,15 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.Window
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.android.eyebody.R
 import com.example.android.eyebody.camera.CameraActivity
 import com.example.android.eyebody.gallery.GalleryActivity
 import com.example.android.eyebody.management.config.ConfigManagementFragment
-import com.example.android.eyebody.management.exercise.ExerciseManagementFragment
+import com.example.android.eyebody.management.gallery.GalleryManagementFragment
 import com.example.android.eyebody.management.food.FoodManagementFragment
 import com.example.android.eyebody.management.main.MainManagementFragment
 import kotlinx.android.synthetic.main.activity_management.*
@@ -142,7 +140,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
                     override fun getItem(buttonTag: Int) = // fragmentAdapter's position = buttonTag
                             when (buttonTag) {
                                 BUTTON_TAG_MAIN -> MainManagementFragment.newInstance(BUTTON_TAG_MAIN)
-                                BUTTON_TAG_EXERCISE -> ExerciseManagementFragment.newInstance(BUTTON_TAG_EXERCISE)
+                                BUTTON_TAG_EXERCISE -> GalleryManagementFragment.newInstance(BUTTON_TAG_EXERCISE)
                                 BUTTON_TAG_FOOD -> FoodManagementFragment.newInstance(BUTTON_TAG_FOOD)
                                 BUTTON_TAG_CONFIG -> ConfigManagementFragment.newInstance(BUTTON_TAG_CONFIG)
                                 else -> {
