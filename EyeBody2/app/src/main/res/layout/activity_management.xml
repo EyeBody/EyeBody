@@ -9,7 +9,7 @@
         android:id="@+id/constraintLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/com_kakao_cancel_button_background"
+        android:background="@color/transparentBlack30"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"

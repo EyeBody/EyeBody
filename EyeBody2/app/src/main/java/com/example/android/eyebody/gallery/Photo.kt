@@ -22,6 +22,12 @@ class Photo: AppCompatActivity, Parcelable {
         setImageSize()
     }
 
+    constructor(url: String){
+        fileUrl = url
+
+        //
+    }
+
     //Parcelable methods
     protected constructor(parcel: Parcel) {
         fileUrl = parcel.readString()
