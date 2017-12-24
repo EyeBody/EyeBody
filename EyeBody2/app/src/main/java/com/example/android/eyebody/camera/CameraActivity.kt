@@ -8,15 +8,15 @@ import android.hardware.Camera.PictureCallback
 import android.hardware.Camera.ShutterCallback
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.view.GestureDetectorCompat
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.SurfaceHolder
-import android.view.View
+import android.view.*
 import android.view.ViewGroup.LayoutParams
-import android.view.ViewManager
 import android.widget.Toast
 import com.example.android.eyebody.MainActivity
 import com.example.android.eyebody.R
+import com.example.android.eyebody.management.ManagementActivity
+import com.example.android.eyebody.management.main.MainManagementFragment
 import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.File
 import java.io.FileOutputStream
@@ -44,13 +44,19 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     private var controlInflater: LayoutInflater? = null
     private var viewControl: View ?=null
     var timeStamp:String=""
-
+    var gestureObject:GestureDetectorCompat?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
         init()
         shutterButtonClicked()
         setLayout()
+        gestureObject = GestureDetectorCompat(this, LearnGesture())
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        this.gestureObject!!.onTouchEvent(event)
+        return super.onTouchEvent(event)
     }
 
     private fun init() {
@@ -217,4 +223,16 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         super.onBackPressed()
         gobackHomeActivity()
     }
+
+    internal inner class LearnGesture : GestureDetector.SimpleOnGestureListener() {
+        override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+            if (event2.x < event1.x || event1.x == event2.x) {
+                val intent = Intent(this@CameraActivity, ManagementActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
+                finish()
+            }
+            return true
+        }
+    }//어떻게 밀어서 다른 액티비티로 갈것인지 결정
 }

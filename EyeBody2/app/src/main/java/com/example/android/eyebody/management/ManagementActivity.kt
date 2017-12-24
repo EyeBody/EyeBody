@@ -8,13 +8,10 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.Window
 import android.widget.ImageView
 import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
 import com.example.android.eyebody.R
 import com.example.android.eyebody.camera.CameraActivity
 import com.example.android.eyebody.gallery.GalleryActivity
@@ -23,7 +20,6 @@ import com.example.android.eyebody.management.exercise.ExerciseManagementFragmen
 import com.example.android.eyebody.management.food.FoodManagementFragment
 import com.example.android.eyebody.management.main.MainManagementFragment
 import kotlinx.android.synthetic.main.activity_management.*
-import kotlinx.android.synthetic.main.list_config_management.*
 
 /**
  * Created by YOON on 2017-11-10
@@ -50,11 +46,10 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         Toast.makeText(this, "$uri", Toast.LENGTH_LONG).show()
     }
 
-    fun navigateToLoginScreen() {
+    fun StartcameraActivity() {
         isNavigated = false
         var intent = Intent(this, CameraActivity::class.java)
         startActivity(intent)
-        finish()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -131,16 +126,20 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
                 */
             }
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                System.out.println("what isGoingToLeftPage : ${isGoingToLeftPage}  dragging : ${dragging} mLastPage: ${mLastPage} position : $position scroll_state_dragging : ${ViewPager.SCROLL_STATE_DRAGGING}")
+
                 if (isGoingToLeftPage && dragging == ViewPager.SCROLL_STATE_DRAGGING) {
-                    if (mLastPage == position)
-                        navigateToLoginScreen()
-                } else {
-                    //do nothing
+                    if (mLastPage == position) {
+                        StartcameraActivity()
+                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
+                        finish()
+                    }
                 }
             }
 
             override fun onPageSelected(position: Int) {
-                if (position == 0) {
+                System.out.println(" position : ${position}")
+                if (position ==  0) {
                     isGoingToLeftPage = true
                 } else {
                     isGoingToLeftPage = false

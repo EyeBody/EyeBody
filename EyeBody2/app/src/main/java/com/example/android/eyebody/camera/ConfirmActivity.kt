@@ -61,7 +61,7 @@ class ConfirmActivity : AppCompatActivity() {
     private fun saveButtonClicked() {
         button_save.setOnClickListener {
             Toast.makeText(applicationContext, "저장되었습니다", Toast.LENGTH_SHORT).show()
-            memoImageDB!!.insert(time,frontImageUri,sideImageUri,value)
+            putValuesInDb(time,frontImageUri,sideImageUri,value)
             goHomeActivity()
         }
     }
@@ -108,19 +108,21 @@ class ConfirmActivity : AppCompatActivity() {
             ad.setPositiveButton("저장") { dialog, which ->
                 value = et!!.text.toString()
                 dialog.dismiss()     //닫기
-                goHomeActivity()
             }
-// 취소 버튼 설정
             ad.setNegativeButton("닫기") { dialog, which ->
                 dialog.dismiss()     //닫기
-                // Event
             }
 // 창 띄우기
             ad.show()
         }
     }
-    private fun putValuesInDb(dbHelper: memoImageDb, time:String, frontImage:String, sideImage:String,memo:String){
+    private fun putValuesInDb(time:String, frontImage:String, sideImage:String,memo:String){
             memoImageDB!!.insert(time,frontImage,sideImage,memo)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        goCameraActivity()
     }
 }
 
