@@ -11,8 +11,10 @@ import java.io.File
 
 class CollageActivity : AppCompatActivity() {
     var photoList: ArrayList<Photo> = ArrayList<Photo>()
+    var pos: Int = 0
     var selectedIndexList: ArrayList<Int> = ArrayList<Int>()
     var selectedPhotoList: ArrayList<Photo> = ArrayList<Photo>()
+    var imageRatio = "0"
 
     lateinit var menu: Menu
 
@@ -21,6 +23,7 @@ class CollageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_collage)
 
         photoList = intent.getParcelableArrayListExtra("photoList")
+        pos= intent.getIntExtra("pos", 0)
 
         //ImageSelectFragment 생성
         fragmentManager
@@ -33,10 +36,12 @@ class CollageActivity : AppCompatActivity() {
         var count: Int = fragmentManager.backStackEntryCount
 
         if(count == 0){ //스택에 프래그먼트가 없으면 액티비티 뒤로가기
+            supportFinishAfterTransition()
             super.onBackPressed()
         } else {
-            if(count == 1)  //ImageSelectFragment로 돌아올 땐 캐시파일 삭제
-                clearApplicationCache(null)
+            if(count == 1)
+                clearApplicationCache(null) //ImageSelectFragment로 돌아올 때 캐시파일 삭제
+
             fragmentManager.popBackStack()  //이전 프래그먼트 불러오기
         }
     }

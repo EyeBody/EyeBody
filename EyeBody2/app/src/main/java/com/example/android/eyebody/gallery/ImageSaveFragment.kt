@@ -16,10 +16,15 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.view.*
+import pl.droidsonroids.gif.GifDrawable
+
 
 class ImageSaveFragment : Fragment() {
     lateinit var collage: CollageActivity
     lateinit var selected: ArrayList<Photo>
+
+    var fileNames: Array<String> = arrayOf("eyebody_collage_horizental.jpg", "eyebody_collage_vertical.jpg", "eyebody_collage_2lines.jpg", "eyebody_collage_3lines.jpg", "eyebody_collage_gif.gif")
+    var collageNumber = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +32,8 @@ class ImageSaveFragment : Fragment() {
 
         collage = activity as CollageActivity
         selected = collage.selectedPhotoList
+
+        saveGif(makeGif())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -41,8 +48,7 @@ class ImageSaveFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_image_save -> {
-                //이미지 저장
-                Toast.makeText(activity, "저장저장", Toast.LENGTH_SHORT).show()
+                saveImage() //이미지 저장
             }
         }
         return super.onOptionsItemSelected(item)
@@ -57,24 +63,33 @@ class ImageSaveFragment : Fragment() {
             ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
         }
 
-        makeGifButton.setOnClickListener {
-            saveGif(makeGif())
-        }
+        sampleImageView.setImageBitmap(combineImage(selected, collageNumber))
 
         horizentalMakeCollageButton.setOnClickListener {
-            sampleImageView.setImageBitmap(combineImage(selected, 0))
+            collageNumber = 0
+            sampleImageView.setImageBitmap(combineImage(selected, collageNumber))
         }
 
         verticalMakeCollageButton.setOnClickListener {
-            sampleImageView.setImageBitmap(combineImage(selected, 1))
+            collageNumber = 1
+            sampleImageView.setImageBitmap(combineImage(selected, collageNumber))
         }
 
         twoMakeCollageButton.setOnClickListener {
-            sampleImageView.setImageBitmap(combineImage(selected, 2))
+            collageNumber = 2
+            sampleImageView.setImageBitmap(combineImage(selected, collageNumber))
         }
 
         threeMakeCollageButton.setOnClickListener {
-            sampleImageView.setImageBitmap(combineImage(selected, 3))
+            collageNumber = 3
+            sampleImageView.setImageBitmap(combineImage(selected, collageNumber))
+        }
+
+        makeGifButton.setOnClickListener {
+            collageNumber = 4
+            var gifFile = File(activity.cacheDir.absolutePath, fileNames[collageNumber])
+            var gifFromFile = GifDrawable(gifFile)
+            sampleImageView.setImageDrawable(gifFromFile)
         }
     }
 
@@ -104,19 +119,18 @@ class ImageSaveFragment : Fragment() {
     fun saveGif(bos: ByteArrayOutputStream?){
         if(bos == null) return
 
-        //폴더 만들기(외부저장소/Pictures/EyeBody)
-        var filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath + "/EyeBody"
-        var file = File(filePath)
+        var filePath = activity.cacheDir.absolutePath
 
-        if(!file.exists()){
-            if(!file.mkdirs()){
+        var file = File(filePath)
+        if (!file.exists()) {
+            if (!file.mkdirs()) {
                 Toast.makeText(activity, "디렉토리가 만들어지지 않음", Toast.LENGTH_SHORT).show()
                 return
             }
         }
 
         //파일 만들기
-        file = File(filePath, "sample.gif") //TODO 파일 이름 설정
+        file = File(filePath, fileNames[4])
         try {
             var fos = FileOutputStream(file)
             fos.write(bos.toByteArray())
@@ -128,8 +142,52 @@ class ImageSaveFragment : Fragment() {
             Toast.makeText(activity, "쓰기 오류", Toast.LENGTH_SHORT).show()
             return
         }
+    }
 
-        Toast.makeText(activity, "GIF 이미지를 저장하였습니다", Toast.LENGTH_SHORT).show()
+    fun saveImage(){
+        try {
+            var path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath + "/EyeBody"
+            var dir = File(path)
+
+            if (!dir.exists()) {
+                if (!dir.mkdirs()) {
+                    Toast.makeText(activity, "디렉토리가 만들어지지 않음", Toast.LENGTH_SHORT).show()
+                    return
+                }
+            }
+
+            if(collageNumber == 4){ //gif 파일 복사
+                var inputfile = activity.cacheDir.absolutePath + "/" + fileNames[collageNumber]
+                var input: InputStream = FileInputStream(inputfile)
+
+                var outputfile: String = path + "/" + fileNames[collageNumber]
+                var output: OutputStream = FileOutputStream(outputfile)
+
+                var buffer: ByteArray = ByteArray(1024)
+                var length: Int
+
+                do {
+                    length = input.read(buffer)
+                    if (length <= 0) break;
+                    output.write(buffer, 0, length)
+                } while (true)
+
+                output.flush();
+                output.close();
+                input.close();
+            } else{ //jpeg 파일 저장
+                var img = combineImage(selected, collageNumber)
+                var imgFile = File(path, fileNames[collageNumber])
+                var fos = FileOutputStream(imgFile)
+                img.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+                fos.flush()
+                fos.close()
+            }
+            Toast.makeText(activity, path + "에 " + fileNames[collageNumber] + "로 저장되었습니다", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(activity, "이미지를 저장하지 못했습니다", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun combineImage(photos: ArrayList<Photo>, COLUMNS: Int = 0): Bitmap{

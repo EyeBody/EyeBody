@@ -117,4 +117,12 @@
 
     </android.support.constraint.ConstraintLayout>
 
+    <ImageView
+        android:id="@+id/guideImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:visibility="gone"
+        android:background="@color/transparentBlack40"
+        android:src="@drawable/eyebody_guide"/>
 </android.support.constraint.ConstraintLayout>

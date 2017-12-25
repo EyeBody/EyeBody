@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.fragment_image_edit.*
 
 class ImageEditFragment : Fragment() {
     lateinit var collage: CollageActivity
-    lateinit var selected: ArrayList<Photo>
+    lateinit var cachedSelectedPhotoList: ArrayList<Photo>
 
     var imgViewWidth: Int = 0
     var imgViewHeight: Int = 0
@@ -20,11 +20,11 @@ class ImageEditFragment : Fragment() {
         setHasOptionsMenu(true)
 
         collage = activity as CollageActivity
-        selected = collage.selectedPhotoList
-        selected.clear()
+        cachedSelectedPhotoList = collage.selectedPhotoList
+        cachedSelectedPhotoList.clear()
 
         for(s in collage.selectedIndexList){
-            selected.add(collage.photoList[s].copyToCacheDir(activity)) //임시 폴더로 복사
+            cachedSelectedPhotoList.add(collage.photoList[s].copyToCacheDir(activity)) //임시 폴더로 복사
         }
     }
 
@@ -66,8 +66,13 @@ class ImageEditFragment : Fragment() {
         }
 
         rotationButton.setOnClickListener {
-            selected[currentIndex].rotationImage(90f)
-            selectedImage_edit.setImageBitmap(selected[currentIndex].getBitmap(imgViewWidth, imgViewHeight))
+            cachedSelectedPhotoList[currentIndex].rotateImage(90f)
+            selectedImage_edit.setImageBitmap(cachedSelectedPhotoList[currentIndex].getBitmap(imgViewWidth, imgViewHeight))
+        }
+
+        reverseButton.setOnClickListener {
+            cachedSelectedPhotoList[currentIndex].mirrorImage()
+            selectedImage_edit.setImageBitmap(cachedSelectedPhotoList[currentIndex].getBitmap(imgViewWidth, imgViewHeight))
         }
 
         stickerButton.setOnClickListener {
@@ -109,13 +114,13 @@ class ImageEditFragment : Fragment() {
                 leftButton_edit.visibility = View.INVISIBLE
             }
 
-            if (pos == selected.size - 1) {  //이후 사진이 없는 경우
+            if (pos == cachedSelectedPhotoList.size - 1) {  //이후 사진이 없는 경우
                 rightButton_edit.visibility = View.INVISIBLE
             }
 
             //이미지와 현재 인덱스 변경
-            selectedImage_edit.setImageBitmap(selected[pos].getBitmap(imgViewWidth, imgViewHeight))
-            imageIndexTextView.text = (pos + 1).toString() + "/" + selected.size
+            selectedImage_edit.setImageBitmap(cachedSelectedPhotoList[pos].getBitmap(imgViewWidth, imgViewHeight))
+            imageIndexTextView.text = (pos + 1).toString() + "/" + cachedSelectedPhotoList.size
             currentIndex = pos
         } catch (e: Exception){
             Log.e("ImageEditFragment", "out of index")  //버튼 빠르게 누르면 OutOfIndex 에러 발생

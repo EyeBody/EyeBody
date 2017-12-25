@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView
 import android.widget.Toast
 
 import com.example.android.eyebody.R
+import com.example.android.eyebody.gallery.CollageActivity
 import com.example.android.eyebody.gallery.Photo
 import com.example.android.eyebody.gallery.PhotoFrameActivity
 import com.example.android.eyebody.management.BasePageFragment
@@ -86,6 +87,12 @@ class GalleryManagementFragment : BasePageFragment() {
     }
 
     fun itemViewLongClicked(itemView: View, pos: Int): Boolean{
+        var intent = Intent(activity, CollageActivity::class.java)
+        intent.putExtra("photoList", photoList)
+        intent.putExtra("pos", pos)
+
+        startActivity(intent)
+
         return true
     }
 }

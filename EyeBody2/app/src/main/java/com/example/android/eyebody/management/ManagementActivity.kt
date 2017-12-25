@@ -201,6 +201,15 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
                     override fun getCount() =
                             4
                 }
+
+        //앱 처음 실행시 가이드 사진 보여주기
+        if(intent.getBooleanExtra("isFirst", false)){
+            guideImageView.visibility = View.VISIBLE
+        }
+
+        guideImageView.setOnClickListener {
+            guideImageView.visibility = View.GONE
+        }
     } // end of onCreate
 
     private fun mappingButtonSelected(position: Int) {
