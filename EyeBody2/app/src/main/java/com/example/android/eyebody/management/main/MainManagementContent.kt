@@ -15,11 +15,13 @@ val TAG = "mydbg_MainContent.kt"
 /**
  * date format must : "yyyyMMddHHmmss"
  */
-class DateData(val date: String, var weight: Double?, val imageUri: ArrayList<String>) : Parcelable {
+class DateData(val date: String, var weight: Double?, var memo: String?,
+               val imageUri: ArrayList<String> = arrayListOf()) : Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readValue(Double::class.java.classLoader) as? Double,
+            parcel.readString(),
             arrayListOf<String>().apply {
                 parcel.readStringList(this)
             })
@@ -27,15 +29,18 @@ class DateData(val date: String, var weight: Double?, val imageUri: ArrayList<St
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(date)
         parcel.writeValue(weight)
+        parcel.writeString(memo)
         parcel.writeStringList(imageUri)
     }
 
     override fun describeContents(): Int = 0
 
     companion object CREATOR : Parcelable.Creator<DateData> {
-        override fun createFromParcel(parcel: Parcel): DateData = DateData(parcel)
+        override fun createFromParcel(parcel: Parcel)
+                = DateData(parcel)
 
-        override fun newArray(size: Int): Array<DateData?> = arrayOfNulls(size)
+        override fun newArray(size: Int): Array<DateData?>
+                = arrayOfNulls(size)
     }
 }
 
@@ -55,7 +60,7 @@ class MainManagementContent(var isInProgress: Boolean,
             parcel.readString(),
             parcel.readDouble(),
             parcel.readDouble(),
-            arrayListOf<DateData>().apply{
+            arrayListOf<DateData>().apply {
                 parcel.readList(this, DateData::class.java.classLoader)
             })
 
@@ -72,6 +77,13 @@ class MainManagementContent(var isInProgress: Boolean,
     override fun describeContents(): Int = 0
 
     companion object CREATOR : Parcelable.Creator<MainManagementContent> {
+
+        val MAIN_MANAGEMENT_SUCCESS = 1
+        val MAIN_MANAGEMENT_SUCCESS_PROGRESS_CHANGED = 2
+
+        val MAIN_MANAGEMENT_FAILED_NO_PROGRESS = -1
+        val MAIN_MANAGEMENT_FAILED_ARRAY_BOUNDS_EXCEEDED = -2
+
         override fun createFromParcel(parcel: Parcel): MainManagementContent =
                 MainManagementContent(parcel)
 
@@ -84,12 +96,10 @@ class MainManagementContent(var isInProgress: Boolean,
         private fun loadMainManagementContents(context: Context): ArrayList<MainManagementContent> {
             val type = object : TypeToken<ArrayList<MainManagementContent>>() {}.type
             val jsonContents = initPref(context).getString(context.getString(R.string.sharedPreference_MainManagementContents), null)
-            val contents =
-                    if (jsonContents == null)
-                        arrayListOf<MainManagementContent>()
-                    else
-                        Gson().fromJson(jsonContents, type)
-            return contents
+            return if (jsonContents == null)
+                arrayListOf()
+            else
+                Gson().fromJson(jsonContents, type)
         }
 
         private fun storeMainManagementContents(context: Context, contents: ArrayList<MainManagementContent>) {
@@ -112,7 +122,7 @@ class MainManagementContent(var isInProgress: Boolean,
                 .firstOrNull { it.date == date }
                 .let {
                     if (it == null) {
-                        content.dateDataList.add(DateData(date, null, arrayListOf()))
+                        content.dateDataList.add(DateData(date, null, null, arrayListOf()))
                         content.dateDataList[0]
                     } else {
                         it
@@ -195,58 +205,97 @@ class MainManagementContent(var isInProgress: Boolean,
         }
 
         /**
-         * delete content by position with sorting.
+         * 진행중인 목표를 종료시킵니다.
+         *
+         * @return 진행중인 목표가 있을 경우 삭제하고 MAIN_MANAGEMENT_SUCCESS 를 반환하며, 없을 경우 MAIN_MANAGEMENT_FAILED_NO_PROGRESS 를 반환합니다.
          */
-        fun deleteMainManagementContent(context: Context, position: Int) {
+        fun terminateProgress(context: Context, progressContent: MainManagementContent): Int {
+            if(progressContent.isInProgress) {
+                progressContent.isInProgress = false
+                val contents = loadMainManagementContents(context)
+                val pos = progressPosition(contents)
+                if (pos != null) {
+                    contents[pos].isInProgress = false
+                    storeMainManagementContents(context, contents)
+                    return MAIN_MANAGEMENT_SUCCESS
+                }
+            }
+            return MAIN_MANAGEMENT_FAILED_NO_PROGRESS
+        }
+
+        /**
+         * delete content by position with sorting.
+         *
+         * @return 성공시 : MAIN_MANAGEMENT_SUCCESS, 잘못된 index 접근 시 : MAIN_MANAGEMENT_FAILED_ARRAY_BOUNDS_EXCEEDED
+         */
+        fun deleteMainManagementContent(context: Context, position: Int): Int {
             val contents = loadMainManagementContents(context)
+            if (position < 0 && contents.size <= position)
+                return MAIN_MANAGEMENT_FAILED_ARRAY_BOUNDS_EXCEEDED
             contents.removeAt(position)
             val sortedContents = sortedMainManagementContent(contents)
             storeMainManagementContents(context, sortedContents)
+            return MAIN_MANAGEMENT_SUCCESS
         }
 
         /**
          * insert content with sorting.
          * 진행중인 목표는 오직 하나만 존재할 수 있으므로 추가되는 목표가 isInProgress 속성을 가진다면 다른 목표가 종료됩니다.
+         *
+         * @return 성공시 : MAIN_MANAGEMENT_SUCCESS, 진행 중인 목표가 변경 될 경우 : MAIN_MANAGEMENT_SUCCESS_PROGRESS_CHANGED
          */
-        fun insertMainManagementContent(context: Context, content: MainManagementContent) {
+        fun insertMainManagementContent(context: Context, content: MainManagementContent): Int {
+            var ret = MAIN_MANAGEMENT_SUCCESS
+
             val contents = loadMainManagementContents(context)
             if (content.isInProgress) {
                 val progress = progressPosition(contents)
-                if (progress != null)
+                if (progress != null) {
                     contents[progress].isInProgress = false
+                    ret = MAIN_MANAGEMENT_SUCCESS_PROGRESS_CHANGED
+                }
             }
             contents.add(content)
             val sortedContents = sortedMainManagementContent(contents)
             storeMainManagementContents(context, sortedContents)
+
+            return ret
         }
 
         /**
          * 진행중인 목표에 날짜데이터를 추가합니다.
          * 이 작업은 추후 (해당 날짜에 image 가 존재한다면) contents 데이터에 uri 를 추가하게 합니다.
          * @see getMainManagementContentArrayListForAdapterFromJson
+         *
+         * @return 성공시 : MAIN_MANAGEMENT_SUCCESS, 진행 중인 목표가 없을 때 : MAIN_MANAGEMENT_FAILED_NO_PROGRESS
          */
-        fun addDateDataToProgressContent(context: Context, date: String) {
+        fun addDateDataToProgressContent(context: Context, date: String): Int {
             val contents = loadMainManagementContents(context)
             val progress = progressPosition(contents)
-            if (progress != null) {
+            return if (progress != null) {
                 val start = contents[progress].startDate.toIntOrNull() ?: Int.MAX_VALUE
                 val end = contents[progress].desireDate.toIntOrNull() ?: Int.MIN_VALUE
                 val dateValue = date.toIntOrNull() ?: 0
                 if (dateValue in start..end) {
                     if (contents[progress].dateDataList.firstOrNull { it.date == date } == null)
-                        contents[progress].dateDataList.add(DateData(date, null, arrayListOf()))
+                        contents[progress].dateDataList.add(DateData(date, null, null, arrayListOf()))
                     storeMainManagementContents(context, contents)
                 }
+                MAIN_MANAGEMENT_SUCCESS
+            } else {
+                MAIN_MANAGEMENT_FAILED_NO_PROGRESS
             }
         }
 
         /**
-         * 진행중인 목표에 추가된 날짜데이터에 weight 속성을 부여합니다.
+         * 진행중인 목표의 지정 날짜에 몸무게 속성을 부여합니다.
+         *
+         * @return 성공시 : MAIN_MANAGEMENT_SUCCESS, 진행 중인 목표가 없을 때 : MAIN_MANAGEMENT_FAILED_NO_PROGRESS
          */
-        fun setWeightToProgressContent(context: Context, date: String, weight: Double) {
+        fun setWeightToProgressContent(context: Context, date: String, weight: Double): Int {
             val contents = loadMainManagementContents(context)
             val progress = progressPosition(contents)
-            if (progress != null) {
+            return if (progress != null) {
                 val start = contents[progress].startDate.toIntOrNull() ?: Int.MAX_VALUE
                 val end = contents[progress].desireDate.toIntOrNull() ?: Int.MIN_VALUE
                 val dateValue = date.toIntOrNull() ?: 0
@@ -256,6 +305,9 @@ class MainManagementContent(var isInProgress: Boolean,
                     findDateDataFromString(contents[progress], date).weight = weight
                     storeMainManagementContents(context, contents)
                 }
+                MAIN_MANAGEMENT_SUCCESS
+            } else {
+                MAIN_MANAGEMENT_FAILED_NO_PROGRESS
             }
         }
 
@@ -264,14 +316,35 @@ class MainManagementContent(var isInProgress: Boolean,
          * @see addDateDataToProgressContent
          *
          * 이미지 uri 를 진행중인 목표의 해당 날짜에 직접 삽입합니다.
+         *
+         * @return 성공시  MAIN_MANAGEMENT_SUCCESS, 진행 중인 목표가 없을 때 : MAIN_MANAGEMENT_FAILED_NO_PROGRESS
          */
-        fun addUriToProgressContent(context: Context, date: String, uri: String) {
+        fun addUriToProgressContent(context: Context, date: String, uri: String): Int {
             val contents = loadMainManagementContents(context)
             val progress = progressPosition(contents)
-            if (progress != null) {
-                val preImageUri = findDateDataFromString(contents[progress], date).imageUri.add(uri)
+            return if (progress != null) {
+                findDateDataFromString(contents[progress], date).imageUri.add(uri)
+                storeMainManagementContents(context, contents)
+                MAIN_MANAGEMENT_SUCCESS
+            } else {
+                MAIN_MANAGEMENT_FAILED_NO_PROGRESS
             }
-            storeMainManagementContents(context, contents)
+        }
+
+        /**
+         * 진행중인 목표의 지정 날짜에 메모 속성을 부여합니다.
+         *
+         * @return 성공시 : MAIN_MANAGEMENT_SUCCESS, 진행 중인 목표가 없을 때 : MAIN_MANAGEMENT_FAILED_NO_PROGRESS
+         */
+        fun addMemoToProgressContent(context: Context, date: String, memo: String): Int {
+            val contents = loadMainManagementContents(context)
+            val progress = progressPosition(contents)
+            return if (progress != null) {
+                findDateDataFromString(contents[progress], date).memo = memo
+                MAIN_MANAGEMENT_SUCCESS
+            } else {
+                MAIN_MANAGEMENT_FAILED_NO_PROGRESS
+            }
         }
     }
 }

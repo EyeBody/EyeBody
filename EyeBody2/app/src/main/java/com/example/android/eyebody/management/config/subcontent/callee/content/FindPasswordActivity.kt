@@ -41,12 +41,20 @@ class FindPasswordActivity : AppCompatActivity() {
         val pref_email = initPref.getString(getString(R.string.sharedPreference_email), "None")
         val pref_email_auth = initPref.getString(getString(R.string.sharedPreference_email_auth_status), "None")
 
+        var passwordCount = 0
+
+        initPref.edit()
+                .putString(getString(R.string.email_auth_key), "${(Math.random() * 1_000_000).toInt()}")
+                .apply()
+
         email.text = pref_email
         emailButton.isClickable = true//pref_email_auth == getString(R.string.sharedPreference_email_auth_ok)
         inputKeyButton.isClickable = emailButton.isClickable
 
         if (emailButton.isClickable) {
             emailButton.setOnClickListener {
+
+                passwordCount = 0
 
                 //TODO random text generater 를 만들거나 5회이상 입력시 5분 뒤 시도하게 만들기 또는 firebase 로 전향
                 val key: Int? = (Math.random() * 1_000_000).toInt()
@@ -87,6 +95,14 @@ class FindPasswordActivity : AppCompatActivity() {
                         .commit()
             }
             inputKeyButton.setOnClickListener {
+                passwordCount++
+                if(passwordCount % 5 == 0){
+                    Toast.makeText(baseContext,"5회 잘못 입력하여 reset 됩니다.",Toast.LENGTH_SHORT).show()
+                    initPref.edit()
+                            .putString(getString(R.string.email_auth_key), "${(Math.random() * 1_000_000).toInt()}")
+                            .apply()
+                    return@setOnClickListener
+                }
                 val encryptInput = StringHashManager.encryptString(inputKey.text.toString())
 
                 //TODO 0000을 지워야 함. release 할 때.

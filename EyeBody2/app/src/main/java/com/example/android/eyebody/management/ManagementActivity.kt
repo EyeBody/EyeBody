@@ -1,5 +1,7 @@
 package com.example.android.eyebody.management
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -22,6 +24,12 @@ import com.example.android.eyebody.management.exercise.ExerciseManagementFragmen
 import com.example.android.eyebody.management.food.FoodManagementFragment
 import com.example.android.eyebody.management.main.MainManagementFragment
 import kotlinx.android.synthetic.main.activity_management.*
+import android.content.ComponentName
+import android.app.ActivityManager.RunningTaskInfo
+import android.content.Context.ACTIVITY_SERVICE
+import android.app.ActivityManager
+import android.content.Context
+
 
 /**
  * Created by YOON on 2017-11-10
@@ -40,18 +48,28 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
     private val BUTTON_TAG_FOOD = 2
     private val BUTTON_TAG_CONFIG = 3
 
+    val originScaleX by lazy { if (buttonToMain.scaleX == buttonToExercise.scaleX) buttonToMain.scaleX else buttonToConfig.scaleX }
+    val originScaleY by lazy { if (buttonToMain.scaleY == buttonToExercise.scaleY) buttonToMain.scaleY else buttonToConfig.scaleY }
+    val activateActionbar by lazy {
+        getSharedPreferences(getString(R.string.getSharedPreference_configuration_Only_Int), Context.MODE_PRIVATE)
+                .getInt(getString(R.string.sharedPreference_activateActionbar), 0)
+    }
+
     override fun onFragmentInteraction(uri: Uri) {
         Toast.makeText(this, "$uri", Toast.LENGTH_LONG).show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
+        when (item?.itemId) {
             android.R.id.home -> Toast.makeText(this, "home button clicked", Toast.LENGTH_LONG).show()
         }
         return true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, "Create")
+        if (activateActionbar == 1)
+            supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_management)
 
@@ -68,15 +86,15 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         actionbar?.setDisplayUseLogoEnabled(false)
         actionbar?.setCustomView(R.layout.actionbar_management)
         val customView = actionbar?.customView
-        if(customView?.parent is Toolbar?) {
+        if (customView?.parent is Toolbar?) {
             val toolbar: Toolbar? = customView?.parent as Toolbar?
             toolbar?.setContentInsetsAbsolute(0, 0)
-        } else if (customView?.parent is android.widget.Toolbar?){
+        } else if (customView?.parent is android.widget.Toolbar?) {
             val toolbar: android.widget.Toolbar? = customView?.parent as android.widget.Toolbar?
             toolbar?.setContentInsetsAbsolute(0, 0)
         }
         customView?.findViewById<ImageView>(R.id.goto_camera)?.setOnClickListener {
-            val mIntent = Intent(this,CameraActivity::class.java)
+            val mIntent = Intent(this, CameraActivity::class.java)
             startActivity(mIntent)
         }
         customView?.findViewById<ImageView>(R.id.goto_gallery)?.setOnClickListener {
@@ -116,9 +134,11 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
                  2 -> settling
                 */
             }
+
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 /* */
             }
+
             override fun onPageSelected(position: Int) {
                 mappingButtonSelected(position)
             }
@@ -159,12 +179,28 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
     } // end of onCreate
 
     private fun mappingButtonSelected(position: Int) {
-        for (i in 0..4)
-            when (i) {
-                BUTTON_TAG_MAIN -> buttonToMain.isSelected = (position == i)
-                BUTTON_TAG_EXERCISE -> buttonToExercise.isSelected = (position == i)
-                BUTTON_TAG_FOOD -> buttonToFood.isSelected = (position == i)
-                BUTTON_TAG_CONFIG -> buttonToConfig.isSelected = (position == i)
+        val buttonArray = arrayOf(buttonToMain, buttonToExercise, buttonToFood, buttonToConfig)
+        val minX = originScaleX * 0.8f
+        val minY = originScaleY * 0.8f
+
+        for (i in 0 until 4) {
+            buttonArray[i].isSelected = (position == i)
+            if (position == i) {
+                buttonArray[i].scaleX = minX
+                buttonArray[i].scaleY = minY
+                buttonArray[i].alpha = 0.5f
+                buttonArray[i].animate()
+                        .scaleX(originScaleX)
+                        .scaleY(originScaleY)
+                        .alpha(1f)
+                        .setDuration(300)
+                        .start()
+            } else {
+                buttonArray[i].animate().cancel()
+                buttonArray[i].scaleX = minX
+                buttonArray[i].scaleY = minY
+                buttonArray[i].alpha = 0.5f
             }
+        }
     }
 }
