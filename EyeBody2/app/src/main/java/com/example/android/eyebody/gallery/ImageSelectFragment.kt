@@ -5,7 +5,9 @@ import android.app.Fragment
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.Toast
 import com.example.android.eyebody.R
+import kotlinx.android.synthetic.main.list_image_select.view.*
 
 class ImageSelectFragment : Fragment() {
     lateinit var menu: Menu
@@ -24,7 +26,7 @@ class ImageSelectFragment : Fragment() {
         //RecyclerView
         imageSelectView = view.findViewById(R.id.imageSelectView)
         imageSelectView.hasFixedSize()
-        imageSelectView.adapter = CollageAdapter(activity, collage.photoList, collage.selectedIndexList, this)
+        imageSelectView.adapter = ImageSelectAdapter(activity, collage.photoList, collage.selectedIndexList, this)
 
         return view
     }
@@ -47,6 +49,7 @@ class ImageSelectFragment : Fragment() {
             R.id.action_edit_image -> {
                 //ImageEditFragment로 교체
                 var imageEditFragment = ImageEditFragment()
+                //var imageEditFragment = ImageCollageFragment()
 
                 fragmentManager
                         .beginTransaction()
@@ -59,25 +62,52 @@ class ImageSelectFragment : Fragment() {
     }
 
     fun setSelected(itemView: View, pos: Int, isSelected: Boolean){
-        //TODO 최대 선택갯수 설정, 선택할 때 번호매기기
         if(isSelected){
-            itemView.setBackgroundColor(Color.BLUE)
+            itemView.setBackgroundColor(Color.WHITE)
+            itemView.date.setTextColor(R.color.eyebodyPurple)
+
+            var idx = collage.selectedIndexList.indexOf(pos)
+            if(idx < 0){
+                itemView.numberTextView.text = (collage.selectedIndexList.size + 1).toString()  //새로 선택하는 경우
+            }else{
+                itemView.numberTextView.text = (idx + 1).toString() //뒤로가기 했을 때(이미 값이 있는 경우)
+            }
+
+            itemView.numberTextView.visibility = View.VISIBLE
+
             if(!collage.selectedIndexList.contains(pos)) collage.selectedIndexList.add(pos)  //없으면 추가
 
             if(collage.selectedIndexList.size > 0){    //선택한 이미지가 하나 이상일 때 이미지편집 메뉴 아이콘 보여주기
                 menu.findItem(R.id.action_edit_image).setVisible(true)
             }
         } else {
-            itemView.setBackgroundColor(Color.RED)
+            itemView.setBackgroundColor(Color.TRANSPARENT)
+            itemView.date.setTextColor(Color.WHITE)
+            itemView.numberTextView.visibility = View.INVISIBLE
+
             collage.selectedIndexList.remove(pos)
+
+            //선택 해제했을 때 번호 다시 매기기
+            try {
+                for (idx in collage.selectedIndexList.indices) {
+                    var sel = collage.selectedIndexList[idx]
+                    imageSelectView.findViewHolderForAdapterPosition(sel).itemView.numberTextView.text = (idx + 1).toString()
+                }
+            } catch(e: Exception){
+                //초기화되지 않은 경우
+            }
 
             if(collage.selectedIndexList.size == 0){    //선택한 이미지가 하나도 없을 때 이미지편집 메뉴 아이콘 숨기기
                 try{
                     menu.findItem(R.id.action_edit_image).setVisible(false)
                 } catch (e: Exception) {
-                    //메뉴가 null일 때
+                    //메뉴가 null일 때(초기화가 안됐을 때)
                 }
             }
         }
+    }
+
+    fun makeToast(str: String){
+        Toast.makeText(activity, str, Toast.LENGTH_SHORT).show()
     }
 }

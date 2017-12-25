@@ -2,16 +2,18 @@ package com.example.android.eyebody.management.config
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.Toast
 
 import com.example.android.eyebody.R
 import com.example.android.eyebody.management.BasePageFragment
+import com.example.android.eyebody.management.config.subcontent.SwitchableSubContent
+import com.example.android.eyebody.management.config.subcontent.callee.content.ConfirmDialog
+import com.example.android.eyebody.management.config.subcontent.callee.content.FindPasswordActivity
+import com.example.android.eyebody.management.config.subcontent.caller.*
 
 /**
  * Created by YOON on 2017-11-11
@@ -35,12 +37,12 @@ class ConfigManagementFragment : BasePageFragment() {
         val listview = mView.findViewById<ListView>(R.id.listview_config_management)
 
         listview.adapter = ConfigManagementAdapter(activity,
-                arrayOf(
+                arrayListOf(
                         ConfigManagementContent(
                                 context.resources.getDrawable(R.drawable.icons8maintenance, null),
                                 "Example",
                                 "Example for sub text",
-                                arrayOf(
+                                arrayListOf(
                                         SwitchableSubContent(
                                                 "연습하기",
                                                 "nullable1",
@@ -64,13 +66,23 @@ class ConfigManagementFragment : BasePageFragment() {
                                 context.resources.getDrawable(R.drawable.icons8uploadtocloud, null),
                                 "백업 설정",
                                 "백업에 대한 설정을 바꿀 수 있습니다.",
-                                arrayOf(
-                                        DialogCallerSubContent(
+                                arrayListOf(
+                                        FunctionCallerSubContent(
                                                 "구글 드라이브 로그인",
-                                                "Backup_NONE",
+                                                getString(R.string.sharedPreference_GoogleLogin_Status),
                                                 false,
                                                 listOf("로그아웃 상태", "로그인 상태"),
-                                                listOf(null, null)
+                                                listOf(
+                                                        Async {
+                                                            Toast.makeText(context, "로그인 시도", Toast.LENGTH_SHORT).show()
+                                                            /*async task something here*/
+                                                            setAsyncReturn(1)
+                                                        },
+                                                        Sync {
+                                                            Toast.makeText(context, "로그아웃 시도", Toast.LENGTH_SHORT).show()
+                                                            0
+                                                        }
+                                                )
                                         ),
                                         DialogCallerSubContent(
                                                 "구글 드라이브 사용자 변경",
@@ -81,7 +93,7 @@ class ConfigManagementFragment : BasePageFragment() {
                                         ),
                                         SwitchableSubContent(
                                                 "Wifi 환경에서만 백업",
-                                                "Backup_Only_Wifi",
+                                                getString(R.string.sharedPreference_Backup_Only_Wifi),
                                                 listOf("LTE를 이용할 때도 백업합니다.", "LTE를 이용할 때는 백업 하지 않습니다.")
                                         ),
                                         DialogCallerSubContent(
@@ -93,7 +105,7 @@ class ConfigManagementFragment : BasePageFragment() {
                                         ),
                                         SwitchableSubContent(
                                                 "자동 백업",
-                                                "Backup_Auto",
+                                                getString(R.string.sharedPreference_Backup_Auto),
                                                 listOf("자동 백업기능을 사용하지 않고 있습니다.", "자동 백업기능이 활성화되었습니다.")
                                         )
                                 )
@@ -102,11 +114,15 @@ class ConfigManagementFragment : BasePageFragment() {
                                 context.resources.getDrawable(R.drawable.icons8plus, null),
                                 "보안",
                                 "보안에 대한 설정을 바꿀 수 있습니다.",
-                                arrayOf(
-                                        SwitchableSubContent(
+                                arrayListOf(
+                                        DialogCallerSubContent(
                                                 "지문인식 사용",
-                                                "Security_Use_Fingerprint",
-                                                listOf("지문인식을 사용하지 않습니다.", "지문인식을 사용합니다.")
+                                                getString(R.string.sharedPreference_Security_Use_Fingerprint),
+                                                true,
+                                                listOf("지문인식을 사용하지 않습니다.", "지문인식을 사용합니다."),
+                                                listOf(ConfirmDialog.Builder("지문인식을 사용하시겠습니까?", "지문인식이 지원되어야 합니다.")
+                                                        .setConfirmCancelMessage("사용함", "사용안함").build(),
+                                                        null)
                                         ),
                                         ActivityCallerSubContent(
                                                 "비밀번호 찾기",
@@ -118,14 +134,6 @@ class ConfigManagementFragment : BasePageFragment() {
                                 )
                         )
                 ))
-
-        listview.setOnItemClickListener { parent, view, position, id -> //AdapterView<?> parent, View view, Int position, Long id
-            Toast.makeText(context, "parent : $parent\nview : $view\n position : $position\nid : $id", Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "parent : $parent\n" +
-                    "view : $view\n" +
-                    " position : $position\n" +
-                    "id : $id")
-        }
 
         return mView
     }

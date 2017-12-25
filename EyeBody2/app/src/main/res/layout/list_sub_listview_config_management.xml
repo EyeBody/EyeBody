@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraint_sub_item"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
-    android:layout_marginStart="5dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="57dp"
+    android:layout_marginStart="5dp"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp">
 
     <TextView
         android:id="@+id/main_textview_sub_listview_config_management"
@@ -27,10 +27,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
         android:text="TextView"
         android:textSize="12sp"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

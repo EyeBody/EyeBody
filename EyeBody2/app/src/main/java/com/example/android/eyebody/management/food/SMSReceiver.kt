@@ -1,4 +1,4 @@
-package com.example.android.eyebody.management.food
+﻿package com.example.android.eyebody.management.food
 
 import android.content.*
 import android.os.Build
@@ -79,7 +79,7 @@ class SMSReceiver : BroadcastReceiver() {
     }
     //얼마라는걸 확인
     private fun checkBank(number: String?): Boolean {
-        val numbers = arrayOf("01057543876","15447200", "15881688", "15661000", "15776200", "15886700", "15888900", "15991155", "15888300", "15889955", "15884515", "15881600")
+        val numbers = arrayOf("01051244019", "01057543876","15447200", "15881688", "15661000", "15776200", "15886700", "15888900", "15991155", "15888300", "15889955", "15884515", "15881600")
         //신한카드 , 국민카드, 시티카드, 현대카드, 외환카드, 삼성카드, 하나sk카드, 롯데카드, 우리카드, bc카드,농협카드
         return numbers.contains(number)
     }//문자가 오면 은행들 번호랑 비교해 가면서 은행에서 온 문자라는 것을 판별, 확인 완료

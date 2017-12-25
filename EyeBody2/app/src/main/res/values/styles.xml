@@ -1,28 +1,26 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:actionOverflowButtonStyle">@style/actionbar_image</item>
-        <item name="android:fontFamily">@font/roboto_regular</item>
+    <!-- 앱 전체 테마 -->
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <item name="actionBarStyle">@style/EyeBodyActionBar</item>
+        <item name="android:windowBackground">@color/eyebodyBackground</item>
 
-        <item name="colorPrimary">@color/transparentBlack30</item>
-        <item name="colorPrimaryDark">@color/transparentBlack40</item>
-        <item name="android:windowBackground">@drawable/gradient_background</item>
-        <item name="android:textColor">@color/transparentBlack30</item>
-        <item name="colorControlNormal">@color/white</item>
-        <item name="colorControlActivated">@color/colorPrimary</item>
-        <item name="colorControlHighlight">@color/colorAccent</item>
-    </style>
-    <style name="actionbar_image" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:src">@drawable/imagebutton_setting</item>
+        <item name="colorControlActivated">@color/eyebodyMiddle</item>
     </style>
 
-    <style name="actionbar_image2" parent="Theme.AppCompat.DayNight.DarkActionBar">
-        <item name="android:src">@drawable/imagebutton_setting</item>
+    <style name="EyeBodyActionBar" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="background">@color/transparent</item>
     </style>
+
+
+    <!-- 특정 컴포넌트 테마 -->
     <style name="NoTitle" parent="Theme.AppCompat.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-
+    <style name="AppTheme.disable_actionbar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

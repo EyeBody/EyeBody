@@ -67,7 +67,7 @@ class GalleryActivity : AppCompatActivity() {
                 photoList.add(Photo(f))
             }
 
-            if(photoList.size != 0){    //이미지가 하나도 없는 경우에는 selectedImage를 세팅하지 않음
+            if(photoList.size != 0){    //이미지가 하나라도 있어야 selectedImage 세팅
                 selectedImage_gallery.setImageBitmap(photoList[0].getBitmap(measuredWidth, measuredHeight))
                 selectedImage_gallery.setTag(0)
             }

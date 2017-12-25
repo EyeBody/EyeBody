@@ -210,9 +210,9 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         camera = null
         previewing = false
     }
-    fun gobackHomeActivity()
+    private fun gobackHomeActivity()
     {
-        var homeIntent = Intent(this, MainActivity::class.java)
+        var homeIntent = Intent(this, ManagementActivity::class.java)
         startActivity(homeIntent)
     }
     override fun onDestroy() {

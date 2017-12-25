@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
-import com.example.android.eyebody.utility.DbHelper
 
 /**
  * Created by ytw11 on 2017-11-19.
