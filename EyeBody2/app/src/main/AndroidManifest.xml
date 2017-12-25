@@ -46,11 +46,10 @@
             android:label="@string/category_exercise" />
         <activity
             android:name=".init.InitActivity"
-            android:label="@string/category_init"/>
-
-        <activity android:name=".SplashActivity"
+            android:label="@string/category_init" />
+        <activity
+            android:name=".SplashActivity"
             android:theme="@style/NoTitle">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -83,30 +82,30 @@
         <activity
             android:name=".management.ManagementActivity"
             android:hardwareAccelerated="true"
-            android:label="관리"/>
+            android:label="관리" />
         <activity
             android:name=".management.main.FullscreenGraphViewActivity"
             android:hardwareAccelerated="true"
             android:label="그래프 풀스크린"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.disable_actionbar"
-            />
+            android:theme="@style/AppTheme.disable_actionbar" />
         <activity
             android:name=".management.main.NewMainContentActivity"
             android:label="목표 설정하기"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".management.food.SMSReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".management.food.ActionReceiver">
-        </receiver>
+        <receiver android:name=".management.food.ActionReceiver"></receiver>
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".gallery.PhotoFrameActivity"></activity>
     </application>
+
 </manifest>

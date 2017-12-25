@@ -7,6 +7,7 @@ import android.graphics.Matrix
 import android.os.Parcel
 import android.os.Parcelable
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import java.io.*
 
 class Photo: AppCompatActivity, Parcelable {
@@ -70,6 +71,12 @@ class Photo: AppCompatActivity, Parcelable {
 
     fun getBitmap(): Bitmap{
         return getBitmap(imgWidth, imgHeight)
+    }
+
+    fun getBitmap(view: View): Bitmap {
+        //bitmap이 표시되는 view의 크기에 맞게 리사이징
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+        return getBitmap(view.measuredWidth, view.measuredHeight)
     }
 
     fun getBitmap(reqWidth: Int, reqHeight: Int): Bitmap{

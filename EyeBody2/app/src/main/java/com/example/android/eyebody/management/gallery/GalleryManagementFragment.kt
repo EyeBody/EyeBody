@@ -1,5 +1,6 @@
 package com.example.android.eyebody.management.gallery
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.Toast
 
 import com.example.android.eyebody.R
 import com.example.android.eyebody.gallery.Photo
+import com.example.android.eyebody.gallery.PhotoFrameActivity
 import com.example.android.eyebody.management.BasePageFragment
 
 /**
@@ -77,11 +79,13 @@ class GalleryManagementFragment : BasePageFragment() {
     }
 
     fun itemViewClicked(itemView: View, pos: Int){
-        Toast.makeText(activity, "짧", Toast.LENGTH_SHORT).show()
+        var intent = Intent(activity, PhotoFrameActivity::class.java)
+        intent.putExtra("photoList", photoList)
+        intent.putExtra("pos", pos);
+        startActivity(intent)
     }
 
     fun itemViewLongClicked(itemView: View, pos: Int): Boolean{
-        Toast.makeText(activity, "길", Toast.LENGTH_SHORT).show()
         return true
     }
 }
