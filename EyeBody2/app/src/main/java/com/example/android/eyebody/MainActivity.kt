@@ -196,9 +196,6 @@ class MainActivity : PermissionsActivity() {
                 toast.setText("TODO : Alarm Setting")
                 toast.show()
             }
-            R.id.Actionbar_kakaoTalk->{
-                //TODO ------ 카카오톡 공유기능으로 구성
-            }
         }
         return super.onOptionsItemSelected(item)
     }

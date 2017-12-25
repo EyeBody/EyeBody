@@ -101,24 +101,40 @@ class Photo: AppCompatActivity, Parcelable {
         return BitmapFactory.decodeFile(fileUrl, options) as Bitmap
     }
 
-    fun rotationImage(degree: Float){
-        var rotateMatrix = Matrix();
-        rotateMatrix.postRotate(degree);
+    fun rotateImage(degree: Float){
+        var rotateMatrix = Matrix()
+        rotateMatrix.postRotate(degree)
 
-        var rotatedImage = Bitmap.createBitmap(getBitmap(), 0, 0, imgWidth, imgHeight, rotateMatrix, false);
+        var rotatedImage = Bitmap.createBitmap(getBitmap(), 0, 0, imgWidth, imgHeight, rotateMatrix, false)
 
         try {
-            var fOut = FileOutputStream(File(fileUrl));
-            rotatedImage.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-            fOut.flush();
-            fOut.close();
+            var fOut = FileOutputStream(File(fileUrl))
+            rotatedImage.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+            fOut.flush()
+            fOut.close()
 
+            //돌아갈 때 마다 가로세로 길이도 바꿔주어야 함
             var tmp = imgWidth
             imgWidth = imgHeight
             imgHeight = tmp
-
         } catch (e: Exception) {
-            e.printStackTrace();
+            e.printStackTrace()
+        }
+    }
+
+    fun mirrorImage(){
+        var mirrorMatrix = Matrix()
+        mirrorMatrix.postScale(-1f, 1f)
+
+        var mirroredImage = Bitmap.createBitmap(getBitmap(), 0, 0, imgWidth, imgHeight, mirrorMatrix, true)
+
+        try {
+            var fOut = FileOutputStream(File(fileUrl))
+            mirroredImage.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+            fOut.flush()
+            fOut.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

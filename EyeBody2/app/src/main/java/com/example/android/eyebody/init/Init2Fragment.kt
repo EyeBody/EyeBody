@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Fragment
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.example.android.eyebody.utility.StringHashManager
 import com.example.android.eyebody.R
+import com.example.android.eyebody.management.ManagementActivity
 import kotlinx.android.synthetic.main.fragment_init2.*
 
 /**
@@ -59,7 +61,7 @@ class Init2Fragment : Fragment() {
             Log.d("mydbg_init2", "password >>> $strPW / $strConfirmPW")
 
             if (strPW.isNotEmpty() && strPW.toString() == strConfirmPW.toString()) {
-                Toast.makeText(activity, "${strPW}를 입력하였습니다.", Toast.LENGTH_LONG).show()
+                //Toast.makeText(activity, "${strPW}를 입력하였습니다.", Toast.LENGTH_LONG).show()
                 Log.d("mydbg_init2", "  length >>> ${strPW.length}")
 
 
@@ -75,13 +77,13 @@ class Init2Fragment : Fragment() {
                         .putString("hashedPW", hashedPW)
                         .commit()
 
-                val init3 = Init3Fragment()
-                activity.fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_init_content, init3)
-                        .commit()
-
-                val initActivity : InitActivity = activity as InitActivity
-                initActivity.setButtonVisibility(View.VISIBLE, View.INVISIBLE)
+                //메인으로 이동
+                var intent = Intent(activity, ManagementActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.putExtra("isFirst", true)
+                startActivity(intent)
+                activity.finish()
             } else {
                 Toast.makeText(activity, "password를 입력해주세요 (1자 이상)", Toast.LENGTH_LONG).show()
             }

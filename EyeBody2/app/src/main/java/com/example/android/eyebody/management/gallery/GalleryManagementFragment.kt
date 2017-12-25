@@ -3,14 +3,14 @@ package com.example.android.eyebody.management.gallery
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.support.v4.app.ActivityOptionsCompat
 import java.io.File
 import android.support.v7.widget.RecyclerView
+import android.view.*
 import android.widget.Toast
 
 import com.example.android.eyebody.R
+import com.example.android.eyebody.gallery.CollageActivity
 import com.example.android.eyebody.gallery.Photo
 import com.example.android.eyebody.gallery.PhotoFrameActivity
 import com.example.android.eyebody.management.BasePageFragment
@@ -25,6 +25,7 @@ class GalleryManagementFragment : BasePageFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         if (arguments != null) {
             pageNumber = arguments.getInt(ARG_PAGE_NUMBER)
         }
@@ -81,11 +82,20 @@ class GalleryManagementFragment : BasePageFragment() {
     fun itemViewClicked(itemView: View, pos: Int){
         var intent = Intent(activity, PhotoFrameActivity::class.java)
         intent.putExtra("photoList", photoList)
-        intent.putExtra("pos", pos);
+        intent.putExtra("pos", pos)
+
         startActivity(intent)
     }
 
     fun itemViewLongClicked(itemView: View, pos: Int): Boolean{
+        var intent = Intent(activity, CollageActivity::class.java)
+        intent.putExtra("photoList", photoList)
+        intent.putExtra("pos", pos)
+
+        //공유 요소 전환
+        //var options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, galleryView, "galleryView")
+        startActivity(intent)
+
         return true
     }
 }

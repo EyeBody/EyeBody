@@ -27,6 +27,7 @@ class ImageSelectFragment : Fragment() {
         imageSelectView = view.findViewById(R.id.imageSelectView)
         imageSelectView.hasFixedSize()
         imageSelectView.adapter = ImageSelectAdapter(activity, collage.photoList, collage.selectedIndexList, this)
+        imageSelectView.scrollToPosition(collage.pos)
 
         return view
     }
@@ -36,11 +37,13 @@ class ImageSelectFragment : Fragment() {
         inflater.inflate(R.menu.menu_image_select, menu)
         this.menu = menu
 
-        menu.findItem(R.id.action_edit_image).setVisible(false)
+        menu.findItem(R.id.action_edit_image).setVisible(true)
         menu.findItem(R.id.action_share).setVisible(false)
 
-        if(collage.selectedIndexList.size > 0){    //선택한 이미지가 하나 이상일 때 이미지편집 메뉴 아이콘 보여주기
-            menu.findItem(R.id.action_edit_image).setVisible(true)
+        //갤러리에서 선택한 이미지
+        if(collage.selectedIndexList.size == 0){
+            collage.selectedIndexList.add(collage.pos)
+            imageSelectView.adapter.notifyDataSetChanged()
         }
     }
 
@@ -59,6 +62,18 @@ class ImageSelectFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun itemViewClicked(itemView: View, pos: Int){
+        var cnt = collage.selectedIndexList.size + 1
+        var isSelected = collage.selectedIndexList.contains(pos)
+
+        if(cnt > 5 && !isSelected){ //꽉 찼는데 더 추가하려고 할 때
+            Toast.makeText(activity, "5개까지만 선택할 수 있습니다", Toast.LENGTH_SHORT).show()
+        } else{
+            setSelected(itemView, pos, !isSelected)   //없으면(false) 추가해줌(true)
+
+        }
     }
 
     fun setSelected(itemView: View, pos: Int, isSelected: Boolean){
@@ -105,9 +120,5 @@ class ImageSelectFragment : Fragment() {
                 }
             }
         }
-    }
-
-    fun makeToast(str: String){
-        Toast.makeText(activity, str, Toast.LENGTH_SHORT).show()
     }
 }

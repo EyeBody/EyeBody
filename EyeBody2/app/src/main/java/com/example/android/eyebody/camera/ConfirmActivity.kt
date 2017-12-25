@@ -125,4 +125,3 @@ class ConfirmActivity : AppCompatActivity() {
         goCameraActivity()
     }
 }
-

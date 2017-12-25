@@ -4,8 +4,9 @@
     <style name="AppTheme" parent="Theme.AppCompat">
         <item name="actionBarStyle">@style/EyeBodyActionBar</item>
         <item name="android:windowBackground">@color/eyebodyBackground</item>
-
         <item name="colorControlActivated">@color/eyebodyMiddle</item>
+
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="EyeBodyActionBar" parent="@style/Widget.AppCompat.ActionBar">

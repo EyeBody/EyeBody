@@ -4,16 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/ImageButton_init1_start_to_init2"
-        android:layout_width="240dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:adjustViewBounds="false"
-        android:cropToPadding="false"
-        android:scaleType="fitXY"
-        android:background="@null"
-        app:srcCompat="@drawable/button_get_started" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:text="눈바디에 오신 것을 환영합니다"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginVertical="20dp"
+            android:src="@drawable/eyebody_introduce"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="50dp"
+            android:textSize="15dp"
+            android:textAlignment="center"
+            android:text="눈바디는 '눈'으로 보는 여러분의 '바디'를 기록하기 위해 만들어졌습니다. 눈바디와 함께 멋진 몸을 만들어 봅시다!"/>
+
+        <Button
+            android:id="@+id/ImageButton_init1_start_to_init2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:background="@drawable/gradient_eyebody_rounded_rectangle"
+            android:text="Start"/>
+    </LinearLayout>
+
+
 </FrameLayout>
 
 

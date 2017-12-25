@@ -41,10 +41,7 @@ class InitActivity : AppCompatActivity() {
                 getString(R.string.sharedPreference_targetDate), getString(R.string.sharedPreference_default_targetDate))
 
 
-        if (sharedPref_hashedPW != getString(R.string.sharedPreference_default_hashedPW) &&
-                sharedPref_targetDate != getString(R.string.sharedPreference_default_targetDate) &&
-                sharedPref_targetWeight != resources.getInteger(R.integer.sharedPreference_default_targetWeight)
-                ) {
+        if (sharedPref_hashedPW != getString(R.string.sharedPreference_default_hashedPW)) {
             Log.d("mydbg_init", "초기설정(비밀번호-init2, 목표-init3)이 완료되어있으므로 MainActivity로 넘어갑니다.")
 
             val goMain = Intent(this, MainActivity::class.java)
@@ -54,15 +51,5 @@ class InitActivity : AppCompatActivity() {
             Log.d("mydbg_init", "현재 설정값은\nhashedPW = $sharedPref_hashedPW\ntargetWeight = $sharedPref_targetWeight\ntargetDate = $sharedPref_targetDate\n")
         }
 
-    }
-
-    /** view가 만들어진 후 호출되어야 함.
-     */
-    fun setButtonVisibility(leftVisibility : Int, rightVisibility : Int){
-        val leftButton = findViewById<ImageButton>(R.id.button_init_prevButton)
-        val rightButton = findViewById<ImageButton>(R.id.button_init_nextButton)
-
-        leftButton.visibility = leftVisibility
-        rightButton.visibility = rightVisibility
     }
 }

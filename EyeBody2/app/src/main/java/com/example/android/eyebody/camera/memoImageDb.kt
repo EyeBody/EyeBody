@@ -38,7 +38,7 @@ class memoImageDb(var context: Context, var name:String, private var factory: SQ
         }
         var frontImage=cursor.getString(0)
         var sideImage=cursor.getString(1)
-        var memo=cursor.getInt(2).toString()
+        var memo=cursor.getString(2)
         cursor.getInt(2)
         result.add(frontImage)//frontImage
         result.add(sideImage)//sideImage
@@ -55,5 +55,25 @@ class memoImageDb(var context: Context, var name:String, private var factory: SQ
             count++
         }
         return count
+    }
+    fun getMemo(imageName:String):String{
+        val db: SQLiteDatabase = readableDatabase
+        var memo=""
+        var cursor: Cursor = db . rawQuery ("SELECT * FROM MEMOIMAGE", null)
+        while(cursor.getString(0)==imageName || cursor.getString(1)==imageName){
+            cursor.moveToNext()
+        }
+        memo=cursor.getString(2)
+        return memo
+    }
+    fun getDate(imageName:String):String{
+        val db: SQLiteDatabase = readableDatabase
+        var date=""
+        var cursor: Cursor = db . rawQuery ("SELECT * FROM MEMOIMAGE", null)
+        while(cursor.getString(0)==imageName || cursor.getString(1)==imageName){
+            cursor.moveToNext()
+        }
+        date=cursor.getString(3)
+        return date
     }
 }

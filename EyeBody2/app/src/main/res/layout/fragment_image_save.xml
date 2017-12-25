@@ -13,47 +13,51 @@
         android:gravity="center" >
 
         <ImageView
-            android:id="@+id/makeGifButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_insert_emoticon_white_48dp" />
-
-        <ImageView
             android:id="@+id/horizentalMakeCollageButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_insert_emoticon_white_48dp" />
+            android:src="@drawable/ic_collage_nby1" />
 
         <ImageView
             android:id="@+id/verticalMakeCollageButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_insert_emoticon_white_48dp" />
+            android:src="@drawable/ic_collage_1byn" />
 
         <ImageView
             android:id="@+id/twoMakeCollageButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_insert_emoticon_white_48dp" />
+            android:src="@drawable/ic_collage_2byn" />
 
         <ImageView
             android:id="@+id/threeMakeCollageButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_insert_emoticon_white_48dp" />
+            android:src="@drawable/ic_collage_3byn" />
+
+        <ImageView
+            android:id="@+id/makeGifButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_gif_white_48dp" />
     </LinearLayout>
 
-    <ImageView
+    <pl.droidsonroids.gif.GifImageView
         android:id="@+id/sampleImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp"
-        android:scaleType="fitCenter"
-        android:src="@mipmap/ic_launcher" />
+        android:scaleType="fitCenter" />
 
 </LinearLayout>
