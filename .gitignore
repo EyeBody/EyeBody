@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-
-# copied at https://github.com/googledrive/android-demos/blob/master/.gitignore
+﻿# copied at https://github.com/googledrive/android-demos/blob/master/.gitignore
 # and add, edit some files.
 
 # kotlinpermission build excludes
@@ -22,7 +20,7 @@ EyeBody2/gradle.properties
 EyeBody2/.DS_Store
 EyeBody2/.idea/misc.xml
 EyeBody2/kotlinpermissions/build/
-=======
+
 ﻿# Built application files
 /*/build/
 

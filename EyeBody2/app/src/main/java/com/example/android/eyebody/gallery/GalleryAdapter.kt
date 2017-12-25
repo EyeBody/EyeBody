@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.activity_gallery.*
-import kotlinx.android.synthetic.main.list_gallery.view.*
+import kotlinx.android.synthetic.main.list_gallery_management.view.*
 
 
 /**
@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.list_gallery.view.*
 class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
-        var v = LayoutInflater.from(c).inflate(R.layout.list_gallery, parent, false)
+        var v = LayoutInflater.from(c).inflate(R.layout.list_gallery_management, parent, false)
         return Item(v)
     }
 
@@ -35,7 +35,7 @@ class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerVie
             var measuredHeight = itemView.imageView.getMeasuredHeight();
 
             itemView.imageView.setImageBitmap(photo.getBitmap(measuredWidth, measuredHeight))
-            itemView.date.text = photo.getMemo()
+            itemView.date.text = photo.getDate()
 
             itemView.setOnClickListener{
                 var imgView = (itemView.context as GalleryActivity).selectedImage_gallery

@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.android.eyebody.R
-import kotlinx.android.synthetic.main.list_gallery.view.*
+import kotlinx.android.synthetic.main.list_gallery_management.view.*
 
-class CollageAdapter (var context: Context, var photoList: ArrayList<Photo>, var selectedPhotoList: ArrayList<Int>, var fragment: Fragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ImageSelectAdapter(var context: Context, var photoList: ArrayList<Photo>, var selectedIndexList: ArrayList<Int>, var fragment: Fragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
-        var v = LayoutInflater.from(context).inflate(R.layout.list_collage, parent, false)
+        var v = LayoutInflater.from(context).inflate(R.layout.list_image_select, parent, false)
         return Item(v)
     }
 
@@ -21,22 +21,30 @@ class CollageAdapter (var context: Context, var photoList: ArrayList<Photo>, var
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        (holder as Item).bindData(photoList[position], position, selectedPhotoList, fragment as ImageSelectFragment)
+        (holder as Item).bindData(photoList[position], position, selectedIndexList, fragment as ImageSelectFragment)
     }
 
     class Item(itemView: View) : RecyclerView.ViewHolder(itemView) {
         //ImageSelectFragment에서 데이터 바인딩
-        fun bindData(photo: Photo, pos: Int, selectedPhotoList: ArrayList<Int>, fragment: ImageSelectFragment) {
+        fun bindData(photo: Photo, pos: Int, selectedIndexList: ArrayList<Int>, fragment: ImageSelectFragment) {
             itemView.imageView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
             var measuredWidth = itemView.imageView.measuredWidth
             var measuredHeight = itemView.imageView.measuredHeight
 
             itemView.imageView.setImageBitmap(photo.getBitmap(measuredWidth, measuredHeight))
             itemView.date.text = photo.getDate()
-            fragment.setSelected(itemView, pos, selectedPhotoList.contains(pos))
+            fragment.setSelected(itemView, pos, selectedIndexList.contains(pos))
 
             itemView.setOnClickListener{
-                fragment.setSelected(itemView, pos, !selectedPhotoList.contains(pos))   //없으면(false) 추가해줌(true)
+                var cnt = selectedIndexList.size + 1
+                var isSelected = selectedIndexList.contains(pos)
+
+                if(cnt > 5 && !isSelected){ //꽉 찼는데 더 추가하려고 할 때
+                    fragment.makeToast("5개 까지만 가능")
+                } else{
+                    fragment.setSelected(itemView, pos, !isSelected)   //없으면(false) 추가해줌(true)
+
+                }
             }
         }
     }

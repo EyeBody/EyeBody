@@ -117,7 +117,7 @@ class ConfirmActivity : AppCompatActivity() {
         }
     }
     private fun putValuesInDb(time:String, frontImage:String, sideImage:String,memo:String){
-            memoImageDB!!.insert(time,frontImage,sideImage,memo)
+        memoImageDB!!.insert(time,frontImage,sideImage,memo)
     }
 
     override fun onBackPressed() {
@@ -125,4 +125,3 @@ class ConfirmActivity : AppCompatActivity() {
         goCameraActivity()
     }
 }
-

@@ -9,9 +9,9 @@
         android:id="@+id/constraintLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/com_kakao_cancel_button_background"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
+        android:background="@drawable/gradient_transparent_balck"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -20,25 +20,25 @@
 
         <ImageButton
             android:id="@+id/management_button_main_management"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/icons8timesheet"
             android:contentDescription="메인관리"
             android:maxHeight="100dp"
             android:maxWidth="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/management_button_exercise_management"
+            app:layout_constraintEnd_toStartOf="@+id/management_button_gallery_management"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="HardcodedText" />
 
         <ImageButton
-            android:id="@+id/management_button_exercise_management"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:background="@drawable/icons8dumbbell"
-            android:contentDescription="운동관리"
+            android:id="@+id/management_button_gallery_management"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/icons8gallery"
+            android:contentDescription="갤러리"
             android:maxHeight="100dp"
             android:maxWidth="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -49,22 +49,22 @@
 
         <ImageButton
             android:id="@+id/management_button_food_management"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/icons8hamburger"
             android:contentDescription="식단관리"
             android:maxHeight="100dp"
             android:maxWidth="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/management_button_config_management"
-            app:layout_constraintStart_toEndOf="@+id/management_button_exercise_management"
+            app:layout_constraintStart_toEndOf="@+id/management_button_gallery_management"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="HardcodedText" />
 
         <ImageButton
             android:id="@+id/management_button_config_management"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/icons8tasktools"
             android:contentDescription="설정관리"
             android:maxHeight="100dp"
@@ -105,11 +105,10 @@
             android:id="@+id/management_viewpager"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/com_kakao_brown"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" >
 
 
         </android.support.v4.view.ViewPager>
