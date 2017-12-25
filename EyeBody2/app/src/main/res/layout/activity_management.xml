@@ -9,9 +9,9 @@
         android:id="@+id/constraintLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/transparentBlack30"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
+        android:background="@drawable/gradient_transparent_balck"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -105,11 +105,10 @@
             android:id="@+id/management_viewpager"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/com_kakao_brown"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" >
 
 
         </android.support.v4.view.ViewPager>

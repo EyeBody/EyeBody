@@ -58,6 +58,9 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         //supportActionBar?.title = "Main"
         //supportActionBar?.subtitle = "메인관리창"
         //supportActionBar?.setBackgroundDrawable(getDrawable(R.drawable.samplebackground))
+
+        /******************************************************************************************
+        //예지의 코멘트: 커스텀 액션바 부분을 주석처리 했어요.
         val actionbar = supportActionBar
         actionbar?.setDisplayShowCustomEnabled(true)
         actionbar?.setDisplayShowTitleEnabled(false)
@@ -81,6 +84,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
             val mIntent = Intent(this, GalleryActivity::class.java)
             startActivity(mIntent)
         }
+         ******************************************************************************************/
 
         window.statusBarColor = 0x7f100030 //0xAARRGGBB ~ format(7f ff ff ff) ~ (127, 255, 255, 255) ~ alpha 는 0이 투명 , resources.getColor(R.color.colorAccent)
 

@@ -3,7 +3,6 @@ package com.example.android.eyebody.gallery
 import android.os.Bundle
 import android.app.Fragment
 import android.graphics.Color
-import android.opengl.Visibility
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.Toast
@@ -65,7 +64,7 @@ class ImageSelectFragment : Fragment() {
     fun setSelected(itemView: View, pos: Int, isSelected: Boolean){
         if(isSelected){
             itemView.setBackgroundColor(Color.WHITE)
-            itemView.date.setTextColor(R.color.gradientPurple)
+            itemView.date.setTextColor(R.color.eyebodyPurple)
 
             var idx = collage.selectedIndexList.indexOf(pos)
             if(idx < 0){

@@ -1,5 +1,6 @@
 ﻿<resources>
     <string name="app_name">EyeBody</string>
+    <string name="eyebody">눈바디</string>
 
     <string name="category_camera">카메라</string>
     <string name="category_gallery">갤러리</string>
@@ -23,8 +24,6 @@
     <string name="sharedPreference_Security_Use_Fingerprint">Security_Use_Fingerprint</string>
     <string name="sharedPreference_GoogleLogin_Status">GoogleLogin_Status</string>
 
-    <string name="collage">콜라주</string>
-    <string name="share">공유하기</string>
     <string name="googleDrive_manualSave">Google 수동 저장</string>
     <string name="googleDrive_manualLoad">Google 수동 불러오기</string>
     <string name="googleDrive_do_signIn">Google 로그인</string>
@@ -34,12 +33,13 @@
     <string name="button_cancel">취소</string>
     <string name="button_submit">확인</string>
     <string name="email_auth_key">email_auth_key</string>
+    <string name="category_init">눈바디 시작하기</string>
 
+    <!-- gallery -->
+    <string name="collage">콜라주</string>
+    <string name="share">공유하기</string>
     <string name="edit_image">이미지 편집하기</string>
     <string name="crop_confirm">자르기 확인</string>
     <string name="fail_to_crop">자르기에 실패하였습니다</string>
     <string name="save">저장</string>
-
-    <string name="category_init">눈바디 시작하기</string>
-
 </resources>

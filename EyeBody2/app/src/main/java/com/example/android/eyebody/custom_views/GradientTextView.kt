@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.LinearGradient
 import android.graphics.Shader
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.widget.TextView
 import com.example.android.eyebody.R
@@ -14,8 +13,8 @@ import com.example.android.eyebody.R
  */
 class GradientTextView : TextView {
     //TODO 작업 중인 커스텀 뷰, 그래디언트 적용이 안된다아악
-    private var startColor = R.color.gradientBlue
-    private var endColor = R.color.gradientPurple
+    private var startColor = R.color.eyebodyBlue
+    private var endColor = R.color.eyebodyPurple
 
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs) { init(attrs) }
@@ -36,8 +35,8 @@ class GradientTextView : TextView {
 
     fun init(attrs: AttributeSet) {
         var ta: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.GradientTextView)
-        startColor = ta.getColor(R.styleable.GradientTextView_start_color, R.color.gradientBlue)
-        endColor = ta.getColor(R.styleable.GradientTextView_start_color, R.color.gradientPurple)
+        startColor = ta.getColor(R.styleable.GradientTextView_start_color, R.color.eyebodyBlue)
+        endColor = ta.getColor(R.styleable.GradientTextView_start_color, R.color.eyebodyPurple)
 
         ta.recycle()
     }

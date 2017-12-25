@@ -4,19 +4,18 @@
     android:id="@+id/const_main_management_parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginBottom="16dp"
-    android:background="#470000">
+    android:layout_margin="20dp" >
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/holo_orange_light"
+        android:layout_margin="8dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="5dp"
+        android:textAlignment="center"
         android:text="17.11.12~17.11.15"
+        android:background="@drawable/gradient_eyebody_rounded_rectangle"
         app:layout_constraintBottom_toTopOf="@+id/constraint_content_list_food_management"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:background="@color/com_kakao_cancel_button_background"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
