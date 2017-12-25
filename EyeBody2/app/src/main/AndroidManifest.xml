@@ -74,7 +74,6 @@
         <activity
             android:name=".gallery.CollageActivity"
             android:label="@string/collage" />
-        <activity android:name=".camera.StickerActivity" />
         <activity
             android:name=".SettingActivity"
             android:label="@string/category_setting"

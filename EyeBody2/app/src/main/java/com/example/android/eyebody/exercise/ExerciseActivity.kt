@@ -196,8 +196,6 @@ package com.example.android.eyebody
 import android.app.Activity
 import android.os.Bundle
 import android.os.PersistableBundle
-import com.example.android.eyebody.management.food.DbHelper
-import kotlinx.android.synthetic.main.activity_exercise.*
 
 /*
 도장 찍는 캘린더(운동기록)
@@ -210,12 +208,7 @@ class ExerciseActivity: Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
-        val dbHelper = DbHelper(baseContext, "bill.db", null, 1)
         setContentView(R.layout.activity_exercise)
-        setText(dbHelper)
-    }
-    private fun setText(dbHelper: DbHelper){
-        result.text = dbHelper.getResult()
     }
 }
 

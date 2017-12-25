@@ -27,18 +27,18 @@
             android:maxHeight="100dp"
             android:maxWidth="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/management_button_exercise_management"
+            app:layout_constraintEnd_toStartOf="@+id/management_button_gallery_management"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="HardcodedText" />
 
         <ImageButton
-            android:id="@+id/management_button_exercise_management"
+            android:id="@+id/management_button_gallery_management"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/icons8dumbbell"
-            android:contentDescription="운동관리"
+            android:background="@drawable/icons8gallery"
+            android:contentDescription="갤러리"
             android:maxHeight="100dp"
             android:maxWidth="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -57,7 +57,7 @@
             android:maxWidth="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/management_button_config_management"
-            app:layout_constraintStart_toEndOf="@+id/management_button_exercise_management"
+            app:layout_constraintStart_toEndOf="@+id/management_button_gallery_management"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="HardcodedText" />
 

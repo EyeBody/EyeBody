@@ -1,20 +1,15 @@
 package com.example.android.eyebody.management
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import com.example.android.eyebody.R
-import com.example.android.eyebody.camera.CameraActivity
-import com.example.android.eyebody.gallery.GalleryActivity
 import com.example.android.eyebody.management.config.ConfigManagementFragment
 import com.example.android.eyebody.management.gallery.GalleryManagementFragment
 import com.example.android.eyebody.management.food.FoodManagementFragment
@@ -29,12 +24,12 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
     private val TAG = "mydbg_manage"
 
     private val buttonToMain by lazy { management_button_main_management }
-    private val buttonToExercise by lazy { management_button_exercise_management }
+    private val buttonToGallery by lazy { management_button_gallery_management }
     private val buttonToFood by lazy { management_button_food_management }
     private val buttonToConfig by lazy { management_button_config_management }
 
     private val BUTTON_TAG_MAIN = 0
-    private val BUTTON_TAG_EXERCISE = 1
+    private val BUTTON_TAG_GALLERY = 1
     private val BUTTON_TAG_FOOD = 2
     private val BUTTON_TAG_CONFIG = 3
 
@@ -104,7 +99,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         mappingButtonSelected(BUTTON_TAG_MAIN)
 
         buttonToMain.tag = BUTTON_TAG_MAIN
-        buttonToExercise.tag = BUTTON_TAG_EXERCISE
+        buttonToGallery.tag = BUTTON_TAG_GALLERY
         buttonToFood.tag = BUTTON_TAG_FOOD
         buttonToConfig.tag = BUTTON_TAG_CONFIG
 
@@ -132,7 +127,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
             mappingButtonSelected(view.tag as Int)
         }
         buttonToMain.setOnClickListener(buttonToPageChangeListener)
-        buttonToExercise.setOnClickListener(buttonToPageChangeListener)
+        buttonToGallery.setOnClickListener(buttonToPageChangeListener)
         buttonToFood.setOnClickListener(buttonToPageChangeListener)
         buttonToConfig.setOnClickListener(buttonToPageChangeListener)
 
@@ -144,7 +139,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
                     override fun getItem(buttonTag: Int) = // fragmentAdapter's position = buttonTag
                             when (buttonTag) {
                                 BUTTON_TAG_MAIN -> MainManagementFragment.newInstance(BUTTON_TAG_MAIN)
-                                BUTTON_TAG_EXERCISE -> GalleryManagementFragment.newInstance(BUTTON_TAG_EXERCISE)
+                                BUTTON_TAG_GALLERY -> GalleryManagementFragment.newInstance(BUTTON_TAG_GALLERY)
                                 BUTTON_TAG_FOOD -> FoodManagementFragment.newInstance(BUTTON_TAG_FOOD)
                                 BUTTON_TAG_CONFIG -> ConfigManagementFragment.newInstance(BUTTON_TAG_CONFIG)
                                 else -> {
@@ -164,7 +159,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         for (i in 0..4)
             when (i) {
                 BUTTON_TAG_MAIN -> buttonToMain.isSelected = (position == i)
-                BUTTON_TAG_EXERCISE -> buttonToExercise.isSelected = (position == i)
+                BUTTON_TAG_GALLERY -> buttonToGallery.isSelected = (position == i)
                 BUTTON_TAG_FOOD -> buttonToFood.isSelected = (position == i)
                 BUTTON_TAG_CONFIG -> buttonToConfig.isSelected = (position == i)
             }

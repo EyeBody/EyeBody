@@ -10,28 +10,36 @@ import com.example.android.eyebody.MainActivity
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.activity_confirm.*
 import java.io.File
+import android.widget.EditText
+
 
 class ConfirmActivity : AppCompatActivity() {
-
     var frontFileName: String? = null
     var sideFileName: String? = null
+    var frontImageUri:String=""
+    var sideImageUri:String=""
+    var value:String=""
+    var memoImageDB:memoImageDb?=null
+    var time:String=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_confirm)
+        memoImageDB =memoImageDb(baseContext,"memoImage.db",null,1)
         showImage()
         saveButtonClicked()
         deleteButtonClicked()
-        editButtonClicked()
+        memoButtonClicked()
     }
 
     //찍은 이미지를 화면에 뿌려주는 역할
     private fun showImage() {
         var intent = intent
-        var frontImageUri = intent.getStringExtra("frontUri")//front 이미지 uri 받아옴
-        var sideImageUri = intent.getStringExtra("sideUri")//side 이미지 uri
+        frontImageUri = intent.getStringExtra("frontUri")//front 이미지 uri 받아옴
+        sideImageUri = intent.getStringExtra("sideUri")//side 이미지 uri
         frontFileName = intent.extras.getString("frontName")//front 이미지 파일명
         sideFileName = intent.extras.getString("sideName")//side 이미지 파일명
+        time=intent.extras.getString("time")
         var sideImage = Uri.parse(sideImageUri)
         var frontImage = Uri.parse(frontImageUri)
         image_front.setImageURI(frontImage)
@@ -53,6 +61,7 @@ class ConfirmActivity : AppCompatActivity() {
     private fun saveButtonClicked() {
         button_save.setOnClickListener {
             Toast.makeText(applicationContext, "저장되었습니다", Toast.LENGTH_SHORT).show()
+            putValuesInDb(time,frontImageUri,sideImageUri,value)
             goHomeActivity()
         }
     }
@@ -86,12 +95,34 @@ class ConfirmActivity : AppCompatActivity() {
             alertDilog.show()
         }
     }
+    private fun memoButtonClicked(){
+        button_memo.setOnClickListener{
+            val ad = AlertDialog.Builder(this@ConfirmActivity)
 
-    private fun editButtonClicked(){
-        button_sticker.setOnClickListener {
-            var stickerIntent=Intent(this,StickerActivity::class.java)
-            startActivity(stickerIntent)
+            ad.setTitle("메모")       // 제목 설정
+            ad.setMessage("메모를 적어주세요")   // 내용 설정
+// EditText 삽입하기
+            val et = EditText(this@ConfirmActivity)
+            ad.setView(et)
+// 확인 버튼 설정
+            ad.setPositiveButton("저장") { dialog, which ->
+                value = et!!.text.toString()
+                dialog.dismiss()     //닫기
+            }
+            ad.setNegativeButton("닫기") { dialog, which ->
+                dialog.dismiss()     //닫기
+            }
+// 창 띄우기
+            ad.show()
         }
+    }
+    private fun putValuesInDb(time:String, frontImage:String, sideImage:String,memo:String){
+        memoImageDB!!.insert(time,frontImage,sideImage,memo)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        goCameraActivity()
     }
 }
 
