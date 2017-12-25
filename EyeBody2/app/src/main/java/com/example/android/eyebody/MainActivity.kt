@@ -19,11 +19,6 @@ import com.example.android.eyebody.gallery.GalleryActivity
 import io.vrinda.kotlinpermissions.PermissionCallBack
 import io.vrinda.kotlinpermissions.PermissionsActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.support.v4.app.ActivityCompat.requestPermissions
-import android.widget.Toast.LENGTH_LONG
-import com.example.android.eyebody.exercise.SMSReceiver
 
 class MainActivity : PermissionsActivity() {
 
@@ -200,9 +195,6 @@ class MainActivity : PermissionsActivity() {
                 // TODO ----- 알람 세팅에 대하여 새로운 액티비티 구성
                 toast.setText("TODO : Alarm Setting")
                 toast.show()
-            }
-            R.id.Actionbar_kakaoTalk->{
-                //TODO ------ 카카오톡 공유기능으로 구성
             }
         }
         return super.onOptionsItemSelected(item)

@@ -8,19 +8,14 @@ import android.os.Bundle
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.Window
-import android.widget.ImageView
 import android.widget.Toast
 import com.example.android.eyebody.R
 import com.example.android.eyebody.camera.CameraActivity
-import com.example.android.eyebody.gallery.GalleryActivity
 import com.example.android.eyebody.management.config.ConfigManagementFragment
-import com.example.android.eyebody.management.exercise.ExerciseManagementFragment
+import com.example.android.eyebody.management.gallery.GalleryManagementFragment
 import com.example.android.eyebody.management.food.FoodManagementFragment
 import com.example.android.eyebody.management.main.MainManagementFragment
 import kotlinx.android.synthetic.main.activity_management.*
@@ -39,14 +34,15 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
     private val TAG = "mydbg_manage"
 
     private val buttonToMain by lazy { management_button_main_management }
-    private val buttonToExercise by lazy { management_button_exercise_management }
+    private val buttonToGallery by lazy { management_button_gallery_management }
     private val buttonToFood by lazy { management_button_food_management }
     private val buttonToConfig by lazy { management_button_config_management }
 
     private val BUTTON_TAG_MAIN = 0
-    private val BUTTON_TAG_EXERCISE = 1
+    private val BUTTON_TAG_GALLERY = 1
     private val BUTTON_TAG_FOOD = 2
     private val BUTTON_TAG_CONFIG = 3
+
 
     val originScaleX by lazy { if (buttonToMain.scaleX == buttonToExercise.scaleX) buttonToMain.scaleX else buttonToConfig.scaleX }
     val originScaleY by lazy { if (buttonToMain.scaleY == buttonToExercise.scaleY) buttonToMain.scaleY else buttonToConfig.scaleY }
@@ -54,6 +50,10 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         getSharedPreferences(getString(R.string.getSharedPreference_configuration_Only_Int), Context.MODE_PRIVATE)
                 .getInt(getString(R.string.sharedPreference_activateActionbar), 0)
     }
+    var mLastPage: Int = 0
+    var isGoingToLeftPage: Boolean = false
+    var isNavigated = true
+    var dragging: Int = 0
 
     override fun onFragmentInteraction(uri: Uri) {
         Toast.makeText(this, "$uri", Toast.LENGTH_LONG).show()
@@ -78,6 +78,9 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         //supportActionBar?.title = "Main"
         //supportActionBar?.subtitle = "메인관리창"
         //supportActionBar?.setBackgroundDrawable(getDrawable(R.drawable.samplebackground))
+
+        /******************************************************************************************
+        //예지의 코멘트: 커스텀 액션바 부분을 주석처리 했어요.
         val actionbar = supportActionBar
         actionbar?.setDisplayShowCustomEnabled(true)
         actionbar?.setDisplayShowTitleEnabled(false)
@@ -101,6 +104,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
             val mIntent = Intent(this, GalleryActivity::class.java)
             startActivity(mIntent)
         }
+         ******************************************************************************************/
 
         window.statusBarColor = 0x7f100030 //0xAARRGGBB ~ format(7f ff ff ff) ~ (127, 255, 255, 255) ~ alpha 는 0이 투명 , resources.getColor(R.color.colorAccent)
 
@@ -120,13 +124,14 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         mappingButtonSelected(BUTTON_TAG_MAIN)
 
         buttonToMain.tag = BUTTON_TAG_MAIN
-        buttonToExercise.tag = BUTTON_TAG_EXERCISE
+        buttonToGallery.tag = BUTTON_TAG_GALLERY
         buttonToFood.tag = BUTTON_TAG_FOOD
         buttonToConfig.tag = BUTTON_TAG_CONFIG
 
 
         viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
+                dragging = state
                 /*
                 state
                  0 -> idle
@@ -137,10 +142,29 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 /* */
+                if (isGoingToLeftPage && dragging == ViewPager.SCROLL_STATE_DRAGGING) {
+                    if (mLastPage == position)
+                        navigateToCamera()
+                } else {
+                    //do nothing
+                }
+            }
+            fun navigateToCamera() {
+                isNavigated = false
+                var intent = Intent(this@ManagementActivity, CameraActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
+                finish()
             }
 
             override fun onPageSelected(position: Int) {
                 mappingButtonSelected(position)
+                if (position == 0) {
+                    isGoingToLeftPage = true
+                } else {
+                    isGoingToLeftPage = false
+                }
+                mLastPage = position
             }
         })
 
@@ -150,7 +174,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
             mappingButtonSelected(view.tag as Int)
         }
         buttonToMain.setOnClickListener(buttonToPageChangeListener)
-        buttonToExercise.setOnClickListener(buttonToPageChangeListener)
+        buttonToGallery.setOnClickListener(buttonToPageChangeListener)
         buttonToFood.setOnClickListener(buttonToPageChangeListener)
         buttonToConfig.setOnClickListener(buttonToPageChangeListener)
 
@@ -162,7 +186,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
                     override fun getItem(buttonTag: Int) = // fragmentAdapter's position = buttonTag
                             when (buttonTag) {
                                 BUTTON_TAG_MAIN -> MainManagementFragment.newInstance(BUTTON_TAG_MAIN)
-                                BUTTON_TAG_EXERCISE -> ExerciseManagementFragment.newInstance(BUTTON_TAG_EXERCISE)
+                                BUTTON_TAG_GALLERY -> GalleryManagementFragment.newInstance(BUTTON_TAG_GALLERY)
                                 BUTTON_TAG_FOOD -> FoodManagementFragment.newInstance(BUTTON_TAG_FOOD)
                                 BUTTON_TAG_CONFIG -> ConfigManagementFragment.newInstance(BUTTON_TAG_CONFIG)
                                 else -> {
@@ -179,7 +203,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
     } // end of onCreate
 
     private fun mappingButtonSelected(position: Int) {
-        val buttonArray = arrayOf(buttonToMain, buttonToExercise, buttonToFood, buttonToConfig)
+        val buttonArray = arrayOf(buttonToMain, buttonToGallery, buttonToFood, buttonToConfig)
         val minX = originScaleX * 0.8f
         val minY = originScaleY * 0.8f
 

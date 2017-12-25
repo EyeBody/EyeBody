@@ -8,12 +8,16 @@
     <color name="transparentBlack40">#40000000</color>
     <color name="transparentBlack7f">#7f000000</color>
 
+    <color name="transparentWhite10">#10ffffff</color>
     <color name="transparentWhite30">#30ffffff</color>
     <color name="transparentWhite40">#40ffffff</color>
 
-    <color name="gradientBlue">#1919a0</color>
-    <color name="gradientPurple">#820082</color>
+    <color name="eyebodyBlue">#1919a0</color>
+    <color name="eyebodyPurple">#820082</color>
+    <color name="eyebodyMiddle">#4e0d91</color>
+    <color name="eyebodyBackground">#0a141e</color>
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="gray22">#222222</color>
 </resources>

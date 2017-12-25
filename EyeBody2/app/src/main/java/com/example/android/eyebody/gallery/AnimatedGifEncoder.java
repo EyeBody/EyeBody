@@ -288,7 +288,7 @@ public class AnimatedGifEncoder {
     }
 
     /**
-     * Returns index of palette color closest to c
+     * Returns index of palette color closest to context
      *
      */
     protected int findClosest(int c) {
@@ -473,7 +473,7 @@ public class AnimatedGifEncoder {
 	 * NeuQuant Neural-Net Quantization Algorithm
 	 * ------------------------------------------
 	 *
-	 * Copyright (c) 1994 Anthony Dekker
+	 * Copyright (context) 1994 Anthony Dekker
 	 *
 	 * NEUQUANT Neural-Net quantization algorithm by Anthony Dekker, 1994. See
 	 * "Kohonen neural networks for optimal colour quantization" in "Network:
@@ -1005,7 +1005,7 @@ class LZWEncoder {
 
     // GIF Image compression - modified 'compress'
     //
-    // Based on: compress.c - File compression ala IEEE Computer, June 1984.
+    // Based on: compress.context - File compression ala IEEE Computer, June 1984.
     //
     // By Authors: Spencer W. Thomas (decvax!harpo!utah-cs!utah-gr!thomas)
     // Jim McKie (decvax!mcvax!jim)

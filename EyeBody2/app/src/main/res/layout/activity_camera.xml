@@ -30,8 +30,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="앞면을 찍어주세요"
-        android:textSize="20dp"
+        android:textSize="25dp"
         android:textStyle="bold"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

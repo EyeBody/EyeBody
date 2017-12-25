@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.android.eyebody.R
-import kotlinx.android.synthetic.main.list_gallery.view.*
+import kotlinx.android.synthetic.main.list_gallery_management.view.*
 
 class ImageSelectAdapter(var context: Context, var photoList: ArrayList<Photo>, var selectedIndexList: ArrayList<Int>, var fragment: Fragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

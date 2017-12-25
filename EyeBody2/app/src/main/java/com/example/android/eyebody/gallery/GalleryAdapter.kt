@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.android.eyebody.R
 import kotlinx.android.synthetic.main.activity_gallery.*
-import kotlinx.android.synthetic.main.list_gallery.view.*
+import kotlinx.android.synthetic.main.list_gallery_management.view.*
 
 
 /**
@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.list_gallery.view.*
 class GalleryAdapter (var c: Context, var lists: ArrayList<Photo>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
-        var v = LayoutInflater.from(c).inflate(R.layout.list_gallery, parent, false)
+        var v = LayoutInflater.from(c).inflate(R.layout.list_gallery_management, parent, false)
         return Item(v)
     }
 
