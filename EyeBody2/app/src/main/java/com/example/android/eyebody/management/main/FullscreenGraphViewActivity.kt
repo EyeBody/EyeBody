@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_fullscreen_graphview.*
 import org.apache.commons.math3.analysis.MultivariateFunction
 import org.apache.commons.math3.analysis.function.Abs
 import org.apache.commons.math3.analysis.function.Exp
+import org.apache.commons.math3.analysis.function.Pow
 import org.apache.commons.math3.optim.InitialGuess
 import org.apache.commons.math3.optim.MaxEval
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType
@@ -107,13 +108,15 @@ class FullscreenGraphViewActivity : AppCompatActivity() {
              */
 
             calendar = Calendar.getInstance()
-            val wholeProgress = stringToCalendar(item.desireDate)!!.time.time - stringToCalendar(item.startDate)!!.time.time
-            val nowProgress = calendar.time.time - stringToCalendar(item.startDate)!!.time.time
+            var wholeProgress = stringToCalendar(item.desireDate)!!.time.time - stringToCalendar(item.startDate)!!.time.time
+            var nowProgress = calendar.time.time - stringToCalendar(item.startDate)!!.time.time
+            if (nowProgress == 0L) nowProgress = 1
+            if (wholeProgress == 0L) wholeProgress = 1
 
             val realXY = arrayOf(Pair(1, 80.0), Pair(2, 79.0), Pair(3, 78.7), Pair(4, 79.0), Pair(5, 76.2))
             val guessA = 0.01
             val guessB = -0.01 * item.startWeight
-            val guessC = (maxWeight - minWeight) / (wholeProgress / nowProgress) * 2
+            val guessC = (maxWeight - minWeight) / (wholeProgress/nowProgress) * 2
             val guessD = item.startWeight - guessC / 2
 
             class MyErrorFunction : MultivariateFunction {
@@ -135,13 +138,13 @@ class FullscreenGraphViewActivity : AppCompatActivity() {
                     for (xy in realXY) {
                         val x = xy.first.toDouble()
                         val y = xy.second
-                        sum += /*Pow().value((y - (c / (1 + Exp().value(a * x + b)))/*+d*/), 2.0)*/ Abs().value((y - (c / (1 + Exp().value(a * x + b))) + d))
+                        sum += Pow().value((y - (c / (1 + Exp().value(a * x + b)))), 2.0)
                     }
                     return sum
                 }
             }
 
-            val optimum = SimplexOptimizer(1e-3, 1e-7)
+            val optimum = SimplexOptimizer(1e-1, 1e-3)
                     .optimize(
                             MaxEval(100000000),
                             ObjectiveFunction(MyErrorFunction()),
@@ -167,7 +170,7 @@ class FullscreenGraphViewActivity : AppCompatActivity() {
                 count++
             }
             val weightEstimateSeries = LineGraphSeries<DataPoint>(estimateWeightArray.toTypedArray())
-            weightEstimateSeries.color = Color.BLACK
+            weightEstimateSeries.color = Color.YELLOW
             contentGraph.addSeries(weightEstimateSeries)
 
             // --------------------------- estimate ===================================================================================================================

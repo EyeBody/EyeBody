@@ -24,6 +24,7 @@ import android.app.ActivityManager.RunningTaskInfo
 import android.content.Context.ACTIVITY_SERVICE
 import android.app.ActivityManager
 import android.content.Context
+import android.view.Window
 
 
 /**
@@ -44,8 +45,8 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
     private val BUTTON_TAG_CONFIG = 3
 
 
-    val originScaleX by lazy { if (buttonToMain.scaleX == buttonToExercise.scaleX) buttonToMain.scaleX else buttonToConfig.scaleX }
-    val originScaleY by lazy { if (buttonToMain.scaleY == buttonToExercise.scaleY) buttonToMain.scaleY else buttonToConfig.scaleY }
+    val originScaleX by lazy { if (buttonToMain.scaleX == buttonToGallery.scaleX) buttonToMain.scaleX else buttonToConfig.scaleX }
+    val originScaleY by lazy { if (buttonToMain.scaleY == buttonToGallery.scaleY) buttonToMain.scaleY else buttonToConfig.scaleY }
     val activateActionbar by lazy {
         getSharedPreferences(getString(R.string.getSharedPreference_configuration_Only_Int), Context.MODE_PRIVATE)
                 .getInt(getString(R.string.sharedPreference_activateActionbar), 0)

@@ -38,6 +38,7 @@ import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer
 import java.sql.Date
+import java.util.function.LongToDoubleFunction
 
 
 /**
@@ -180,7 +181,6 @@ class MainManagementAdapter(context: Context, contents: ArrayList<MainManagement
             nowDaySeries.spacing = 1000*/
 
 
-
             // --------------------------- estimate ===================================================================================================================
             /*
              (비선형 회귀)
@@ -196,17 +196,19 @@ class MainManagementAdapter(context: Context, contents: ArrayList<MainManagement
              */
 
             calendar = Calendar.getInstance()
-            val wholeProgress = stringToCalendar(item.desireDate)!!.time.time - stringToCalendar(item.startDate)!!.time.time
-            val nowProgress = calendar.time.time - stringToCalendar(item.startDate)!!.time.time
+            var wholeProgress = stringToCalendar(item.desireDate)!!.time.time - stringToCalendar(item.startDate)!!.time.time
+            var nowProgress = calendar.time.time - stringToCalendar(item.startDate)!!.time.time
+            if (nowProgress == 0L) nowProgress = 1
+            if (wholeProgress == 0L) wholeProgress = 1
 
-            val realXY = arrayOf(Pair(1,80.0), Pair(2,79.0), Pair(3, 78.7), Pair(4, 79.0), Pair(5, 76.2))
+            val realXY = arrayOf(Pair(1, 80.0), Pair(2, 79.0), Pair(3, 78.7), Pair(4, 79.0), Pair(5, 76.2))
             val guessA = 0.01
             val guessB = -0.01 * item.startWeight
-            val guessC = (maxWeight-minWeight) / (wholeProgress/nowProgress) * 2
+            val guessC = (maxWeight - minWeight) / (wholeProgress/nowProgress) * 2
             val guessD = item.startWeight - guessC / 2
 
-            class MyErrorFunction : MultivariateFunction{
-                fun realFunction(x: Int, point: DoubleArray): Double{
+            class MyErrorFunction : MultivariateFunction {
+                fun realFunction(x: Int, point: DoubleArray): Double {
                     val a = point[0]
                     val b = point[1]
                     val c = point[2]
@@ -221,16 +223,16 @@ class MainManagementAdapter(context: Context, contents: ArrayList<MainManagement
                     val c = point[2]
                     val d = point[3]
                     var sum = 0.0
-                    for(xy in realXY){
+                    for (xy in realXY) {
                         val x = xy.first.toDouble()
                         val y = xy.second
-                        sum += /*Pow().value((y - (c / (1 + Exp().value(a * x + b)))/*+d*/), 2.0)*/ Abs().value((y - (c / (1 + Exp().value(a * x + b)))+d))
+                        sum += Pow().value((y - (c / (1 + Exp().value(a * x + b)))), 2.0)
                     }
                     return sum
                 }
             }
 
-            val optimum = SimplexOptimizer(1e-3, 1e-7)
+            val optimum = SimplexOptimizer(1e-1, 1e-3)
                     .optimize(
                             MaxEval(100000000),
                             ObjectiveFunction(MyErrorFunction()),
@@ -241,22 +243,22 @@ class MainManagementAdapter(context: Context, contents: ArrayList<MainManagement
                             NelderMeadSimplex(4)
                     )
             val ref = optimum.point
-            /*for(i in 1 until 10){
+            for (i in 1 until 10) {
                 Log.d(TAG, "$i : ${MyErrorFunction().realFunction(i, ref)} when ${ref[0]} ${ref[1]} ${ref[2]} ${ref[3]}")
-            }*/
+            }
 
 
             val estimateWeightArray = arrayListOf<DataPoint>()
             var count = 1
             calendar = stringToCalendar(item.startDate)
             val desireCal = stringToCalendar(item.desireDate)!!
-            while(calendar.timeInMillis <= desireCal.timeInMillis){
+            while (calendar.timeInMillis <= desireCal.timeInMillis) {
                 estimateWeightArray.add(DataPoint(calendar.time, MyErrorFunction().realFunction(count, ref)))
                 calendar.add(Calendar.DATE, 1)
                 count++
             }
             val weightEstimateSeries = LineGraphSeries<DataPoint>(estimateWeightArray.toTypedArray())
-            weightEstimateSeries.color = Color.BLACK
+            weightEstimateSeries.color = Color.YELLOW
             contentGraph.addSeries(weightEstimateSeries)
 
             // --------------------------- estimate ===================================================================================================================
