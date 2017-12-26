@@ -214,6 +214,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     {
         var homeIntent = Intent(this, ManagementActivity::class.java)
         startActivity(homeIntent)
+        finish()
     }
     override fun onDestroy() {
 

@@ -27,10 +27,11 @@ android {
 dependencies {
     compile 'com.jjoe64:graphview:4.2.1'
     compile 'com.google.code.gson:gson:2.8.2'
-    compile 'com.google.android.gms:play-services-drive:11.6.0'
+    compile 'com.google.android.gms:play-services-drive:11.8.0'
     compile 'io.vrinda.kotlinpermissions:kotlinpermissions:1.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
     compile 'com.naver.android.helloyako:imagecropview:1.2.0'   //crop image view
+    compile 'org.apache.commons:commons-math3:3.6.1'
 
     compile group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
     compile group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION

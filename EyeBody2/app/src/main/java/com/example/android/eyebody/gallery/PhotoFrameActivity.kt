@@ -7,12 +7,12 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import com.example.android.eyebody.R
+import com.example.android.eyebody.camera.memoImageDb
 import kotlinx.android.synthetic.main.activity_photo_frame.*
 import java.lang.Math.abs
 
 class PhotoFrameActivity : AppCompatActivity() {
-
-
+    lateinit var memoImageDB: memoImageDb
     var photoList: ArrayList<Photo> = ArrayList<Photo>()
     var pos: Int = 0
 
@@ -34,7 +34,12 @@ class PhotoFrameActivity : AppCompatActivity() {
         photoFrameRecyclerView.adapter = PhotoFrameAdapter(this, photoList)
         photoFrameRecyclerView.scrollToPosition(pos)
 
+        //메모
+        memoImageDB = memoImageDb(baseContext,"memoImage.db",null,1)
+
         memoTextView.setMovementMethod(ScrollingMovementMethod())
+//        memoTextView.text = memoImageDB.getMemo(photoList[pos].fileUrl)
+//        dateTextView.text = memoImageDB.getDate(photoList[pos].fileUrl)
         memoTextView.text = photoList[pos].getMemo()
         dateTextView.text = photoList[pos].getDate("yyyy년 dd월 mm일")
 

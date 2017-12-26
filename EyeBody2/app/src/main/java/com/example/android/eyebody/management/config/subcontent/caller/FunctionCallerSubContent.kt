@@ -1,6 +1,9 @@
 package com.example.android.eyebody.management.config.subcontent.caller
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.os.AsyncTask
+import android.os.Handler
 import android.util.Log
 
 val TAG = "mydbg_ConfMNG_FunCalSC"
@@ -81,12 +84,14 @@ class Sync(val func: () -> Int) : SyncOrAsyncFunction() {
 
 class Async(val func: () -> setAsyncReturn) : SyncOrAsyncFunction() {
     val funcCall = { listener: FunctionCallerReturnListener?, caller: FunctionCallerSubContent ->
-        object : Thread() {
-            override fun run() {
+        val async = @SuppressLint("StaticFieldLeak")
+        object : AsyncTask<Void, Void, Unit>(){
+            override fun doInBackground(vararg p0: Void?) {
                 caller.ret = run { func().ret }
                 listener?.onReturn()
             }
-        }.run()
+        }
+        async.execute()
     }
 }
 

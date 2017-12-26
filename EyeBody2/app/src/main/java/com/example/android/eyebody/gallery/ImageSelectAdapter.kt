@@ -36,15 +36,8 @@ class ImageSelectAdapter(var context: Context, var photoList: ArrayList<Photo>, 
             fragment.setSelected(itemView, pos, selectedIndexList.contains(pos))
 
             itemView.setOnClickListener{
-                var cnt = selectedIndexList.size + 1
-                var isSelected = selectedIndexList.contains(pos)
+                fragment.itemViewClicked(itemView, pos)
 
-                if(cnt > 5 && !isSelected){ //꽉 찼는데 더 추가하려고 할 때
-                    fragment.makeToast("5개 까지만 가능")
-                } else{
-                    fragment.setSelected(itemView, pos, !isSelected)   //없으면(false) 추가해줌(true)
-
-                }
             }
         }
     }

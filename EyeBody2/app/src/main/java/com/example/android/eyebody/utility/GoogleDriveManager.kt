@@ -152,8 +152,11 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
         return multipleFileTransfer(fileTransferDataArray)
     }
 
-    fun getDataForSync(localFiles: Array<String>): Array<FileTransferData>? {
+    fun getDataForSync(localFiles: Array<String>): Array<FileTransferData> {
         // TODO ----- array of filetransferData 를 모두 mutableMap 으로 바꾸는 것이 효율적일 것 같다.
+
+        if(mGoogleApiClient == null)
+            return arrayOf()
 
         val avoidSame = mutableMapOf<String, Int>()
 
@@ -239,6 +242,9 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
      * @return Pair of (success of request to google, Total) : 성공한 요청은 데이터가 원활하지 않을 경우 전송이 중단될 수 있으며 다시 연결될 경우 이어서 전송합니다.
      */
     fun multipleFileTransfer(fileTransferDataArray: Array<FileTransferData>): Pair<Int, Int> {
+
+        if(mGoogleApiClient == null)
+            return Pair(0,0)
 
         var successCount = 0
         var totalCount = 0
@@ -396,7 +402,9 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
                 Log.d(TAG, "read Contents Byte Size : ${imageByte.size}\n" +
                         "and save to [${activity.getExternalFilesDir(null)}/gallery_body/$photoURI]")
 
-                context.openFileOutput(photoURI, Context.MODE_APPEND)
+                val fos = FileOutputStream(File("${activity.getExternalFilesDir(null)}/gallery_body/$photoURI"))
+                fos.write(imageByte)
+                fos.close()
                 for (f in context.fileList()) {
                     Log.d(TAG, f)
                 }
@@ -411,6 +419,7 @@ open class GoogleDriveManager(val context: Context, val activity: Activity) : Go
                 }catch(ioe : IOException){
                     ioe.printStackTrace()
                 }*/
+
                 /*val root = Environment.getExternalStorageState().toString()
                 val myDir = File(root+"/gallery_body/$photoURI")
                 myDir.mkdirs()

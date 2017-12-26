@@ -117,12 +117,12 @@ class NewMainContentActivity : AppCompatActivity() {
 
             // 왜 month 저거 저딴식으로 만들어가지고 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             val startDate = GregorianCalendar(numberpicker_start_year.value, numberpicker_start_month.value-1, numberpicker_start_day.value)
-            val endDate = GregorianCalendar(numberpicker_end_year.value, numberpicker_end_month.value-1, numberpicker_start_day.value)
+            val endDate = GregorianCalendar(numberpicker_end_year.value, numberpicker_end_month.value-1, numberpicker_end_day.value)
 
             if (edittext_goal_name.text.isEmpty()) {
                 Toast.makeText(this, "목표 이름을 설정해주세요.", Toast.LENGTH_SHORT).show()
-            } else if (startDate > endDate) {
-                Toast.makeText(this, "종료 날짜가 시작 날짜보다 이를 수 없습니다.", Toast.LENGTH_SHORT).show()
+            } else if (startDate >= endDate) {
+                Toast.makeText(this, "종료 날짜가 시작 날짜보다 같거나 이를 수 없습니다.", Toast.LENGTH_SHORT).show()
             } else {
                 val sdf = SimpleDateFormat("yyyyMMdd")
                 val startDateFormat = sdf.format(startDate.time)

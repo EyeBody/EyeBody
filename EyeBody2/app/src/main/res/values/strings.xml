@@ -19,6 +19,7 @@
     <string name="sharedPreference_default_targetDate">none</string>
 
     <string name="getSharedPreference_configuration_Only_Int">sharedPref_configuration</string>
+    <string name="sharedPreference_activateActionbar">sharedPreference_activateActionbar</string>
     <string name="sharedPreference_Backup_Only_Wifi">Backup_Only_Wifi</string>
     <string name="sharedPreference_Backup_Auto">Backup_Auto</string>
     <string name="sharedPreference_Security_Use_Fingerprint">Security_Use_Fingerprint</string>
