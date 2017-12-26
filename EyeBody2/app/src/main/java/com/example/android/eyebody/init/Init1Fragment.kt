@@ -34,7 +34,12 @@ class Init1Fragment : Fragment() {
         val startButton = v.findViewById<Button>(R.id.ImageButton_init1_start_to_init2)
 
         startButton.setOnClickListener {
-            requestPermissions(arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), 1)
+            }
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+        }
 
             val init2 = Init2Fragment()
             activity.fragmentManager.beginTransaction()

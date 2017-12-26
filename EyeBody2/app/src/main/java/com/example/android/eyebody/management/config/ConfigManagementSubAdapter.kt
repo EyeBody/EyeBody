@@ -102,8 +102,10 @@ class ConfigManagementSubAdapter(val activity: Activity, contents: ArrayList<CMB
                         } else if (content is FunctionCallerSubContent) {
                             content.ret = prefCurrentStatus
                             content.setOnReturnListener {
-                                savePreference(pref, content.preferenceName!!, content.ret ?: prefCurrentStatus)
-                                notifyDataSetChanged()
+                                if(content.preferenceName!=null) {
+                                    savePreference(pref, content.preferenceName, content.ret ?: prefCurrentStatus)
+                                    notifyDataSetChanged()
+                                }
                             }
                         }
                         content.call(activity, prefCurrentStatus) //activity, dialog, function will call.

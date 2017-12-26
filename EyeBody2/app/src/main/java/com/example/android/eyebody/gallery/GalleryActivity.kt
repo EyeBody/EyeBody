@@ -59,7 +59,7 @@ class GalleryActivity : AppCompatActivity() {
                 }
             }
 
-            assetsToExternalStorage()   //assets에 있는 테스트용 이미지를 외부저장소에 복사
+            //assetsToExternalStorage()   //assets에 있는 테스트용 이미지를 외부저장소에 복사
 
             for (f in file.listFiles()) {
                 //TODO 이미지 파일이 아닌경우 예외처리

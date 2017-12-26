@@ -26,7 +26,7 @@ class Photo: AppCompatActivity, Parcelable {
     constructor(url: String){
         fileUrl = url
 
-        setImageSize()
+        //
     }
 
     //===============Parcelable methods===============
@@ -163,27 +163,14 @@ class Photo: AppCompatActivity, Parcelable {
     }
 
     fun getDate(opt: String = "yyyy.dd.mm"): String{
-        var result = ""
-        var year = ""
-        var month = ""
-        var date = ""
-
-        if(fileName[0] == 'f'){
-            year = fileName.substring(6, 10)
-            month = fileName.substring(10, 12)
-            date = fileName.substring(12, 14)
-        }else if(fileName[0] == 's'){
-            year = fileName.substring(5, 9)
-            month = fileName.substring(9, 11)
-            date = fileName.substring(11, 13)
-        }
+        var date: String = ""
 
         when(opt){
-            "yyyy.dd.mm" -> result = year + "." + month + "." + date
-            "yyyy년 dd월 mm일" -> result = year + "년 " + month + "월 " + date + "일"
+            "yyyy.dd.mm" -> date = "2017.00.00"
+            "yyyy년 dd월 mm일" -> date = "2017년 00월 00일"
         }
 
-        return result
+        return date
     }
 
     fun getMemo(): String{

@@ -19,7 +19,7 @@ import com.example.android.eyebody.management.BasePageAdapter
  * Created by YOON on 2017-11-19
  */
 class FoodManagementAdapter(context: Context, contents: ArrayList<FoodManagementContent>) : BasePageAdapter(context, contents as ArrayList<Any>) {
-
+    val dbHelper = DbHelper(context, "bill.db", null, 1)
     override fun getItem(position: Int):FoodManagementContent = contents[position] as FoodManagementContent
 
     @SuppressLint("SetTextI18n")
@@ -28,42 +28,11 @@ class FoodManagementAdapter(context: Context, contents: ArrayList<FoodManagement
 
         val date: TextView = mView.findViewById(R.id.textview_date_list_food_management)
         //val simpleText : TextView = mView.findViewById(R.id.textview_simplecontent_list_food_management)
-        val expandableButton: ImageButton = mView.findViewById(R.id.imagebutton_expandable_list_food_management)
         val constraintExpandableContent: ConstraintLayout = mView.findViewById(R.id.constraint_expandable_content_list_food_management)
 
 
-        date.text = "2017. 11. 20 당신이 먹은 것을 알고 있다!!"
-
-        expandableButton.setOnClickListener {
-            when (constraintExpandableContent.visibility) {
-                VISIBLE -> {
-                    constraintExpandableContent
-                            .animate()
-                            .alpha(0f)
-                            .setDuration(250)
-                            .setListener(object : AnimatorListenerAdapter() {
-                                override fun onAnimationEnd(animation: Animator?) {
-                                    super.onAnimationEnd(animation)
-                                    constraintExpandableContent.visibility = GONE
-                                }
-                            })
-                }
-                GONE -> {
-                    constraintExpandableContent
-                            .animate()
-                            .alpha(1f)
-                            .setDuration(250)
-                            .setListener(object : AnimatorListenerAdapter() {
-                                override fun onAnimationStart(animation: Animator?) {
-                                    super.onAnimationStart(animation)
-                                    constraintExpandableContent.visibility = VISIBLE
-                                }
-                            })
-                }
-            }
-        }
+        date.text = dbHelper.getResult()
 
         return mView
     }
-
 }

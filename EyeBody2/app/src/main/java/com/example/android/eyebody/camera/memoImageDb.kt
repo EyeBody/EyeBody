@@ -60,10 +60,13 @@ class memoImageDb(var context: Context, var name:String, private var factory: SQ
         val db: SQLiteDatabase = readableDatabase
         var memo=""
         var cursor: Cursor = db . rawQuery ("SELECT * FROM MEMOIMAGE", null)
-        while(cursor.getString(0)==imageName || cursor.getString(1)==imageName){
-            cursor.moveToNext()
+
+        while(cursor.moveToNext()){
+            if(cursor.getString(0)==imageName || cursor.getString(1)==imageName){
+                memo=cursor.getString(2)
+                break
+            }
         }
-        memo=cursor.getString(2)
         return memo
     }
     fun getDate(imageName:String):String{
