@@ -31,7 +31,12 @@ class FoodManagementAdapter(context: Context, contents: ArrayList<FoodManagement
         val constraintExpandableContent: ConstraintLayout = mView.findViewById(R.id.constraint_expandable_content_list_food_management)
 
 
-        date.text = dbHelper.getResult()
+        //date.text = dbHelper.getResult()
+
+        val item = getItem(position)
+        date.text = "날짜 : ${item.date}\n" +
+                "메뉴 : ${item.menu}\n" +
+                "가격 : ${item.price}"
 
         return mView
     }

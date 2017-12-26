@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
 /**
  * Created by ytw11 on 2017-11-15.
@@ -29,7 +30,7 @@ class DbHelper(var context: Context, var name:String, private var factory: SQLit
         db.execSQL("UPDATE BILL SET price=$price WHERE menu='$menu';")
         db.close()
     }
-    fun getResult(): String
+    fun getResult(): ArrayList<String>
     {
         // 읽기가 가능하게 DB 열기
         var db:SQLiteDatabase = readableDatabase
@@ -37,9 +38,11 @@ class DbHelper(var context: Context, var name:String, private var factory: SQLit
 
         // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
          var cursor:Cursor = db . rawQuery ("SELECT * FROM BILL", null)
+        val array = arrayListOf<String>()
             while (cursor.moveToNext()) {
-                result += cursor.getString(0)+" : "+cursor.getString(1)+" | "+cursor.getInt(2)+"원 "+cursor.getString(3)+"\n"
+                array.add(cursor.getString(0)+"/"+cursor.getString(1)+"/"+cursor.getInt(2)+"원/"+cursor.getString(3))
         }
-        return result
+        Log.d("sss", "${array.size}")
+        return array
     }
 }

@@ -1,6 +1,7 @@
 package com.example.android.eyebody.management.food
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,10 +29,19 @@ class FoodManagementFragment : BasePageFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mView = inflater!!.inflate(R.layout.fragment_management_food, container, false)
 
+        val dbHelper = DbHelper(context, "bill.db", null, 1)
+        val result = dbHelper.getResult()
+
+        Log.d("sss", result.size.toString())
+        val contents = arrayListOf<FoodManagementContent>()
+        for(x in result){
+            val list = x.split("/")
+            contents.add(FoodManagementContent(list))
+            Log.d("sss", x)
+        }
+
         val listview : ListView = mView.findViewById(R.id.listview_food_management)
-        listview.adapter = FoodManagementAdapter(context, arrayListOf(
-                FoodManagementContent(), FoodManagementContent()
-        ))
+        listview.adapter = FoodManagementAdapter(context, contents)
 
         return mView
     }
