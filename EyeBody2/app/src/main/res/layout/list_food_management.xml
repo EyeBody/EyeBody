@@ -6,19 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="20dp" >
 
-    <TextView
-        android:id="@+id/textview_date_list_food_management"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="17.11.12~17.11.15"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/constraint_content_list_food_management"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
-
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraint_content_list_food_management"
         android:layout_width="match_parent"
@@ -29,19 +16,7 @@
         app:layout_constraintBottom_toTopOf="@+id/constraint_expandable_content_list_food_management"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_date_list_food_management"
         app:layout_constraintVertical_chainStyle="packed">
-
-        <TextView
-            android:id="@+id/textview_simplecontent_list_food_management"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="햄버거를 먹고만거야"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 
@@ -59,16 +34,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraint_content_list_food_management"
         app:layout_constraintVertical_chainStyle="packed">
-
-        <TextView
-            android:id="@+id/textview_main_content_list_food_management"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="햄버거드신거 아니세요???"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
 
     </android.support.constraint.ConstraintLayout>
 
