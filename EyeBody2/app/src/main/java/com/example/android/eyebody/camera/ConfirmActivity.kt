@@ -61,7 +61,7 @@ class ConfirmActivity : AppCompatActivity() {
     private fun saveButtonClicked() {
         button_save.setOnClickListener {
             Toast.makeText(applicationContext, "저장되었습니다", Toast.LENGTH_SHORT).show()
-            putValuesInDb(time,frontImageUri,sideImageUri,value)
+            putValuesInDb(time,frontFileName!!,sideFileName!!,value)
             goHomeActivity()
         }
     }
