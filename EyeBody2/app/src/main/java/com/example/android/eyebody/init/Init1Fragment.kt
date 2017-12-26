@@ -29,27 +29,19 @@ class Init1Fragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreate(savedInstanceState)
         val v = inflater!!.inflate(R.layout.fragment_init1, container, false)
-        Log.d("mydbg_init1","[ init1 진입 ]")
+        Log.d("mydbg_init1", "[ init1 진입 ]")
 
         val startButton = v.findViewById<Button>(R.id.ImageButton_init1_start_to_init2)
 
-        startButton.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), 1)
-            }
-            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-        }
+        requestPermissions(arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.RECEIVE_SMS), 0)
 
-            val init2 = Init2Fragment()
-            activity.fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_init_content, init2)
-                    .commit()
+        val init2 = Init2Fragment()
+        activity.fragmentManager.beginTransaction()
+                .replace(R.id.fragment_init_content, init2)
+                .commit()
 
-            val initActivity : InitActivity = activity as InitActivity
-        }
+        val initActivity: InitActivity = activity as InitActivity
 
         return v
     }
-
 }
