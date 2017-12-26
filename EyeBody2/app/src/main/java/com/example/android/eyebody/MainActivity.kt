@@ -56,7 +56,6 @@ class MainActivity : PermissionsActivity() {
         이렇게하면 속도가 빨라지는 효과가 있는지는 모르겠다.***
          */
         val cameraPage by lazy { Intent(this, CameraActivity::class.java) }
-        val exercisePage by lazy { Intent(this, ExerciseActivity::class.java) }
         val settingPage by lazy { Intent(this, SettingActivity::class.java) }
         val galleryPage by lazy { Intent(this, GalleryActivity::class.java) }
 
@@ -101,11 +100,6 @@ class MainActivity : PermissionsActivity() {
                 enterGalleryDialog.show(fragmentManager, "enter_gallery")
                 //overridePendingTransition(0,0)
             }
-        }
-
-        btn_activity_func1.setOnClickListener {
-
-            startActivity(exercisePage)
         }
 
         btn_activity_func2.setOnClickListener {

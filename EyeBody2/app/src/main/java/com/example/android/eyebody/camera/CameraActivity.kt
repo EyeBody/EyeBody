@@ -213,7 +213,9 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
     private fun gobackHomeActivity()
     {
         var homeIntent = Intent(this, ManagementActivity::class.java)
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(homeIntent)
+        overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
         finish()
     }
     override fun onDestroy() {
@@ -221,7 +223,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         super.onDestroy()
     }
     override fun onBackPressed() {
-        super.onBackPressed()
+        //super.onBackPressed()
         gobackHomeActivity()
     }
 
@@ -229,6 +231,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback {
         override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             if (event2.x < event1.x || event1.x == event2.x) {
                 val intent = Intent(this@CameraActivity, ManagementActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
                 overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left)
                 finish()

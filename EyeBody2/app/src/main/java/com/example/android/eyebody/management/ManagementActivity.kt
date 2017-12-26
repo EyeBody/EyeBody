@@ -2,6 +2,7 @@ package com.example.android.eyebody.management
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -24,6 +25,7 @@ import android.app.ActivityManager.RunningTaskInfo
 import android.content.Context.ACTIVITY_SERVICE
 import android.app.ActivityManager
 import android.content.Context
+import android.os.AsyncTask
 import android.view.Window
 
 
@@ -34,6 +36,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
 
     private val TAG = "mydbg_manage"
 
+    private val buttonToCamera by lazy { management_button_camera }
     private val buttonToMain by lazy { management_button_main_management }
     private val buttonToGallery by lazy { management_button_gallery_management }
     private val buttonToFood by lazy { management_button_food_management }
@@ -55,6 +58,7 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
     var isGoingToLeftPage: Boolean = false
     var isNavigated = true
     var dragging: Int = 0
+    var positionOff: Float = 0f
 
     override fun onFragmentInteraction(uri: Uri) {
         Toast.makeText(this, "$uri", Toast.LENGTH_LONG).show()
@@ -129,6 +133,40 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         buttonToFood.tag = BUTTON_TAG_FOOD
         buttonToConfig.tag = BUTTON_TAG_CONFIG
 
+        fun navigateToCamera() {
+            if(viewpager.currentItem==BUTTON_TAG_MAIN){
+                isNavigated = false
+                var intent = Intent(this, CameraActivity::class.java)
+                startActivity(intent)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
+                finish()
+                return
+            }
+            viewpager.currentItem = BUTTON_TAG_MAIN
+            mappingButtonSelected(BUTTON_TAG_MAIN)
+            val smooth = @SuppressLint("StaticFieldLeak")
+            object : AsyncTask<Void, Void, Unit>(){
+                override fun doInBackground(vararg p0: Void?) {
+                    while(dragging == ViewPager.SCROLL_STATE_IDLE){
+
+                    }
+                    while(positionOff != 0f){
+
+                    }
+                }
+                override fun onPostExecute(result: Unit?) {
+                    super.onPostExecute(result)
+                    isNavigated = false
+                    var intent = Intent(this@ManagementActivity, CameraActivity::class.java)
+                    startActivity(intent)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
+                    finish()
+                }
+            }
+            smooth.execute()
+        }
 
         viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
@@ -143,19 +181,14 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 /* */
+                positionOff = positionOffset
+                Log.d(TAG, positionOffset.toString())
                 if (isGoingToLeftPage && dragging == ViewPager.SCROLL_STATE_DRAGGING) {
                     if (mLastPage == position)
                         navigateToCamera()
                 } else {
                     //do nothing
                 }
-            }
-            fun navigateToCamera() {
-                isNavigated = false
-                var intent = Intent(this@ManagementActivity, CameraActivity::class.java)
-                startActivity(intent)
-                overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right)
-                finish()
             }
 
             override fun onPageSelected(position: Int) {
@@ -178,6 +211,9 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
         buttonToGallery.setOnClickListener(buttonToPageChangeListener)
         buttonToFood.setOnClickListener(buttonToPageChangeListener)
         buttonToConfig.setOnClickListener(buttonToPageChangeListener)
+        buttonToCamera.setOnClickListener{
+            navigateToCamera()
+        }
 
 
         // getStoredInt : currentItem에 따라서 반환하는 Fragment를 각각 지정해줌.
@@ -213,11 +249,11 @@ class ManagementActivity : AppCompatActivity(), BasePageFragment.OnFragmentInter
     } // end of onCreate
 
     private fun mappingButtonSelected(position: Int) {
-        val buttonArray = arrayOf(buttonToMain, buttonToGallery, buttonToFood, buttonToConfig)
+        val buttonArray = arrayOf(buttonToMain, buttonToGallery, buttonToFood, buttonToConfig, buttonToCamera)
         val minX = originScaleX * 0.8f
         val minY = originScaleY * 0.8f
 
-        for (i in 0 until 4) {
+        for (i in 0 until buttonArray.size) {
             buttonArray[i].isSelected = (position == i)
             if (position == i) {
                 buttonArray[i].scaleX = minX
