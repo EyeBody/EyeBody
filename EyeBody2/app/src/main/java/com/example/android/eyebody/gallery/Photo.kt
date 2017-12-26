@@ -15,6 +15,7 @@ class Photo: AppCompatActivity, Parcelable {
     var fileName: String = ""
     var imgWidth: Int = 0
     var imgHeight: Int = 0
+    var imgmemo: String = ""
 
     constructor(imgFile: File) {
         fileUrl = imgFile.path //intent로 bitmap이미지를 넘기는 것 보다 url로 넘기는게 좋대서 바꿈
@@ -35,6 +36,7 @@ class Photo: AppCompatActivity, Parcelable {
         fileName = parcel.readString()
         imgWidth = parcel.readInt()
         imgHeight = parcel.readInt()
+        imgmemo = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -42,6 +44,7 @@ class Photo: AppCompatActivity, Parcelable {
         parcel.writeString(fileName)
         parcel.writeInt(imgWidth)
         parcel.writeInt(imgHeight)
+        parcel.writeString(imgmemo)
     }
 
     override fun describeContents(): Int {
@@ -187,8 +190,10 @@ class Photo: AppCompatActivity, Parcelable {
     }
 
     fun getMemo(): String{
-        var text: String = fileName + "의 메모"
-
-        return text
+        var result = imgmemo
+        if(result == ""){
+            result = fileName + "의 메모"
+        }
+        return result
     }
 }
