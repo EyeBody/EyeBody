@@ -38,8 +38,8 @@ class PhotoFrameActivity : AppCompatActivity() {
         memoImageDB = memoImageDb(baseContext,"memoImage.db",null,1)
 
         memoTextView.setMovementMethod(ScrollingMovementMethod())
-//        memoTextView.text = memoImageDB.getMemo(photoList[pos].fileUrl)
-//        dateTextView.text = memoImageDB.getDate(photoList[pos].fileUrl)
+//        memoTextView.text = memoImageDB.getMemo(photoList[pos].fileName)
+//        dateTextView.text = memoImageDB.getDate(photoList[pos].fileName)
         memoTextView.text = photoList[pos].getMemo()
         dateTextView.text = photoList[pos].getDate("yyyy년 dd월 mm일")
 

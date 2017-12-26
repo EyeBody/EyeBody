@@ -7,9 +7,9 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/imageSelectView"
-        android:transitionName="galleryView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="GridLayoutManager"
         app:spanCount="3" />
+
 </FrameLayout>
