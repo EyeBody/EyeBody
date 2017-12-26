@@ -15,6 +15,7 @@ class Photo: AppCompatActivity, Parcelable {
     var fileName: String = ""
     var imgWidth: Int = 0
     var imgHeight: Int = 0
+    var imgmemo: String = ""
 
     constructor(imgFile: File) {
         fileUrl = imgFile.path //intent로 bitmap이미지를 넘기는 것 보다 url로 넘기는게 좋대서 바꿈
@@ -35,6 +36,7 @@ class Photo: AppCompatActivity, Parcelable {
         fileName = parcel.readString()
         imgWidth = parcel.readInt()
         imgHeight = parcel.readInt()
+        imgmemo = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -42,6 +44,7 @@ class Photo: AppCompatActivity, Parcelable {
         parcel.writeString(fileName)
         parcel.writeInt(imgWidth)
         parcel.writeInt(imgHeight)
+        parcel.writeString(imgmemo)
     }
 
     override fun describeContents(): Int {
@@ -163,19 +166,34 @@ class Photo: AppCompatActivity, Parcelable {
     }
 
     fun getDate(opt: String = "yyyy.dd.mm"): String{
-        var date: String = ""
+        var result = ""
+        var year = ""
+        var month = ""
+        var date = ""
 
-        when(opt){
-            "yyyy.dd.mm" -> date = "2017.00.00"
-            "yyyy년 dd월 mm일" -> date = "2017년 00월 00일"
+        if(fileName[0] == 'f'){
+            year = fileName.substring(6, 10)
+            month = fileName.substring(10, 12)
+            date = fileName.substring(12, 14)
+        }else if(fileName[0] == 's'){
+            year = fileName.substring(5, 9)
+            month = fileName.substring(9, 11)
+            date = fileName.substring(11, 13)
         }
 
-        return date
+        when(opt){
+            "yyyy.dd.mm" -> result = year + "." + month + "." + date
+            "yyyy년 dd월 mm일" -> result = year + "년 " + month + "월 " + date + "일"
+        }
+
+        return result
     }
 
     fun getMemo(): String{
-        var text: String = fileName + "의 메모"
-
-        return text
+        var result = imgmemo
+        if(result == ""){
+            result = fileName + "의 메모"
+        }
+        return result
     }
 }

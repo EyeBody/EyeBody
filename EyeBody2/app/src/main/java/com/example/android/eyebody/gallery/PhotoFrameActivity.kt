@@ -2,9 +2,11 @@ package com.example.android.eyebody.gallery
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.text.method.ScrollingMovementMethod
 import android.view.MotionEvent
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import com.example.android.eyebody.R
 import com.example.android.eyebody.camera.memoImageDb
@@ -38,13 +40,31 @@ class PhotoFrameActivity : AppCompatActivity() {
         memoImageDB = memoImageDb(baseContext,"memoImage.db",null,1)
 
         memoTextView.setMovementMethod(ScrollingMovementMethod())
-//        memoTextView.text = memoImageDB.getMemo(photoList[pos].fileUrl)
-//        dateTextView.text = memoImageDB.getDate(photoList[pos].fileUrl)
+//        memoTextView.text = memoImageDB.getMemo(photoList[pos].fileName)
+//        dateTextView.text = memoImageDB.getDate(photoList[pos].fileName)
         memoTextView.text = photoList[pos].getMemo()
         dateTextView.text = photoList[pos].getDate("yyyy년 dd월 mm일")
 
         editMemoButton.setOnClickListener {
-            Toast.makeText(this, "메모 작성", Toast.LENGTH_SHORT).show()
+            var editedMemo = ""
+            val ad = AlertDialog.Builder(this)
+
+            ad.setTitle("메모 수정")
+            ad.setMessage("메모를 적어주세요")
+
+            val et = EditText(this)
+            ad.setView(et)
+            ad.setPositiveButton("저장") { dialog, which ->
+                editedMemo = et!!.text.toString()
+                Toast.makeText(this, editedMemo + " 저장되었습니다", Toast.LENGTH_SHORT).show()
+                photoList[pos].imgmemo = editedMemo
+                memoTextView.text = editedMemo
+                dialog.dismiss()
+            }
+            ad.setNegativeButton("닫기") { dialog, which ->
+                dialog.dismiss()
+            }
+            ad.show()
         }
 
         photoFrameRecyclerView.setOnTouchListener { view, motionEvent ->
