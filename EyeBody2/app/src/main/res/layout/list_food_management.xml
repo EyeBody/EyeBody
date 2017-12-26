@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="20dp" >
@@ -42,18 +43,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/imagebutton_expandable_list_food_management"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/arrow_down_float" />
-
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
@@ -75,24 +64,12 @@
             android:id="@+id/textview_main_content_list_food_management"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:text="햄버거드신거 아니세요???"
-            app:layout_constraintBottom_toTopOf="@+id/textview_main_sms_content_list_food_management"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <TextView
-            android:id="@+id/textview_main_sms_content_list_food_management"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="SMS 내역 : (체크아웃)5800원 결제완료/익월요금합산청구/버거킹"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textview_main_content_list_food_management"
-            app:layout_constraintVertical_chainStyle="packed" />
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
@@ -107,89 +84,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraint_expandable_content_list_food_management"
         app:layout_constraintVertical_chainStyle="packed">
-
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="어느정도먹었는지 체크해주세요"
-            app:layout_constraintBottom_toTopOf="@+id/imageview_level_bread_list_food_management"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <ImageView
-            android:id="@+id/imageview_level_water_list_food_management"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:baselineAlignBottom="true"
-            app:layout_constraintBaseline_toBaselineOf="@+id/imageview_level_bread_list_food_management"
-            app:layout_constraintEnd_toStartOf="@+id/imageview_level_bread_list_food_management"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/icons8water" />
-
-        <ImageView
-            android:id="@+id/imageview_level_bread_list_food_management"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:baselineAlignBottom="true"
-            app:layout_constraintBottom_toTopOf="@+id/seekbar_level_of_food_list_food_management"
-            app:layout_constraintEnd_toStartOf="@+id/imageview_level_meat_list_food_management"
-            app:layout_constraintStart_toEndOf="@+id/imageview_level_water_list_food_management"
-            app:layout_constraintTop_toBottomOf="@+id/textView10"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:srcCompat="@drawable/icons8cupcake" />
-
-        <ImageView
-            android:id="@+id/imageview_level_meat_list_food_management"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:baselineAlignBottom="true"
-            app:layout_constraintBaseline_toBaselineOf="@+id/imageview_level_bread_list_food_management"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageview_level_bread_list_food_management"
-            app:srcCompat="@drawable/icons8meat" />
-
-        <SeekBar
-            android:id="@+id/seekbar_level_of_food_list_food_management"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"
-            app:layout_constraintBottom_toTopOf="@+id/imagebutton_cancel_list_food_management"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageview_level_bread_list_food_management"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <ImageButton
-            android:id="@+id/imagebutton_cancel_list_food_management"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="8dp"
-            android:background="#00000000"
-            android:baselineAlignBottom="true"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imagebutton_ok_list_food_management"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seekbar_level_of_food_list_food_management"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:srcCompat="@drawable/icons8delete" />
-
-        <ImageButton
-            android:id="@+id/imagebutton_ok_list_food_management"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="#00000000"
-            android:baselineAlignBottom="true"
-            android:scaleType="centerInside"
-            app:layout_constraintBaseline_toBaselineOf="@+id/imagebutton_cancel_list_food_management"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imagebutton_cancel_list_food_management"
-            app:srcCompat="@drawable/icons8ok" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>
